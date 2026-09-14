@@ -1,0 +1,158 @@
+@import 'tailwindcss';
+
+@theme {
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --color-coffee-primary: #8b5a2b;
+    --color-coffee-hover: #6d421d;
+    --color-coffee-espresso: #24140d;
+    --color-coffee-mocha: #3d2314;
+    --color-coffee-cream: #fbf8f5;
+    --color-coffee-soft: #f5ede6;
+    --color-coffee-caramel: #c8894f;
+    --color-coffee-border: #e5d5ca;
+}
+
+:root {
+    --primary: #8b5a2b;
+    --primary-hover: #6d421d;
+    --espresso: #24140d;
+    --mocha: #3d2314;
+    --bg-page: #fbf8f5;
+    --bg-card: #ffffff;
+    --bg-soft: #f5ede6;
+    --border-hairline: #e5d5ca;
+    --text-main: #24140d;
+    --text-muted: #7d6558;
+}
+
+/* Zero shadow enforcement across the entire application */
+*, *::before, *::after {
+    box-shadow: none !important;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 4-Tab Top Navigation Bar */
+.cupdate-top-tabs {
+    background: #ffffff;
+    border-bottom: 1.5px solid #e5d5ca;
+    position: sticky;
+    top: 68px;
+    z-index: 40;
+    padding: 10px 16px;
+}
+
+.cupdate-tabs-inner {
+    max-width: 580px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f5ede6;
+    padding: 5px;
+    border-radius: 999px;
+    border: 1.5px solid #e5d5ca;
+}
+
+.cupdate-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #7d6558;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cupdate-tab-btn:hover {
+    color: #8b5a2b;
+}
+
+.cupdate-tab-btn.active {
+    background: #8b5a2b;
+    color: #ffffff !important;
+}
+
+/* Mobile Bottom Navigation Bar */
+.cupdate-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #ffffff;
+    border-top: 1.5px solid #e5d5ca;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 50;
+    padding: 0 10px;
+}
+
+.bottom-tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    color: #7d6558;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.bottom-tab-item i {
+    font-size: 1.25rem;
+}
+
+.bottom-tab-item.active {
+    color: #8b5a2b;
+    background: #f5ede6;
+}
+
+/* Custom Modals */
+.custom-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(36, 20, 13, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.custom-modal-backdrop.active {
+    display: flex;
+}
+
+.custom-modal-card {
+    background: #ffffff;
+    border: 2px solid #e5d5ca;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 480px;
+    padding: 28px;
+    position: relative;
+    animation: modalPop 0.25s ease-out forwards;
+}
+
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}

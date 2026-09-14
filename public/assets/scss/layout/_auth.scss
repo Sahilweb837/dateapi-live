@@ -1,0 +1,105 @@
+// _auth.scss - Soft UI Auth Layout
+
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.soft-auth-container {
+    min-height: 100vh;
+    display: flex;
+    background: $bg-color;
+    overflow: hidden;
+    position: relative;
+    padding-top: 80px; // Clear navbar
+    
+    // Split screen on desktop
+    @media (min-width: 992px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.soft-auth-visual {
+    display: none; // Hidden on mobile by default
+    
+    @media (min-width: 992px) {
+        display: block;
+        position: relative;
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 40px;
+            @include soft-ui-extruded(40px);
+            opacity: 0.8;
+            filter: grayscale(20%) contrast(120%);
+        }
+    }
+}
+
+.soft-auth-form-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    width: 100%;
+}
+
+.soft-auth-card {
+    @include soft-ui-extruded(24px);
+    width: 100%;
+    max-width: 500px;
+    padding: 50px 40px;
+    
+    @media (max-width: 480px) {
+        padding: 30px 20px;
+    }
+}
+
+.soft-input-group {
+    margin-bottom: 24px;
+    
+    label {
+        display: block;
+        color: $text-muted;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+        padding-left: 5px;
+    }
+    
+    input, select {
+        width: 100%;
+        @include soft-ui-depressed(16px);
+        padding: 16px 20px;
+        color: $text-main;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+        
+        &:focus {
+            box-shadow: inset 8px 8px 16px $shadow-dark, 
+                        inset -8px -8px 16px $shadow-light,
+                        0 0 0 2px rgba($primary, 0.3);
+        }
+    }
+}
+
+.soft-btn {
+    width: 100%;
+    padding: 16px;
+    @include soft-ui-button();
+    font-size: 1.05rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+}

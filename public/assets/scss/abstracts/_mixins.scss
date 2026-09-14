@@ -1,0 +1,35 @@
+// _mixins.scss - Neumorphic Shadow Mixins
+@use 'variables' as *;
+
+@mixin soft-ui-extruded($border-radius: 16px) {
+    background: $bg-color;
+    border-radius: $border-radius;
+    box-shadow:  8px 8px 16px $shadow-dark, 
+                -8px -8px 16px $shadow-light;
+    border: none;
+}
+
+@mixin soft-ui-depressed($border-radius: 16px) {
+    background: $bg-color;
+    border-radius: $border-radius;
+    box-shadow: inset 6px 6px 12px $shadow-dark, 
+                inset -6px -6px 12px $shadow-light;
+    border: none;
+}
+
+@mixin soft-ui-button() {
+    @include soft-ui-extruded(30px);
+    color: $text-main;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        background: $bg-card;
+    }
+    
+    &:active {
+        @include soft-ui-depressed(30px);
+        color: $primary;
+    }
+}

@@ -1,0 +1,108 @@
+@extends('layouts.app')
+
+@section('title', 'Frequently Asked Questions & Help Guide — CupDate')
+@section('meta_desc', 'Answers to common questions about CupDate: selfie verification, coffee date etiquette, landmark cafe discounts, membership plans, and safety protocols.')
+
+@section('content')
+<div class="max-w-4xl mx-auto px-4 py-12 font-['Inter']">
+    <div class="text-center mb-10 bg-white border border-[#e5d5ca] rounded-3xl p-8 md:p-12 shadow-none">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#f5ede6] text-[#8b5a2b] border border-[#e5d5ca] mb-3">
+            <i class="fa-solid fa-circle-question"></i> Help & Knowledge Base
+        </span>
+        <h1 class="font-['Plus_Jakarta_Sans'] font-extrabold text-3xl md:text-5xl text-[#24140d] mb-4">
+            Frequently Asked Questions
+        </h1>
+        <p class="text-sm text-[#7d6558] max-w-xl mx-auto leading-relaxed">
+            Everything you need to know about CupDate's verification, coffee dates, safety standards, and membership tiers.
+        </p>
+    </div>
+
+    <!-- FAQ Categories Accordion -->
+    <div class="space-y-4 mb-12" id="faqAccordionPage">
+        <!-- Q1 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    How does CupDate's selfie verification work?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                When setting up your profile, CupDate prompts you to capture a 3-second live selfie with slight head movement. Our biometric model compares this to your uploaded gallery photos to confirm you are the true account owner. Verified users receive an official Blue Verified Badge.
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    Why are 45-minute coffee dates better than dinner dates?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                Traditional dinner dates cost thousands of rupees and force two people into a 2-hour commitment even if there is zero conversational chemistry. A daytime coffee date in a vibrant public cafe is casual, safe, affordable, and easily extended if you both feel an authentic spark.
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    How do I claim 15% discount at partner cafes?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                Simply browse our Partner Cafes list (under <a href="{{ route('dates') }}" class="text-[#8b5a2b] font-bold underline">Coffee Date Spots</a>) and arrange to meet there. During billing, present your active verified CupDate Member ID badge (#CD-XXXXX) to receive 15% off your table order!
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    Is CupDate free to use?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                Yes! 100% free matching, swiping, and clutter-free direct chat are available to all verified singles under the Free Sip tier. Optional VIP subscriptions (Gold Roaster & Diamond Barista) are available for power daters seeking unlimited superlikes and multi-city travel mode.
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    What is Ghost Location Fuzzing?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                To safeguard members against stalking, CupDate never shares exact GPS coordinates. Your location is fuzz-shifted algorithmically by 1.5 to 2 kilometers, showing that you are in the same general neighborhood (e.g. Koregaon Park, Pune or The Mall, Shimla) without ever pinpointing your precise home address.
+            </div>
+        </div>
+    </div>
+
+    <!-- Still have questions? -->
+    <div class="bg-[#fbf8f5] border border-[#e5d5ca] rounded-3xl p-8 text-center shadow-none">
+        <h3 class="font-['Plus_Jakarta_Sans'] font-extrabold text-lg text-[#24140d] mb-2">Still have questions?</h3>
+        <p class="text-xs text-[#7d6558] mb-4">Our support team is always eager to assist with account or safety queries.</p>
+        <a href="{{ route('contact') }}" class="inline-flex items-center gap-1.5 px-6 py-2.5 bg-[#8b5a2b] text-white text-xs font-bold rounded-xl hover:bg-[#6d421d] transition shadow-none">
+            <i class="fa-solid fa-envelope"></i> Contact Support Team
+        </a>
+    </div>
+</div>
+@endsection
+
+@section('extra_js')
+<script>
+function toggleFaqItem(item) {
+    const content = item.querySelector('.faq-content');
+    const icon = item.querySelector('i');
+    content.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180');
+}
+</script>
+@endsection
