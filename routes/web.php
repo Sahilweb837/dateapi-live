@@ -198,3 +198,62 @@ Route::get('/system/error-log', function (\Illuminate\Http\Request $request) {
     return response('<pre>'.htmlspecialchars(implode('', $lastLines)).'</pre>');
 });
 
+// ─── Emergency: Force-patch DB_HOST from 127.0.0.1 → localhost ──────────────
+// Visit https://cupdate.in/system/fix-db-host?key=cupdate_secure_init_2026
+Route::get('/system/fix-db-host', function (\Illuminate\Http\Request $request) {
+    if ($request->query('key') !== 'cupdate_secure_init_2026') {
+        abort(403, 'Unauthorized');
+    }
+
+    $envPath  = base_path('.env');
+    $prodPath = base_path('.env.production');
+    $results  = [];
+
+    // Step 1: Re-copy from .env.production (which has DB_HOST=localhost)
+    if (file_exists($prodPath)) {
+        $copied = @copy($prodPath, $envPath);
+        $results[] = 'Re-copied .env.production → .env: ' . ($copied ? 'OK' : 'FAILED');
+    } else {
+        $results[] = '.env.production not found, patching in-place.';
+        if (file_exists($envPath)) {
+            $content = file_get_contents($envPath);
+            $patched = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=localhost', $content);
+            file_put_contents($envPath, $patched);
+            $results[] = 'In-place patch: 127.0.0.1 → localhost: OK';
+        }
+    }
+
+    // Step 2: Clear config cache so Laravel picks up the new .env immediately
+    $cacheFile = base_path('bootstrap/cache/config.php');
+    if (file_exists($cacheFile)) {
+        @unlink($cacheFile);
+        $results[] = 'Config cache cleared: OK';
+    } else {
+        $results[] = 'Config cache: not present (OK)';
+    }
+
+    // Step 3: Verify what DB_HOST is now
+    $envNow  = (string)@file_get_contents($envPath);
+    $hostNow = 'unknown';
+    if (preg_match('/^DB_HOST=(.+)$/m', $envNow, $m)) {
+        $hostNow = trim($m[1]);
+    }
+    $results[] = "DB_HOST in .env is now: {$hostNow}";
+
+    // Step 4: Test the DB connection with the new config
+    try {
+        \Illuminate\Support\Facades\DB::reconnect();
+        \Illuminate\Support\Facades\DB::connection()->getPdo();
+        $tables = \Illuminate\Support\Facades\DB::select('SHOW TABLES');
+        $results[] = '✅ DB connected! Tables: ' . count($tables);
+    } catch (\Throwable $e) {
+        $results[] = '❌ DB still failing: ' . $e->getMessage();
+    }
+
+    return response('<pre style="font-family:monospace;font-size:14px;padding:20px;">'
+        . '✅ CupDate DB-Host Fix Report' . "\n\n"
+        . implode("\n", $results)
+        . "\n\n⏱️ " . now()->toDateTimeString()
+        . '</pre>');
+})->name('system.fix-db-host');
+

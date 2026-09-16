@@ -25,16 +25,27 @@ if (file_exists($baseDir.'/bootstrap/cache/config.php')) {
 @chmod($baseDir.'/storage/logs', 0777);
 @chmod($baseDir.'/bootstrap/cache', 0777);
 
-// Sync .env from .env.production if .env is absent or missing credentials
+// Sync .env from .env.production if .env is absent, missing credentials, or has wrong DB_HOST
 if (file_exists($baseDir.'/.env.production')) {
     if (!file_exists($baseDir.'/.env')) {
         @copy($baseDir.'/.env.production', $baseDir.'/.env');
     } else {
         $envContent = (string)@file_get_contents($baseDir.'/.env');
-        if (!str_contains($envContent, 'cupamate1_backendlaraveldate2s') || !str_contains($envContent, 'APP_KEY=base64:')) {
+        $needsSync = !str_contains($envContent, 'cupamate1_backendlaraveldate2s')
+            || !str_contains($envContent, 'APP_KEY=base64:')
+            || str_contains($envContent, 'DB_HOST=127.0.0.1');
+
+        if ($needsSync) {
             @copy($baseDir.'/.env.production', $baseDir.'/.env');
         }
     }
+}
+
+// Force-patch DB_HOST to localhost if 127.0.0.1 sneaks back in (cPanel shared hosting safety net)
+$currentEnv = (string)@file_get_contents($baseDir.'/.env');
+if (str_contains($currentEnv, 'DB_HOST=127.0.0.1')) {
+    $patched = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=localhost', $currentEnv);
+    @file_put_contents($baseDir.'/.env', $patched);
 }
 
 return Application::configure(basePath: dirname(__DIR__))
