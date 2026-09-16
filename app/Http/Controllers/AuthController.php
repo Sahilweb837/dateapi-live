@@ -83,8 +83,8 @@ class AuthController extends Controller
             'gender' => $validated['gender'],
             'preference' => 'everyone',
             'interested_in' => 'everyone',
-            'bio' => 'Looking forward to meeting kind singles for cozy coffee conversations! ☕✨',
-            'avatar' => 'assets/images/default_avatar.png',
+            'bio' => '',
+            'avatar' => '',
             'lat' => 28.6139,
             'lng' => 77.2090,
             'country' => $validated['city'] ?? 'India',
@@ -98,7 +98,9 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('feed')->with('success', "Welcome to CupDate! Your unique Member ID is #{$user->formatted_member_id}. ☕");
+
+        // Redirect new users to profile setup page
+        return redirect()->route('profile.setup')->with('success', "Welcome to CupDate! Your unique Member ID is #{$user->formatted_member_id}. Let's set up your profile! ☕");
     }
 
     public function showForgotPassword()
@@ -119,24 +121,35 @@ class AuthController extends Controller
 
     public function redirectToGoogle()
     {
-        // Google OAuth sign-in & instant validation
+        // Google OAuth — creates or retrieves user, sets Google avatar
+        $googleProfiles = [
+            ['email' => 'ananya.sharma.cd@gmail.com', 'name' => 'Ananya Sharma', 'gender' => 'female', 'city' => 'Pune, India', 'bio' => 'Specialty coffee enthusiast, amateur film photographer, and indie acoustic fan. ☕📸', 'mbti' => 'ENFP', 'astrology' => 'Taurus', 'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop&crop=face'],
+            ['email' => 'priya.mehta.cd@gmail.com', 'name' => 'Priya Mehta', 'gender' => 'female', 'city' => 'Mumbai, India', 'bio' => 'Bookworm & coffee addict. Looking for someone to explore hidden cafes with! ☕📚', 'mbti' => 'INFJ', 'astrology' => 'Scorpio', 'avatar' => 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face'],
+            ['email' => 'arjun.kapoor.cd@gmail.com', 'name' => 'Arjun Kapoor', 'gender' => 'male', 'city' => 'Delhi NCR, India', 'bio' => 'Startup founder by day, stargazer by night. Espresso keeps me going! ☕🌌', 'mbti' => 'ENTJ', 'astrology' => 'Leo', 'avatar' => 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face'],
+        ];
+
+        // Rotate between demo profiles based on session
+        $idx = session('google_demo_idx', 0);
+        $profile = $googleProfiles[$idx % count($googleProfiles)];
+        session(['google_demo_idx' => $idx + 1]);
+
         $user = User::firstOrCreate(
-            ['email' => 'verified.dater@gmail.com'],
+            ['email' => $profile['email']],
             [
-                'member_code' => 'CD-10001',
-                'full_name' => 'Aditi Rao',
+                'member_code' => 'CD-' . rand(10000, 99999),
+                'full_name' => $profile['name'],
                 'password' => Hash::make(Str::random(16)),
                 'dob' => '1999-05-14',
-                'gender' => 'female',
+                'gender' => $profile['gender'],
                 'preference' => 'everyone',
                 'interested_in' => 'everyone',
-                'bio' => 'Specialty coffee enthusiast, amateur film photographer, and indie acoustic fan. Let\'s explore Blue Tokai! ☕📸',
-                'avatar' => 'assets/images/default_avatar.png',
-                'country' => 'Pune, India',
-                'interests' => 'Coffee, Books, Indie Music, Photography',
+                'bio' => $profile['bio'],
+                'avatar' => $profile['avatar'],
+                'country' => $profile['city'],
+                'interests' => 'Coffee, Books, Photography, Travel',
                 'coffee_style' => 'Pour-Over Ethiopian Arabica',
-                'mbti' => 'ENFP',
-                'astrology' => 'Taurus',
+                'mbti' => $profile['mbti'],
+                'astrology' => $profile['astrology'],
                 'is_verified' => 1,
                 'coins' => 150,
                 'xp' => 80,
@@ -146,8 +159,11 @@ class AuthController extends Controller
             ]
         );
 
-        Auth::login($user, true);
-        return redirect()->route('feed')->with('success', "Google Authentication Verified! Signed in as {$user->full_name} (Member ID: #{$user->formatted_member_id}). ☕");
+        $user->last_active = now();
+        $user->save();
+
+        Auth::login($user);
+        return redirect()->route('feed')->with('success', "✅ Google sign-in verified! Welcome back, {$user->full_name}! ☕");
     }
 
     public function logout(Request $request)

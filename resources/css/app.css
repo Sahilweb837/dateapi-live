@@ -25,10 +25,8 @@
     --text-muted: #7d6558;
 }
 
-/* Zero shadow enforcement across the entire application */
-*, *::before, *::after {
-    box-shadow: none !important;
-}
+/* App Variables */
+.hairline-border { border: 1.5px solid #e5d5ca !important; }
 
 body {
     background-color: var(--bg-page);
@@ -44,7 +42,7 @@ body {
     background: #ffffff;
     border-bottom: 1.5px solid #e5d5ca;
     position: sticky;
-    top: 68px;
+    top: 80px;
     z-index: 40;
     padding: 10px 16px;
 }

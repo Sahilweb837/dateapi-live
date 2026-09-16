@@ -33,25 +33,29 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name(
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
 
 // 1. Feed
-Route::get('/feed', [FeedController::class, 'index'])->name('feed');
-Route::post('/feed/idea', [FeedController::class, 'postIdea'])->name('feed.idea');
-Route::post('/feed/spark/{id}', [FeedController::class, 'sparkIdea'])->name('feed.spark');
+Route::get('/feed', [FeedController::class, 'index'])->name('feed')->middleware('auth.cupdate');
+Route::post('/feed/idea', [FeedController::class, 'postIdea'])->name('feed.idea')->middleware('auth.cupdate');
+Route::post('/feed/spark/{id}', [FeedController::class, 'sparkIdea'])->name('feed.spark')->middleware('auth.cupdate');
 
 // 2. Swipes
-Route::get('/swipes', [SwipeController::class, 'index'])->name('swipes');
-Route::post('/api/swipe', [SwipeController::class, 'swipe'])->name('api.swipe');
+Route::get('/swipes', [SwipeController::class, 'index'])->name('swipes')->middleware('auth.cupdate');
+Route::post('/api/swipe', [SwipeController::class, 'swipe'])->name('api.swipe')->middleware('auth.cupdate');
 
 // 3. Messages (Simple clean chat, zero-refresh AJAX + photo upload)
-Route::get('/messages', [MessageController::class, 'index'])->name('messages');
-Route::post('/api/messages/send', [MessageController::class, 'sendMessage'])->name('api.messages.send');
-Route::get('/api/messages/fetch', [MessageController::class, 'fetchMessages'])->name('api.messages.fetch');
-Route::get('/api/messages/conversation', [MessageController::class, 'getConversation'])->name('api.messages.conversation');
+Route::get('/messages', [MessageController::class, 'index'])->name('messages')->middleware('auth.cupdate');
+Route::post('/api/messages/send', [MessageController::class, 'sendMessage'])->name('api.messages.send')->middleware('auth.cupdate');
+Route::get('/api/messages/fetch', [MessageController::class, 'fetchMessages'])->name('api.messages.fetch')->middleware('auth.cupdate');
+Route::get('/api/messages/conversation', [MessageController::class, 'getConversation'])->name('api.messages.conversation')->middleware('auth.cupdate');
 
-// 4. Profile
-Route::get('/profile/{id?}', [ProfileController::class, 'show'])->name('profile');
-Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-Route::post('/api/streak/claim', [ProfileController::class, 'claimStreak'])->name('api.streak.claim');
-Route::post('/api/profile/boost', [ProfileController::class, 'boostProfile'])->name('api.profile.boost');
+// 4. Profile Setup (MUST be before the wildcard profile/{id?} route)
+Route::get('/profile/setup', [ProfileController::class, 'showSetup'])->name('profile.setup')->middleware('auth.cupdate');
+Route::post('/profile/setup', [ProfileController::class, 'completeSetup'])->name('profile.setup.save')->middleware('auth.cupdate');
+
+// 4b. Profile — wildcard comes AFTER specific routes
+Route::get('/profile/{id?}', [ProfileController::class, 'show'])->name('profile')->middleware('auth.cupdate');
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth.cupdate');
+Route::post('/api/streak/claim', [ProfileController::class, 'claimStreak'])->name('api.streak.claim')->middleware('auth.cupdate');
+Route::post('/api/profile/boost', [ProfileController::class, 'boostProfile'])->name('api.profile.boost')->middleware('auth.cupdate');
 
 // Standalone Video Portal
 Route::get('/video', [VideoController::class, 'index'])->name('video');

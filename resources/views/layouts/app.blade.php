@@ -4,288 +4,820 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'CupDate — Meet Verified Singles Over Coffee | India\'s Safest Dating App')</title>
-    <meta name="description" content="@yield('meta_desc', 'CupDate is India\'s safest coffee dating app. 100% selfie verified singles, zero fake profiles, warm artisanal coffee aesthetic, and safe cafe date meetups.')">
+    <title>@yield('title', 'CupDate — Meet Verified Singles Over Coffee | Curated Coffee Dating')</title>
+    <meta name="description" content="@yield('meta_desc', 'CupDate matches you with intentional singles nearby who share your taste in brew, neighborhood spots, and genuine conversation.')">
 
-    <!-- Google Fonts -->
+    <!-- Material Symbols & Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- FontAwesome 6 -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    
+    <!-- FontAwesome 6 (Compatibility) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Compiled Vite Assets (Tailwind CSS + JS) -->
+    <!-- Tailwind Play CDN for Precision Layout System -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#000000",
+            "primary-container": "#271811",
+            "on-tertiary-container": "#d65b6c",
+            "error": "#ba1a1a",
+            "tertiary-container": "#40000f",
+            "surface-tint": "#6f5a51",
+            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "secondary-container": "#febe9e",
+            "on-background": "#231a15",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#dcc1b5",
+            "secondary": "#835339",
+            "surface-container-highest": "#f1dfd8",
+            "primary-fixed": "#f9ddd1",
+            "on-tertiary-fixed": "#40000f",
+            "primary": "#000000",
+            "inverse-on-surface": "#ffede6",
+            "surface-container-high": "#f7e4dd",
+            "surface-container": "#fdeae3",
+            "on-primary-fixed-variant": "#55433a",
+            "surface-variant": "#f1dfd8",
+            "on-tertiary-fixed-variant": "#861e33",
+            "on-secondary-fixed": "#331201",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#ffdbcb",
+            "surface-dim": "#e8d6cf",
+            "on-primary-fixed": "#271811",
+            "on-error": "#ffffff",
+            "on-secondary-container": "#794b32",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed-dim": "#f7b999",
+            "tertiary-fixed-dim": "#ffb2b8",
+            "outline": "#81756f",
+            "surface-container-low": "#fff1eb",
+            "on-secondary-fixed-variant": "#673c24",
+            "outline-variant": "#d2c3bd",
+            "on-surface-variant": "#4f4540",
+            "on-primary-container": "#967f75",
+            "tertiary-fixed": "#ffdadb",
+            "inverse-surface": "#392e2a",
+            "background": "#fff8f6",
+            "surface-bright": "#fff8f6",
+            "surface": "#fff8f6",
+            "inverse-primary": "#dcc1b5",
+            "on-surface": "#231a15",
+            "on-tertiary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "gutter-lg": "2rem",
+            "margin": "2.5rem",
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin-desktop": "4rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem"
+          },
+          "fontFamily": {
+            "body-md": [ "Plus Jakarta Sans", "Inter", "sans-serif" ],
+            "headline-md": [ "Playfair Display", "serif" ],
+            "label-lg": [ "Plus Jakarta Sans", "Inter", "sans-serif" ],
+            "label-md": [ "Plus Jakarta Sans", "Inter", "sans-serif" ],
+            "body-sm": [ "Plus Jakarta Sans", "Inter", "sans-serif" ],
+            "body-lg": [ "Plus Jakarta Sans", "Inter", "sans-serif" ],
+            "label-sm": [ "Plus Jakarta Sans", "Inter", "sans-serif" ],
+            "headline-lg": [ "Playfair Display", "serif" ],
+            "headline-xl": [ "Playfair Display", "serif" ],
+            "headline-lg-mobile": [ "Playfair Display", "serif" ],
+            "headline-sm": [ "Playfair Display", "serif" ]
+          },
+          "fontSize": {
+            "body-md": [ "15px", { "lineHeight": "24px", "fontWeight": "400" } ],
+            "headline-md": [ "28px", { "lineHeight": "36px", "fontWeight": "500" } ],
+            "label-lg": [ "14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" } ],
+            "label-md": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" } ],
+            "body-sm": [ "13px", { "lineHeight": "20px", "fontWeight": "400" } ],
+            "body-lg": [ "18px", { "lineHeight": "28px", "fontWeight": "400" } ],
+            "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700" } ],
+            "headline-lg": [ "40px", { "lineHeight": "48px", "letterSpacing": "-0.015em", "fontWeight": "600" } ],
+            "headline-xl": [ "52px", { "lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "600" } ],
+            "headline-lg-mobile": [ "32px", { "lineHeight": "40px", "fontWeight": "600" } ],
+            "headline-sm": [ "22px", { "lineHeight": "30px", "fontWeight": "500" } ]
+          }
+        }
+      }
+    };
+    </script>
+
+    <!-- Vite Styles & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        /* Zero shadow enforcement & Coffee styling */
-        .hairline-border { border: 1.5px solid #e5d5ca !important; }
-        .coffee-border { border: 1.5px solid #8b5a2b !important; }
-        
-        @keyframes steamFloat {
-            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.9; }
-            50% { transform: translateY(-7px) scale(1.03); opacity: 1; }
+      @layer base {
+        html, body { margin: 0; padding: 0; }
+        body { overscroll-behavior: none; }
+      }
+      ::-webkit-scrollbar { display: none; }
+
+      /* Smooth Scroll-Driven Reveal Styles */
+      .scroll-reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+      }
+      .scroll-reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .delay-100 { transition-delay: 100ms; }
+      .delay-200 { transition-delay: 200ms; }
+      .delay-300 { transition-delay: 300ms; }
+
+      /* Hero Floating Animation */
+      @keyframes floatSlow {
+        0%, 100% {
+          transform: translateY(0px) rotate(0deg);
         }
-        .animate-steam {
-            animation: steamFloat 3.5s ease-in-out infinite;
+        50% {
+          transform: translateY(-8px) rotate(0.4deg);
         }
+      }
+      .animate-float {
+        animation: floatSlow 4s ease-in-out infinite;
+      }
+
+      /* Ambient Coffee Steam / Aroma Ring Keyframes */
+      @keyframes aromaPulse {
+        0% {
+          transform: scale(0.92) translate(0, 0);
+          opacity: 0.25;
+        }
+        50% {
+          transform: scale(1.08) translate(8px, -12px);
+          opacity: 0.45;
+        }
+        100% {
+          transform: scale(0.92) translate(0, 0);
+          opacity: 0.25;
+        }
+      }
+      .animate-aroma {
+        animation: aromaPulse 9s ease-in-out infinite;
+      }
+
+      /* Live Pulse Breathing Badge */
+      @keyframes liveGlow {
+        0%, 100% {
+          box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 7px rgba(5, 150, 105, 0);
+        }
+      }
+      .pulse-glow-dot {
+        animation: liveGlow 2.5s infinite;
+      }
+
+      /* Card Arrow Micro-interaction */
+      .city-card:hover .city-arrow-icon {
+        transform: translate(3px, -3px);
+      }
+
+      /* Accessibility: Prefers-reduced-motion */
+      @media (prefers-reduced-motion: reduce) {
+        .scroll-reveal {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+        }
+        .animate-float,
+        .animate-aroma,
+        .pulse-glow-dot {
+          animation: none !important;
+        }
+        * {
+          transition-duration: 0.001s !important;
+        }
+      }
+      /* Smooth Scroll & Custom Neon Pink Scrollbar */
+      html {
+        scroll-behavior: smooth;
+      }
+      ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fbf8f5;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d2c3bd;
+        border-radius: 99px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #ff007f;
+      }
+      .neon-pink-text {
+        background: linear-gradient(135deg, #ff4081 0%, #ff007f 50%, #e91e63 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .neon-pink-glow {
+        filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.45));
+      }
     </style>
     @yield('extra_css')
 </head>
-<body class="bg-[#fbf8f5] text-[#24140d] min-h-screen flex flex-col pb-20 md:pb-0 font-['Inter']">
+<body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col pb-16 md:pb-0">
 
-    <!-- Global Top Header -->
-    <header class="sticky top-0 z-50 bg-[#ffffff]/95 backdrop-blur border-b border-[#e5d5ca] px-4 md:px-8 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('home') }}" class="flex items-center gap-2.5 text-decoration-none group">
-                <div class="w-10 h-10 rounded-2xl bg-[#f5ede6] border border-[#e5d5ca] flex items-center justify-center text-xl text-[#8b5a2b] animate-steam">
-                    <i class="fa-solid fa-mug-hot"></i>
+    <!-- Global Top Fixed Editorial Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/30 transition-all">
+        <div class="h-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop flex items-center justify-between gap-space-md sm:gap-space-lg">
+            
+            <!-- Brand Logo & Atelier Moniker -->
+            <div class="flex items-center gap-space-md">
+                <a href="{{ route('home') }}" class="flex items-center gap-2.5 group text-decoration-none">
+                    <div class="w-9 h-9 rounded-full overflow-hidden shadow-[0_0_14px_rgba(255,0,127,0.4)] border border-[#ff007f]/50 p-0.5 bg-[#180e0c] group-hover:scale-110 transition-transform shrink-0">
+                        <img alt="CupDate Logo" class="w-full h-full object-contain" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
+                    </div>
+                    <span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-black">Cup<span class="neon-pink-text">Date</span></span>
+                </a>
+                <span class="hidden xl:inline-block text-[#ff007f] font-semibold text-xs tracking-wide px-2 py-0.5 rounded-full bg-[#ff007f]/10 border border-[#ff007f]/30">HP &amp; India Dating</span>
+            </div>
+
+            <!-- Desktop Nav Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-space-sm p-space-xs bg-surface-container-low/60 rounded-full border border-outline-variant/30">
+                <a href="{{ route('cities.index') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Explore &amp; Cities</a>
+                
+                <a href="{{ route('swipes') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('swipes*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Discover Deck</a>
+                
+                <a href="{{ route('dates') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('dates*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Nearby Cafés</a>
+                
+                <div class="relative flex items-center">
+                    <a href="{{ route('messages') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('messages*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }} pr-space-lg">Messages &amp; Dates</a>
+                    @auth
+                        <span class="absolute right-space-xs px-1.5 py-0.5 rounded-full bg-on-tertiary-container text-on-tertiary font-label-sm text-label-sm leading-none">3</span>
+                    @endauth
                 </div>
-                <span class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl tracking-tight text-[#8b5a2b]">
-                    Cup<span class="text-[#24140d]">Date</span>
-                </span>
-            </a>
+
+                @auth
+                    <a href="{{ route('feed') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('feed*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Feed</a>
+                @else
+                    <a href="{{ route('blog.index') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('blog*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Dating Guides</a>
+                @endauth
+            </nav>
+
+            <!-- Right Controls & User Profile Dropdown -->
+            <div class="flex items-center gap-2 sm:gap-space-md">
+                
+                <!-- Live GPS & City Location Selector -->
+                <div class="relative flex items-center" id="globalLocationContainer">
+                    <button type="button" onclick="toggleGlobalLocationDropdown()" class="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-surface-container-high/90 hover:bg-surface-container border border-outline-variant/40 text-on-surface transition-all cursor-pointer shadow-xs active:scale-95" title="Change or detect your dating city">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" id="headerGpsDot"></span>
+                        <span class="material-symbols-outlined text-secondary text-base leading-none">location_on</span>
+                        <span id="globalHeaderCityName" class="font-label-md text-label-md text-on-surface font-semibold max-w-[100px] sm:max-w-[150px] truncate">
+                            @if(isset($cityData['name']))
+                                {{ $cityData['name'] }}
+                            @elseif(Auth::check() && (Auth::user()->country || Auth::user()->city))
+                                {{ Auth::user()->country ?? Auth::user()->city }}
+                            @else
+                                Kangra, HP
+                            @endif
+                        </span>
+                        <span class="material-symbols-outlined text-xs text-on-surface-variant leading-none transition-transform" id="headerCityArrow">expand_more</span>
+                    </button>
+
+                    <!-- Location Dropdown Panel -->
+                    <div id="globalLocationDropdown" class="hidden absolute right-0 top-11 w-72 bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/40 py-3 px-3 z-50 animate-in fade-in zoom-in duration-150">
+                        <div class="flex items-center justify-between pb-2 mb-2 border-b border-outline-variant/20">
+                            <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Your Dating Location</span>
+                            <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold border border-emerald-200 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> Live GPS
+                            </span>
+                        </div>
+
+                        <!-- Auto Detect Button -->
+                        <button type="button" onclick="autoDetectHeaderLocation()" id="detectHeaderGpsBtn" class="w-full py-2 px-3 rounded-xl bg-on-tertiary-container text-on-tertiary text-xs font-bold flex items-center justify-center gap-2 shadow-xs hover:opacity-95 transition-all mb-2.5 cursor-pointer active:scale-98">
+                            <span class="material-symbols-outlined text-sm">my_location</span>
+                            <span id="detectHeaderGpsBtnText">Auto-Detect GPS Location</span>
+                        </button>
+
+                        <!-- Himachal Pradesh Cities Section -->
+                        <p class="text-[10px] uppercase font-bold text-secondary tracking-wider mb-1 px-1">Himachal Pradesh Hubs</p>
+                        <div class="grid grid-cols-2 gap-1 mb-2.5">
+                            <a href="{{ route('city.show', 'kangra') }}" onclick="selectHeaderCity('Kangra, HP')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">📍 Kangra</a>
+                            <a href="{{ route('city.show', 'solan') }}" onclick="selectHeaderCity('Solan, HP')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">📍 Solan</a>
+                            <a href="{{ route('city.show', 'shimla') }}" onclick="selectHeaderCity('Shimla, HP')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">📍 Shimla</a>
+                            <a href="{{ route('city.show', 'dharamshala') }}" onclick="selectHeaderCity('Dharamshala, HP')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">📍 Dharamshala</a>
+                            <a href="{{ route('city.show', 'manali') }}" onclick="selectHeaderCity('Manali, HP')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">📍 Manali</a>
+                            <a href="{{ route('city.show', 'palampur') }}" onclick="selectHeaderCity('Palampur, HP')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">📍 Palampur</a>
+                        </div>
+
+                        <!-- Top Indian Metros Section -->
+                        <p class="text-[10px] uppercase font-bold text-secondary tracking-wider mb-1 px-1">Top Coffee Metros</p>
+                        <div class="grid grid-cols-2 gap-1">
+                            <a href="{{ route('city.show', 'chandigarh') }}" onclick="selectHeaderCity('Chandigarh')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">☕ Chandigarh</a>
+                            <a href="{{ route('city.show', 'delhi-ncr') }}" onclick="selectHeaderCity('Delhi NCR')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">☕ Delhi NCR</a>
+                            <a href="{{ route('city.show', 'pune') }}" onclick="selectHeaderCity('Pune')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">☕ Pune</a>
+                            <a href="{{ route('city.show', 'mumbai') }}" onclick="selectHeaderCity('Mumbai')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">☕ Mumbai</a>
+                            <a href="{{ route('city.show', 'bangalore') }}" onclick="selectHeaderCity('Bangalore')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">☕ Bangalore</a>
+                            <a href="{{ route('city.show', 'goa') }}" onclick="selectHeaderCity('Goa')" class="text-left px-2 py-1 rounded-lg text-xs font-medium text-on-surface hover:bg-surface-container transition-colors truncate">☕ Goa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brew a Date CTA -->
+                <a href="{{ Auth::check() ? route('feed') : route('register') }}" class="hidden md:inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-label-md shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] hover:opacity-95 transition-all">
+                    <span class="material-symbols-outlined text-base leading-none">add</span>
+                    <span>Brew a Date</span>
+                </a>
+
+                @auth
+                    <!-- Daily Streak Coins Pill -->
+                    <button onclick="openStreakModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/60 text-secondary hover:bg-surface-container font-label-md text-label-md transition-all cursor-pointer" title="Coffee Bean Streak & Coins">
+                        <span class="material-symbols-outlined text-base text-amber-600 leading-none">monetization_on</span>
+                        <span id="headerCoinsCount">{{ Auth::user()->coins ?? 50 }}</span>
+                        <span class="text-[10px] bg-secondary text-white px-1.5 py-0.2 rounded-full font-bold">Streak</span>
+                    </button>
+
+                    <!-- User Profile Avatar + Menu -->
+                    <div class="relative flex items-center" id="globalProfileMenuContainer">
+                        <button type="button" onclick="toggleGlobalProfileMenu()" class="relative cursor-pointer p-0.5 rounded-full ring-1 ring-outline-variant/60 hover:ring-secondary transition-all focus:outline-none" aria-label="Open Profile Menu">
+                            <img alt="{{ Auth::user()->full_name }}" class="w-8 h-8 rounded-full object-cover" src="{{ Auth::user()->avatar_url }}"/>
+                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-700 ring-2 ring-surface"></span>
+                        </button>
+
+                        <!-- Profile Dropdown Popup -->
+                        <div id="globalProfileDropdown" class="hidden absolute right-0 top-11 w-56 bg-surface-container-lowest rounded-2xl shadow-xl border border-outline-variant/40 py-2 z-50">
+                            <div class="px-4 py-2.5 border-b border-surface-container-high/70">
+                                <p class="font-label-md text-label-md font-bold text-on-surface truncate">{{ Auth::user()->full_name }}</p>
+                                <p class="text-[11px] text-on-surface-variant font-mono">ID: #{{ Auth::user()->formatted_member_id ?? 'CD-10001' }}</p>
+                                <p class="text-[11px] text-secondary font-medium mt-0.5">Wallet: {{ Auth::user()->coins ?? 50 }} Coins</p>
+                            </div>
+                            <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                <span class="material-symbols-outlined text-base text-secondary leading-none">account_circle</span>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                <span class="material-symbols-outlined text-base text-amber-600 leading-none">style</span>
+                                <span>Discover Deck</span>
+                            </a>
+                            <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                <span class="material-symbols-outlined text-base text-secondary leading-none">local_cafe</span>
+                                <span>Pitch Date Idea</span>
+                            </a>
+                            <a href="{{ route('video') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                <span class="material-symbols-outlined text-base text-emerald-600 leading-none">videocam</span>
+                                <span>Live Video Portal</span>
+                            </a>
+                            <div class="border-t border-surface-container-high/70 my-1"></div>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full text-left flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-error hover:bg-error-container/20 transition-colors cursor-pointer">
+                                    <span class="material-symbols-outlined text-base leading-none">logout</span>
+                                    <span>Log Out</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="px-space-sm sm:px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface hover:text-secondary transition-all">Login</a>
+                    <a href="{{ route('register') }}" class="px-space-md py-space-xs rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-label-md shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-105 active:scale-95 transition-all">Join Free</a>
+                @endauth
+
+                <!-- Mobile Hamburger Toggle -->
+                <button type="button" onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-full hover:bg-surface-container text-on-surface transition-colors focus:outline-none" aria-label="Toggle Navigation">
+                    <span class="material-symbols-outlined text-2xl leading-none" id="mobileMenuIcon">menu</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Desktop Navigation & Shortcuts -->
-        <nav class="hidden md:flex items-center gap-6">
-            @auth
-                <a href="{{ route('feed') }}" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition flex items-center gap-1.5 {{ request()->routeIs('feed') ? 'text-[#8b5a2b]' : '' }}">
-                    <i class="fa-solid fa-mug-hot"></i> Feed
-                </a>
-                <a href="{{ route('swipes') }}" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition flex items-center gap-1.5 {{ request()->routeIs('swipes') ? 'text-[#8b5a2b]' : '' }}">
-                    <i class="fa-solid fa-fire text-[#d97706]"></i> Swipes
-                </a>
-                <a href="{{ route('messages') }}" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition flex items-center gap-1.5 {{ request()->routeIs('messages') ? 'text-[#8b5a2b]' : '' }}">
-                    <i class="fa-solid fa-comments"></i> Chat
-                </a>
-                <a href="{{ route('video') }}" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition flex items-center gap-1.5 {{ request()->routeIs('video') ? 'text-[#8b5a2b]' : '' }}">
-                    <i class="fa-solid fa-video text-[#10b981]"></i> Live Video
-                </a>
-            @else
-                <a href="{{ route('home') }}#matcher" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition">
-                    Coffee Matcher
-                </a>
-                <a href="{{ route('home') }}#cafes" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition">
-                    Partner Cafes
-                </a>
-                <a href="{{ route('home') }}#how-it-works" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition">
-                    How It Works
-                </a>
-                <a href="{{ route('home') }}#safety" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition flex items-center gap-1">
-                    <i class="fa-solid fa-shield-halved text-[#10b981]"></i> Safety
-                </a>
-            @endauth
-            <a href="{{ route('ai.bio.generator') }}" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition flex items-center gap-1.5 {{ request()->routeIs('ai.bio*') ? 'text-[#8b5a2b]' : '' }}">
-                <i class="fa-solid fa-wand-magic-sparkles text-[#8b5a2b]"></i> AI Bio
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobileNavDrawer" class="hidden lg:hidden w-full bg-surface-container-lowest/98 border-t border-outline-variant/30 px-6 py-4 flex flex-col gap-2 shadow-lg">
+            <a href="{{ route('cities.index') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Explore &amp; Cities</a>
+            <a href="{{ route('swipes') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Discover Deck</a>
+            <a href="{{ route('dates') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Nearby Cafés</a>
+            <a href="{{ route('messages') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container flex items-center justify-between">
+                <span>Messages &amp; Dates</span>
+                @auth <span class="px-2 py-0.5 rounded-full bg-on-tertiary-container text-on-tertiary text-xs font-bold">3</span> @endauth
             </a>
-            <a href="{{ route('blog.index') }}" class="font-bold text-sm text-[#7d6558] hover:text-[#8b5a2b] transition flex items-center gap-1.5 {{ request()->routeIs('blog*') ? 'text-[#8b5a2b]' : '' }}">
-                <i class="fa-solid fa-book-open"></i> Dating Guides
-            </a>
-        </nav>
-
-        <!-- User Controls -->
-        <div class="flex items-center gap-3">
             @auth
-                <button onclick="openStreakModal()" class="flex items-center gap-2 bg-[#f5ede6] border border-[#e5d5ca] text-[#8b5a2b] px-3.5 py-1.5 rounded-full font-bold text-xs hover:bg-[#ebdcd0] transition cursor-pointer">
-                    <i class="fa-solid fa-coins text-[#d97706]"></i>
-                    <span id="headerCoinsCount">{{ Auth::user()->coins ?? 50 }}</span> Coins
-                    <span class="bg-[#8b5a2b] text-white px-1.5 py-0.5 rounded-full text-[10px] ml-0.5">Streak</span>
-                </button>
-
-                <a href="{{ route('profile') }}" class="flex items-center gap-2 p-1 border border-[#e5d5ca] rounded-full hover:border-[#8b5a2b] transition" title="My Profile">
-                    <img src="{{ Auth::user()->avatar_url }}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
-                </a>
-
-                <form action="{{ route('logout') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="text-xs font-bold text-[#7d6558] hover:text-[#ef4444] px-2 py-1.5 transition cursor-pointer" title="Log Out">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    </button>
-                </form>
+                <a href="{{ route('feed') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Community Feed</a>
+                <a href="{{ route('profile') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">My Profile</a>
+                <button onclick="openStreakModal()" class="text-left px-4 py-2 rounded-xl text-sm font-semibold text-secondary hover:bg-surface-container">Claim Daily Streak ({{ Auth::user()->coins ?? 50 }} Coins)</button>
             @else
-                <a href="{{ route('login') }}" class="text-xs md:text-sm font-bold text-[#7d6558] hover:text-[#8b5a2b] px-3 py-1.5 transition">Login</a>
-                <a href="{{ route('register') }}" class="text-xs md:text-sm font-bold bg-[#8b5a2b] text-white px-4 py-2 rounded-full hover:bg-[#6d421d] transition flex items-center gap-1.5">
-                    <span>Join Free</span> ☕
-                </a>
+                <a href="{{ route('blog.index') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Dating Guides</a>
+                <a href="{{ route('login') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-secondary hover:bg-surface-container">Login</a>
+                <a href="{{ route('register') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-tertiary-container hover:bg-surface-container">Join Free</a>
             @endauth
         </div>
     </header>
 
-    <!-- Global Toast Alerts -->
+    <!-- Global Toast Alert (if any) -->
     @if(session('success'))
-        <div class="bg-[#f5ede6] border-b border-[#e5d5ca] px-4 py-2.5 text-center text-xs font-bold text-[#8b5a2b] flex items-center justify-center gap-2">
-            <i class="fa-solid fa-circle-check text-[#10b981]"></i>
+        <div class="fixed top-24 left-1/2 -translate-x-1/2 z-40 bg-surface-container-highest/95 border border-outline-variant px-6 py-3 rounded-full shadow-lg text-xs font-bold text-secondary flex items-center gap-2 backdrop-blur-md">
+            <span class="material-symbols-outlined text-emerald-600 text-base leading-none">check_circle</span>
             <span>{{ session('success') }}</span>
         </div>
     @endif
 
-    <!-- Main Content -->
-    <main class="flex-grow">
+    <!-- Main Content Container (pt-20 offsets fixed 80px header) -->
+    <main class="w-full pt-20 bg-surface min-h-screen flex-grow">
         @yield('content')
     </main>
 
-    <!-- Rich Dark Espresso & Coffee Footer -->
-    <footer class="bg-[#24140d] text-[#d6c4b8] pt-16 pb-12 mt-16 font-['Inter'] border-t-2 border-[#8b5a2b]">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-                <!-- Brand & Mission -->
-                <div class="md:col-span-1 space-y-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-xl bg-[#8b5a2b] text-white flex items-center justify-center text-sm">
-                            <i class="fa-solid fa-mug-hot"></i>
+    <!-- Global High-SEO Multi-Column Editorial Footer -->
+    <footer class="w-full bg-[#160c09] text-stone-300 border-t border-[#ff007f]/20 mt-auto">
+        <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop py-12 flex flex-col gap-10">
+            
+            <!-- Brand + Mission -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-stone-800">
+                <div class="flex flex-col gap-2 max-w-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full overflow-hidden shadow-[0_0_12px_rgba(255,0,127,0.4)] border border-[#ff007f]/50 p-0.5 bg-[#180e0c]">
+                            <img alt="CupDate Logo" class="w-full h-full object-contain" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
                         </div>
-                        <span class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl text-[#ffffff]">Cup<span class="text-[#c8894f]">Date</span></span>
+                        <span class="text-2xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">Cup<span class="neon-pink-text">Date</span></span>
+                        <span class="text-[10px] bg-[#ff007f]/20 text-[#ff80bf] border border-[#ff007f]/40 px-2 py-0.5 rounded-full font-bold">India &amp; Himachal Dating</span>
                     </div>
-                    <p class="text-xs leading-relaxed text-[#b59f91]">
-                        India's premier coffee dating sanctuary. Fostering unhurried, low-pressure, verified cafe meetings and safe digital boundaries.
+                    <p class="text-xs text-stone-400 leading-relaxed">
+                        India's premier 100% selfie-verified intentional matchmaking app. Meet for respectful, low-pressure 45-minute coffee dates across Himachal Pradesh and major metropolitan cities.
                     </p>
-                    <div class="flex items-center gap-3 pt-2 text-[#c8894f]">
-                        <span class="w-8 h-8 rounded-full bg-[#341d13] border border-[#4d2c1e] flex items-center justify-center text-xs hover:text-white transition"><i class="fa-brands fa-instagram"></i></span>
-                        <span class="w-8 h-8 rounded-full bg-[#341d13] border border-[#4d2c1e] flex items-center justify-center text-xs hover:text-white transition"><i class="fa-brands fa-x-twitter"></i></span>
-                        <span class="w-8 h-8 rounded-full bg-[#341d13] border border-[#4d2c1e] flex items-center justify-center text-xs hover:text-white transition"><i class="fa-brands fa-linkedin"></i></span>
-                    </div>
                 </div>
-
-                <!-- Core Sections -->
-                <div>
-                    <h4 class="font-['Plus_Jakarta_Sans'] font-extrabold text-sm text-[#ffffff] mb-3">Explore CupDate</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('feed') }}" class="hover:text-[#c8894f] transition">Community Coffee Feed</a></li>
-                        <li><a href="{{ route('swipes') }}" class="hover:text-[#c8894f] transition">Discover Singles (Swipes)</a></li>
-                        <li><a href="{{ route('messages') }}" class="hover:text-[#c8894f] transition">Messages & Coffee Invites</a></li>
-                        <li><a href="{{ route('dates') }}" class="hover:text-[#c8894f] transition">Landmark Coffee Spots</a></li>
-                        <li><a href="{{ route('rishta') }}" class="hover:text-[#c8894f] transition">Rishta & Matrimony</a></li>
-                        <li><a href="{{ route('cities.index') }}" class="hover:text-[#c8894f] transition">Cities & Himachal Hubs</a></li>
-                        <li><a href="{{ route('video') }}" class="hover:text-[#c8894f] transition">Live 1-on-1 Video Portal</a></li>
-                    </ul>
-                </div>
-
-                <!-- Safety & Editorial -->
-                <div>
-                    <h4 class="font-['Plus_Jakarta_Sans'] font-extrabold text-sm text-[#ffffff] mb-3">Safety & Guides</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('safety') }}" class="hover:text-[#c8894f] text-[#34d399] font-bold transition">Women's Safety Guide 🛡️</a></li>
-                        <li><a href="{{ route('ai.bio.generator') }}" class="hover:text-[#c8894f] text-[#fbbf24] font-bold transition">AI Dating Bio Generator ✨</a></li>
-                        <li><a href="{{ route('coffee.date.ideas') }}" class="hover:text-[#c8894f] transition">10 Coffee Date Ideas</a></li>
-                        <li><a href="{{ route('how.it.works') }}" class="hover:text-[#c8894f] transition">How It Works</a></li>
-                        <li><a href="{{ route('blog.index') }}" class="hover:text-[#c8894f] transition">All Relationship Guides</a></li>
-                        <li><a href="{{ route('community.guidelines') }}" class="hover:text-[#c8894f] transition">Community Guidelines</a></li>
-                        <li><a href="{{ route('faq') }}" class="hover:text-[#c8894f] transition">Frequently Asked Questions</a></li>
-                    </ul>
-                </div>
-
-                <!-- Legal & Trust -->
-                <div>
-                    <h4 class="font-['Plus_Jakarta_Sans'] font-extrabold text-sm text-[#ffffff] mb-3">Trust & Sitemaps</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('about') }}" class="hover:text-[#c8894f] transition">About CupDate</a></li>
-                        <li><a href="{{ route('privacy') }}" class="hover:text-[#c8894f] transition">Privacy Policy (DPDP Act)</a></li>
-                        <li><a href="{{ route('terms') }}" class="hover:text-[#c8894f] transition">Terms of Service</a></li>
-                        <li><a href="{{ route('disclaimer') }}" class="hover:text-[#c8894f] transition">Website Disclaimer</a></li>
-                        <li><a href="{{ route('cookie.policy') }}" class="hover:text-[#c8894f] transition">Cookie Policy</a></li>
-                        <li><a href="{{ route('contact') }}" class="hover:text-[#c8894f] transition">Contact & Grievance Officer</a></li>
-                        <li><a href="{{ route('sitemap.xml') }}" target="_blank" class="hover:text-[#c8894f] transition flex items-center gap-1"><i class="fa-solid fa-code text-[10px]"></i> XML Sitemap</a></li>
-                        <li><a href="{{ route('sitemap.html') }}" class="hover:text-[#c8894f] transition flex items-center gap-1"><i class="fa-solid fa-sitemap text-[10px]"></i> HTML Sitemap</a></li>
-                    </ul>
+                
+                <div class="flex flex-wrap items-center gap-3 text-xs">
+                    <a href="{{ route('register') }}" class="px-5 py-2.5 rounded-full bg-[#ff007f] hover:bg-[#ff4081] text-white font-bold transition shadow-[0_0_20px_rgba(255,0,127,0.4)]">
+                        <i class="fa-solid fa-mug-hot mr-1.5"></i> Join Free in Your City
+                    </a>
+                    <a href="{{ route('dates') }}" class="px-4 py-2.5 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold border border-stone-700 transition">
+                        Partner Cafes
+                    </a>
                 </div>
             </div>
 
-            <div class="pt-8 border-t border-[#3e2216] flex flex-col sm:flex-row items-center justify-between text-xs text-[#9d897c] gap-4">
-                <p>© 2026 CupDate.in. All rights reserved. Handcrafted with authentic coffee passion for meaningful Indian dating.</p>
-                <div class="flex items-center gap-4 text-[11px]">
-                    <span class="inline-flex items-center gap-1 text-[#34d399] font-bold">
-                        <i class="fa-solid fa-circle-check"></i> 100% Selfie Verified
+            <!-- SEO Cities Multi-Column Links Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-2">
+                
+                <!-- Column 1: Dating in Himachal Pradesh (High-Intent SEO) -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-[#ff007f] text-sm"><i class="fa-solid fa-mountain"></i></span>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-white">Dating in Himachal Pradesh</h4>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-stone-400">
+                        <li><a href="{{ route('city.show', 'kangra') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Kangra, HP</a></li>
+                        <li><a href="{{ route('city.show', 'solan') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Solan, HP</a></li>
+                        <li><a href="{{ route('city.show', 'shimla') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Shimla</a></li>
+                        <li><a href="{{ route('city.show', 'dharamshala') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Dharamshala &amp; McLeodGanj</a></li>
+                        <li><a href="{{ route('city.show', 'manali') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Manali &amp; Old Manali</a></li>
+                        <li><a href="{{ route('city.show', 'mandi') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Mandi (Chhoti Kashi)</a></li>
+                        <li><a href="{{ route('city.show', 'kullu') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Kullu Valley</a></li>
+                        <li><a href="{{ route('city.show', 'hamirpur') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Hamirpur, HP</a></li>
+                        <li><a href="{{ route('city.show', 'bilaspur') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Bilaspur (Govind Sagar)</a></li>
+                        <li><a href="{{ route('city.show', 'una') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Una, HP</a></li>
+                        <li><a href="{{ route('city.show', 'chamba') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Chamba</a></li>
+                        <li><a href="{{ route('city.show', 'palampur') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Palampur Tea Valley</a></li>
+                        <li><a href="{{ route('city.show', 'baddi') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Baddi &amp; Solan</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Dating in North India & Tri-City -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-emerald-400 text-sm"><i class="fa-solid fa-tree"></i></span>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-white">North India &amp; Tri-City</h4>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-stone-400">
+                        <li><a href="{{ route('city.show', 'chandigarh') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Chandigarh</a></li>
+                        <li><a href="{{ route('city.show', 'mohali') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Mohali (Phase 3B2)</a></li>
+                        <li><a href="{{ route('city.show', 'panchkula') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Panchkula</a></li>
+                        <li><a href="{{ route('city.show', 'delhi') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Delhi NCR (Saket &amp; HKV)</a></li>
+                        <li><a href="{{ route('city.show', 'dehradun') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Dehradun &amp; Mussoorie</a></li>
+                        <li><a href="{{ route('city.show', 'amritsar') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Amritsar</a></li>
+                        <li><a href="{{ route('city.show', 'ludhiana') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Ludhiana</a></li>
+                        <li><a href="{{ route('rishta') }}" class="text-amber-400 font-bold hover:underline transition">Traditional Rishta &amp; Matrimony Hub</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Major Indian Metros -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-amber-400 text-sm"><i class="fa-solid fa-city"></i></span>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-white">Metro Cities Across India</h4>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-stone-400">
+                        <li><a href="{{ route('city.show', 'pune') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Pune (Koregaon Park)</a></li>
+                        <li><a href="{{ route('city.show', 'mumbai') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Mumbai (Bandra West)</a></li>
+                        <li><a href="{{ route('city.show', 'bangalore') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Bangalore (Indiranagar)</a></li>
+                        <li><a href="{{ route('city.show', 'jaipur') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Jaipur (C-Scheme)</a></li>
+                        <li><a href="{{ route('city.show', 'hyderabad') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Hyderabad (Jubilee Hills)</a></li>
+                        <li><a href="{{ route('city.show', 'kolkata') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Kolkata (Park Street)</a></li>
+                        <li><a href="{{ route('city.show', 'goa') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Goa (Assagao &amp; Panjim)</a></li>
+                        <li><a href="{{ route('cities.index') }}" class="text-[#ff80bf] font-bold hover:underline transition">View All 50+ Cities Index →</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Trust, Safety & Legal -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-rose-400 text-sm"><i class="fa-solid fa-shield-halved"></i></span>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-white">Safety &amp; Compliance</h4>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-stone-400">
+                        <li><a href="{{ route('how.it.works') }}" class="hover:text-white transition">Coffee Matchmaking Manifesto</a></li>
+                        <li><a href="{{ route('safety') }}" class="hover:text-white transition">Women Safety &amp; Protocol</a></li>
+                        <li><a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy (DPDP Act 2023)</a></li>
+                        <li><a href="{{ route('terms') }}" class="hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="{{ route('community.guidelines') }}" class="hover:text-white transition">Community Guidelines</a></li>
+                        <li><a href="{{ route('contact') }}" class="hover:text-white transition">Contact &amp; Grievance Officer</a></li>
+                        <li><a href="{{ route('sitemap.html') }}" class="hover:text-white transition">HTML Sitemap</a></li>
+                        <li><a href="{{ route('sitemap.xml') }}" class="hover:text-white transition">XML Sitemap for Search Engines</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Copyright & Sub-footer -->
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-stone-800 text-xs text-stone-500">
+                <p>© {{ date('Y') }} CupDate Atelier. Roasted with intention. Dedicated to mindful connections across Himachal Pradesh &amp; India.</p>
+                <div class="flex items-center gap-4 text-stone-400">
+                    <span class="flex items-center gap-1.5 text-emerald-400 font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 100% Selfie-Verified
                     </span>
                     <span>•</span>
-                    <span class="inline-flex items-center gap-1 text-[#c8894f] font-bold">
-                        <i class="fa-solid fa-shield-halved"></i> 256-Bit SSL Encrypted
-                    </span>
+                    <span>SSL 256-Bit Encrypted</span>
                 </div>
             </div>
+
         </div>
     </footer>
 
-    <!-- Mobile Bottom Navigation (Exact 4 Core Tabs) -->
-    <nav class="md:hidden cupdate-bottom-nav">
-        <a href="{{ route('feed') }}" class="bottom-tab-item {{ request()->routeIs('feed') ? 'active' : '' }}">
-            <i class="fa-solid fa-mug-hot"></i>
-            <span>Feed</span>
-        </a>
-        <a href="{{ route('swipes') }}" class="bottom-tab-item {{ request()->routeIs('swipes') ? 'active' : '' }}">
-            <i class="fa-solid fa-fire"></i>
-            <span>Swipes</span>
-        </a>
-        <a href="{{ route('messages') }}" class="bottom-tab-item {{ request()->routeIs('messages') ? 'active' : '' }}">
-            <i class="fa-solid fa-comments"></i>
-            <span>Chat</span>
-        </a>
-        <a href="{{ route('profile') }}" class="bottom-tab-item {{ request()->routeIs('profile*') ? 'active' : '' }}">
-            <i class="fa-solid fa-user"></i>
-            <span>Profile</span>
-        </a>
-    </nav>
+    <!-- Mobile Bottom Navigation for Quick Thumb Access -->
+    @auth
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface/95 backdrop-blur-md border-t border-outline-variant/30 flex items-center justify-around z-40">
+            <a href="{{ route('feed') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('feed*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">local_cafe</span>
+                <span>Feed</span>
+            </a>
+            <a href="{{ route('swipes') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('swipes*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">style</span>
+                <span>Swipes</span>
+            </a>
+            <a href="{{ route('messages') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('messages*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">chat_bubble</span>
+                <span>Chat</span>
+            </a>
+            <a href="{{ route('profile') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('profile*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">account_circle</span>
+                <span>Profile</span>
+            </a>
+        </nav>
+    @else
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface/95 backdrop-blur-md border-t border-outline-variant/30 flex items-center justify-around z-40">
+            <a href="{{ route('home') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('home') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">home</span>
+                <span>Home</span>
+            </a>
+            <a href="{{ route('cities.index') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">explore</span>
+                <span>Cities</span>
+            </a>
+            <a href="{{ route('dates') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('dates*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">local_cafe</span>
+                <span>Cafés</span>
+            </a>
+            <a href="{{ route('login') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('login*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">login</span>
+                <span>Login</span>
+            </a>
+            <a href="{{ route('register') }}" class="flex flex-col items-center gap-0.5 text-xs font-bold text-on-tertiary-container">
+                <span class="material-symbols-outlined text-xl">add_circle</span>
+                <span>Join</span>
+            </a>
+        </nav>
+    @endauth
 
-    <!-- 7-Day Streak & Profile Boost Modal -->
-    <div id="streakModal" class="custom-modal-backdrop">
-        <div class="custom-modal-card">
-            <button onclick="closeStreakModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">
-                <i class="fa-solid fa-xmark"></i>
+    <!-- 7-Day Streak & Coins Modal -->
+    <div id="streakModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-surface-container-lowest border border-outline-variant/40 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative">
+            <button onclick="closeStreakModal()" class="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface text-xl cursor-pointer">
+                <span class="material-symbols-outlined">close</span>
             </button>
             <div class="text-center mb-5">
-                <span class="inline-flex items-center gap-1.5 bg-[#f5ede6] text-[#8b5a2b] border border-[#e5d5ca] px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
-                    <i class="fa-solid fa-fire text-[#d97706]"></i> Daily Login Reward
+                <span class="inline-flex items-center gap-1.5 bg-surface-container text-secondary px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+                    <span class="material-symbols-outlined text-sm text-amber-600">local_fire_department</span> Daily Login Reward
                 </span>
-                <h3 class="font-['Plus_Jakarta_Sans'] font-extrabold text-xl text-[#24140d]">7-Day Coffee Bean Streak</h3>
-                <p class="text-xs text-[#7d6558] mt-1">Log in daily to claim bonus coins and supercharge your dating profile visibility!</p>
+                <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">7-Day Coffee Bean Streak</h3>
+                <p class="text-xs text-on-surface-variant mt-1">Log in daily to claim bonus coins and boost your dating profile visibility!</p>
             </div>
 
             <!-- 7-Day Roadmap Grid -->
             <div class="grid grid-cols-7 gap-1.5 mb-6 text-center">
                 @php $streakRewards = [1=>10, 2=>15, 3=>20, 4=>25, 5=>35, 6=>50, 7=>100]; @endphp
                 @foreach($streakRewards as $day => $coins)
-                    <div class="p-2 rounded-xl border border-[#e5d5ca] bg-[#fbf8f5] flex flex-col items-center">
-                        <span class="text-[10px] font-bold text-[#7d6558]">D{{ $day }}</span>
-                        <i class="fa-solid fa-coins text-[#d97706] my-1 text-sm"></i>
-                        <span class="text-xs font-extrabold text-[#8b5a2b]">+{{ $coins }}</span>
+                    <div class="p-2 rounded-xl border border-outline-variant/40 bg-surface-container-low flex flex-col items-center">
+                        <span class="text-[10px] font-bold text-on-surface-variant">D{{ $day }}</span>
+                        <span class="material-symbols-outlined text-amber-600 text-sm my-0.5">monetization_on</span>
+                        <span class="text-xs font-extrabold text-secondary">+{{ $coins }}</span>
                     </div>
                 @endforeach
             </div>
 
             <!-- Claim Button -->
-            <button id="claimStreakBtn" onclick="handleClaimStreak()" class="w-full py-3 bg-[#8b5a2b] text-white font-extrabold rounded-xl hover:bg-[#6d421d] transition cursor-pointer mb-3">
-                <i class="fa-solid fa-gift mr-1"></i> Claim Today's Coffee Coins
+            <button id="claimStreakBtn" onclick="handleClaimStreak()" class="w-full py-3 bg-on-tertiary-container text-on-tertiary font-label-md text-label-md rounded-xl shadow-md hover:scale-[1.01] active:scale-[0.99] transition cursor-pointer mb-3">
+                Claim Today's Coffee Coins
             </button>
 
             <!-- 24h Profile Boost Option -->
-            <div class="pt-4 border-t border-[#e5d5ca] flex items-center justify-between">
+            <div class="pt-4 border-t border-outline-variant/30 flex items-center justify-between">
                 <div>
-                    <strong class="text-sm font-bold text-[#24140d] block">Boost Profile for 24h</strong>
-                    <span class="text-xs text-[#7d6558]">Appear 10x more frequently in Swipes</span>
+                    <strong class="text-sm font-bold text-on-surface block">Boost Profile for 24h</strong>
+                    <span class="text-xs text-on-surface-variant">Appear 10x more frequently in Swipes</span>
                 </div>
-                <button onclick="handleBoostProfile()" class="px-3.5 py-2 bg-[#f5ede6] border border-[#e5d5ca] text-[#8b5a2b] rounded-xl font-bold text-xs hover:bg-[#ebdcd0] transition cursor-pointer">
-                    <i class="fa-solid fa-bolt mr-1 text-[#d97706]"></i> Boost (50 Coins)
+                <button onclick="handleBoostProfile()" class="px-3.5 py-2 bg-surface-container border border-outline-variant/40 text-secondary rounded-xl font-bold text-xs hover:bg-surface-container-high transition cursor-pointer">
+                    Boost (50 Coins)
                 </button>
             </div>
-            <div id="streakModalFeedback" class="mt-3 text-center text-xs font-bold text-[#8b5a2b]"></div>
+            <div id="streakModalFeedback" class="mt-3 text-center text-xs font-bold text-secondary"></div>
         </div>
     </div>
 
-    <!-- Global JavaScript for Streak and Boost AJAX -->
+    <!-- Header Dropdown & Streak JS -->
     <script>
-        function openStreakModal() {
-            document.getElementById('streakModal').classList.add('active');
+        function toggleGlobalProfileMenu() {
+            const dropdown = document.getElementById('globalProfileDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
         }
+
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobileNavDrawer');
+            const icon = document.getElementById('mobileMenuIcon');
+            if (drawer) {
+                drawer.classList.toggle('hidden');
+                if (icon) {
+                    icon.textContent = drawer.classList.contains('hidden') ? 'menu' : 'close';
+                }
+            }
+        }
+
+        // Location Dropdown & GPS Auto-Detection
+        function toggleGlobalLocationDropdown() {
+            const dropdown = document.getElementById('globalLocationDropdown');
+            const arrow = document.getElementById('headerCityArrow');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+                if (arrow) {
+                    arrow.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+                }
+            }
+        }
+
+        function selectHeaderCity(cityName) {
+            localStorage.setItem('cupdate_active_city', cityName);
+            const label = document.getElementById('globalHeaderCityName');
+            if (label) label.innerText = cityName;
+            const dropdown = document.getElementById('globalLocationDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+            const arrow = document.getElementById('headerCityArrow');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+        }
+
+        const HEADER_GPS_CITIES = [
+            { name: 'Kangra, HP', lat: 32.0998, lng: 76.2691 },
+            { name: 'Solan, HP', lat: 30.9084, lng: 77.0999 },
+            { name: 'Shimla, HP', lat: 31.1048, lng: 77.1734 },
+            { name: 'Dharamshala, HP', lat: 32.2190, lng: 76.3234 },
+            { name: 'Manali, HP', lat: 32.2432, lng: 77.1892 },
+            { name: 'Mandi, HP', lat: 31.7087, lng: 76.9320 },
+            { name: 'Kullu, HP', lat: 31.9579, lng: 77.1095 },
+            { name: 'Hamirpur, HP', lat: 31.6862, lng: 76.5213 },
+            { name: 'Bilaspur, HP', lat: 31.3326, lng: 76.7570 },
+            { name: 'Una, HP', lat: 31.4685, lng: 76.2708 },
+            { name: 'Palampur, HP', lat: 32.1109, lng: 76.5363 },
+            { name: 'Chandigarh', lat: 30.7333, lng: 76.7794 },
+            { name: 'Delhi NCR', lat: 28.6139, lng: 77.2090 },
+            { name: 'Pune', lat: 18.5204, lng: 73.8567 },
+            { name: 'Mumbai', lat: 19.0760, lng: 72.8777 },
+            { name: 'Bangalore', lat: 12.9716, lng: 77.5946 },
+            { name: 'Goa', lat: 15.2993, lng: 74.1240 }
+        ];
+
+        function autoDetectHeaderLocation() {
+            const btnText = document.getElementById('detectHeaderGpsBtnText');
+            if (btnText) btnText.innerText = "Querying GPS Satellites...";
+
+            if (!navigator.geolocation) {
+                if (btnText) btnText.innerText = "GPS Not Supported";
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const uLat = pos.coords.latitude;
+                    const uLng = pos.coords.longitude;
+                    let closest = HEADER_GPS_CITIES[0];
+                    let minDist = 999999;
+
+                    HEADER_GPS_CITIES.forEach(c => {
+                        const d = Math.hypot(uLat - c.lat, uLng - c.lng);
+                        if (d < minDist) {
+                            minDist = d;
+                            closest = c;
+                        }
+                    });
+
+                    selectHeaderCity(closest.name);
+                    if (btnText) btnText.innerText = `Detected: ${closest.name} ✓`;
+                    setTimeout(() => {
+                        const dropdown = document.getElementById('globalLocationDropdown');
+                        if (dropdown) dropdown.classList.add('hidden');
+                        if (btnText) btnText.innerText = "Auto-Detect GPS Location";
+                    }, 800);
+                },
+                (err) => {
+                    if (btnText) btnText.innerText = "Permission Denied. Select Below";
+                    setTimeout(() => {
+                        if (btnText) btnText.innerText = "Auto-Detect GPS Location";
+                    }, 2500);
+                }
+            );
+        }
+
+        // Initialize header location from stored preference or auto GPS
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedCity = localStorage.getItem('cupdate_active_city');
+            const label = document.getElementById('globalHeaderCityName');
+            @if(!isset($cityData['name']))
+                if (savedCity && label) {
+                    label.innerText = savedCity;
+                } else if (navigator.geolocation && !savedCity) {
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        const uLat = pos.coords.latitude;
+                        const uLng = pos.coords.longitude;
+                        let closest = HEADER_GPS_CITIES[0];
+                        let minDist = 999999;
+                        HEADER_GPS_CITIES.forEach(c => {
+                            const d = Math.hypot(uLat - c.lat, uLng - c.lng);
+                            if (d < minDist) {
+                                minDist = d;
+                                closest = c;
+                            }
+                        });
+                        selectHeaderCity(closest.name);
+                    }, () => {});
+                }
+            @endif
+        });
+
+        // Close dropdowns on external click
+        document.addEventListener('click', (e) => {
+            const profileContainer = document.getElementById('globalProfileMenuContainer');
+            const profileDropdown = document.getElementById('globalProfileDropdown');
+            if (profileContainer && profileDropdown && !profileContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+
+            const locContainer = document.getElementById('globalLocationContainer');
+            const locDropdown = document.getElementById('globalLocationDropdown');
+            const locArrow = document.getElementById('headerCityArrow');
+            if (locContainer && locDropdown && !locContainer.contains(e.target)) {
+                locDropdown.classList.add('hidden');
+                if (locArrow) locArrow.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        function openStreakModal() {
+            const modal = document.getElementById('streakModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
         function closeStreakModal() {
-            document.getElementById('streakModal').classList.remove('active');
+            const modal = document.getElementById('streakModal');
+            if (modal) modal.classList.add('hidden');
         }
 
         async function handleClaimStreak() {
             const btn = document.getElementById('claimStreakBtn');
             const feedback = document.getElementById('streakModalFeedback');
-            btn.disabled = true;
-            btn.innerText = 'Claiming...';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = 'Claiming...';
+            }
 
             try {
                 const response = await fetch("{{ route('api.streak.claim') }}", {
@@ -296,22 +828,24 @@
                     }
                 });
                 const data = await response.json();
-                feedback.innerText = data.message;
+                if (feedback) feedback.innerText = data.message;
                 if (data.coins !== undefined) {
                     const coinDisplay = document.getElementById('headerCoinsCount');
                     if (coinDisplay) coinDisplay.innerText = data.coins;
                 }
-                btn.innerText = "Claimed Today ✓";
+                if (btn) btn.innerText = "Claimed Today ✓";
             } catch (err) {
-                feedback.innerText = "Error claiming reward. Please try again.";
-                btn.disabled = false;
-                btn.innerText = "Claim Today's Coffee Coins";
+                if (feedback) feedback.innerText = "Error claiming reward. Please try again.";
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Claim Today's Coffee Coins";
+                }
             }
         }
 
         async function handleBoostProfile() {
             const feedback = document.getElementById('streakModalFeedback');
-            feedback.innerText = "Activating Profile Boost...";
+            if (feedback) feedback.innerText = "Activating Profile Boost...";
 
             try {
                 const response = await fetch("{{ route('api.profile.boost') }}", {
@@ -322,13 +856,13 @@
                     }
                 });
                 const data = await response.json();
-                feedback.innerText = data.message;
+                if (feedback) feedback.innerText = data.message;
                 if (data.coins !== undefined) {
                     const coinDisplay = document.getElementById('headerCoinsCount');
                     if (coinDisplay) coinDisplay.innerText = data.coins;
                 }
             } catch (err) {
-                feedback.innerText = "Error activating boost.";
+                if (feedback) feedback.innerText = "Error activating boost.";
             }
         }
     </script>

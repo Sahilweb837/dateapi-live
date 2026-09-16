@@ -1,295 +1,716 @@
 @extends('layouts.app')
 
-@section('title', $targetUser->full_name . ' — Profile | CupDate')
+@section('title', $targetUser->full_name . ' — Atelier Dossier | CupDate')
+
+@section('extra_css')
+<style>
+  /* Editorial Profile Monograph Theme */
+  .profile-film-frame {
+    box-shadow: 0 10px 30px rgba(39, 24, 17, 0.08);
+  }
+  .quote-mark {
+    font-family: 'Playfair Display', serif;
+  }
+</style>
+@endsection
 
 @section('content')
-<!-- 4-Tab Top Navigation Bar -->
-<div class="cupdate-top-tabs">
-    <div class="cupdate-tabs-inner">
-        <a href="{{ route('feed') }}" class="cupdate-tab-btn"><i class="fa-solid fa-mug-hot"></i> Feed</a>
-        <a href="{{ route('swipes') }}" class="cupdate-tab-btn"><i class="fa-solid fa-fire"></i> Swipes</a>
-        <a href="{{ route('messages') }}" class="cupdate-tab-btn"><i class="fa-solid fa-comments"></i> Chat</a>
-        <a href="{{ route('profile') }}" class="cupdate-tab-btn active"><i class="fa-solid fa-user"></i> Profile</a>
-    </div>
-</div>
-
-<div class="max-w-4xl mx-auto px-4 py-8">
-    @if(session('success'))
-        <div class="mb-6 p-4 bg-[#ecfdf5] border border-[#a7f3d0] rounded-2xl text-xs font-bold text-[#065f46] flex items-center gap-2 shadow-none">
-            <i class="fa-solid fa-circle-check text-base"></i>
-            <span>{{ session('success') }}</span>
+<div class="flex flex-col w-full bg-surface min-h-screen">
+  <div class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-margin-desktop py-6 sm:py-10 flex flex-col gap-space-xl">
+    
+    <!-- Editorial Navigation & Header Monogram Bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-4 border-b border-outline-variant/30">
+      <a class="inline-flex items-center gap-space-xs font-label-lg text-label-lg text-secondary hover:text-on-surface transition-colors group" href="{{ route('swipes') }}">
+        <span class="material-symbols-outlined text-body-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+        <span>Back to Discover Deck</span>
+      </a>
+      <div class="flex items-center gap-space-md flex-wrap">
+        <span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">
+          CupDate Edition • Profile No. {{ $targetUser->formatted_member_id }}
+        </span>
+        <div class="inline-flex items-center gap-1.5 px-space-md py-space-xs rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md">
+          <span class="material-symbols-outlined text-secondary text-sm">schedule</span>
+          <span>Member since {{ $targetUser->created_at ? \Carbon\Carbon::parse($targetUser->created_at)->format('M Y') : 'Autumn 2024' }}</span>
         </div>
+        @if($isOwnProfile)
+          <button onclick="openEditModal()" class="inline-flex items-center gap-1.5 px-space-md py-space-xs rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:opacity-90 transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-sm">edit</span>
+            <span>Edit Atelier Dossier</span>
+          </button>
+        @endif
+      </div>
+    </div>
+
+    @if(session('success'))
+      <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-bold text-emerald-900 flex items-center gap-2 shadow-xs">
+        <span class="material-symbols-outlined text-emerald-700 text-base">check_circle</span>
+        <span>{{ session('success') }}</span>
+      </div>
     @endif
 
     <!-- Profile Completeness Meter (for own profile) -->
     @if($isOwnProfile)
-        <div class="mb-6 bg-white border border-[#e5d5ca] rounded-3xl p-5 shadow-none">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-extrabold text-[#24140d] flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-pie text-[#8b5a2b]"></i> Profile Completeness
-                </span>
-                <strong class="text-xs font-extrabold text-[#8b5a2b]">{{ $completeness ?? 80 }}%</strong>
-            </div>
-            <div class="w-full bg-[#f5ede6] border border-[#e5d5ca] h-2.5 rounded-full overflow-hidden shadow-none">
-                <div class="bg-[#8b5a2b] h-full rounded-full transition-all duration-500" style="width: {{ $completeness ?? 80 }}%;"></div>
-            </div>
-            <p class="text-[11px] text-[#7a666c] mt-2">
-                Add your coffee persona, MBTI type, favorite cafe, and photo to receive up to 3x more coffee date invitations!
-            </p>
+      <div class="bg-surface-container-low p-space-md rounded-2xl border border-outline-variant/30 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-secondary text-base">pie_chart</span>
+            <span>Dossier Completeness</span>
+          </span>
+          <strong class="font-label-md text-label-md text-secondary font-bold">{{ $completeness ?? 85 }}%</strong>
         </div>
+        <div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+          <div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: {{ $completeness ?? 85 }}%;"></div>
+        </div>
+        <p class="font-body-sm text-xs text-on-surface-variant">
+          Complete your coffee persona, preferred cafés, and prompts to receive 3x more quality coffee date invitations!
+        </p>
+      </div>
     @endif
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Left: Profile Identity Card -->
-        <div class="bg-white border border-[#e5d5ca] rounded-3xl p-6 text-center flex flex-col items-center shadow-none">
-            <div class="relative mb-3">
-                <img id="avatarDisplay" src="{{ $targetUser->avatar_url }}" alt="{{ $targetUser->full_name }}" class="w-32 h-32 rounded-full object-cover border-4 border-[#8b5a2b] shadow-none">
-                @if($targetUser->is_verified)
-                    <i class="fa-solid fa-circle-check text-[#8b5a2b] text-2xl absolute bottom-1 right-1 bg-white rounded-full"></i>
-                @endif
-                @if($isOwnProfile)
-                    <button type="button" onclick="document.getElementById('avatarFileInput').click()" class="absolute bottom-1 left-1 w-8 h-8 rounded-full bg-[#8b5a2b] text-white flex items-center justify-center text-xs hover:bg-[#6d441e] transition cursor-pointer shadow-none" title="Change Photo">
-                        <i class="fa-solid fa-camera"></i>
-                    </button>
-                @endif
+    <!-- Main Editorial Two-Column Spread -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-start">
+      
+      <!-- ============================================================= -->
+      <!-- LEFT COLUMN (Visual Gallery, Coffee Persona & Trust) - 5 cols -->
+      <!-- ============================================================= -->
+      <div class="lg:col-span-5 flex flex-col gap-space-lg">
+        
+        <!-- Primary Photo Frame with Monograph Styling -->
+        <div class="relative bg-surface-container-low p-space-md rounded-2xl shadow-sm group profile-film-frame border border-outline-variant/30">
+          <div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden bg-surface-container">
+            <img class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out" 
+                 id="mainProfileImg"
+                 src="{{ $targetUser->avatar_url }}" 
+                 alt="{{ $targetUser->full_name }}"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary-container/70 via-transparent to-transparent opacity-85 pointer-events-none"></div>
+            
+            <div class="absolute bottom-space-md left-space-md right-space-md flex items-end justify-between text-on-primary">
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm tracking-wider uppercase opacity-90 text-secondary-fixed">Cover Dispatch</span>
+                <span class="font-headline-sm text-headline-sm font-semibold">{{ $targetUser->country ?? 'Himachal Pradesh, India' }}</span>
+              </div>
+              <span class="px-space-md py-space-xs rounded-full bg-surface/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm shadow-sm flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs text-on-tertiary-container" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                <span>Curated Monograph</span>
+              </span>
             </div>
-
-            <!-- Member ID Badge -->
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-[#f5ede6] text-[#8b5a2b] border border-[#e5d5ca] mb-2 shadow-none">
-                <i class="fa-solid fa-id-badge text-[#8b5a2b]"></i> ID #{{ $targetUser->formatted_member_id }}
-            </span>
-
-            <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-xl text-[#24140d] flex items-center gap-1.5">
-                {{ $targetUser->full_name }}
-            </h2>
-            <p class="text-xs text-[#7a666c] mt-0.5">
-                {{ $targetUser->age }} Years Old • {{ ucfirst($targetUser->gender ?? 'Not specified') }}
-            </p>
-
-            <!-- Photo Download Link -->
-            <a href="{{ $targetUser->avatar_url }}" download="{{ \Illuminate\Support\Str::slug($targetUser->full_name) }}-cupid-photo.jpg" class="mt-3 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#fbf8f5] border border-[#e5d5ca] text-[11px] font-bold text-[#8b5a2b] hover:bg-[#f5ede6] transition shadow-none cursor-pointer">
-                <i class="fa-solid fa-download text-[10px]"></i> Download HD Photo
-            </a>
-
-            @if($targetUser->is_boosted)
-                <div class="mt-3 inline-flex items-center gap-1.5 bg-[#8b5a2b] text-white text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-none">
-                    <i class="fa-solid fa-bolt"></i> Boosted Profile
-                </div>
-            @endif
 
             @if($isOwnProfile)
-                <!-- Streak & Coins Quick Card -->
-                <div class="w-full mt-6 pt-5 border-t border-[#e5d5ca] space-y-3">
-                    <div class="flex items-center justify-between bg-[#fbf8f5] border border-[#e5d5ca] p-3 rounded-2xl shadow-none">
-                        <div class="text-left">
-                            <span class="text-[11px] font-bold text-[#7a666c] uppercase block">Wallet Balance</span>
-                            <strong class="text-base font-extrabold text-[#8b5a2b] flex items-center gap-1">
-                                <i class="fa-solid fa-coins text-[#f59e0b]"></i> {{ $targetUser->coins ?? 50 }} Beans
-                            </strong>
-                        </div>
-                        <button onclick="openStreakModal()" class="px-3 py-1.5 bg-[#8b5a2b] text-white rounded-xl text-xs font-bold hover:bg-[#6d441e] transition cursor-pointer shadow-none">
-                            Claim Streak
-                        </button>
-                    </div>
-
-                    <button onclick="document.getElementById('editProfileModal').classList.add('active')" class="w-full py-2.5 bg-white border border-[#e5d5ca] rounded-xl text-xs font-bold text-[#24140d] hover:bg-[#fbf8f5] transition cursor-pointer flex items-center justify-center gap-1.5 shadow-none">
-                        <i class="fa-solid fa-pen text-xs"></i> Edit Profile & Coffee Persona
-                    </button>
-
-                    <button onclick="openStreakModal()" class="w-full py-2.5 bg-[#f5ede6] border border-[#e5d5ca] text-[#8b5a2b] rounded-xl text-xs font-bold hover:bg-[#ede2d8] transition cursor-pointer flex items-center justify-center gap-1.5 shadow-none">
-                        <i class="fa-solid fa-bolt"></i> Boost Profile for 24h
-                    </button>
-                </div>
-            @else
-                <div class="w-full mt-6 pt-5 border-t border-[#e5d5ca] flex gap-2">
-                    <a href="{{ route('messages', ['user_id' => $targetUser->id]) }}" class="flex-1 py-3 bg-[#8b5a2b] text-white rounded-xl text-xs font-bold hover:bg-[#6d441e] transition flex items-center justify-center gap-1.5 shadow-none">
-                        <i class="fa-solid fa-comments"></i> Send Message
-                    </a>
-                </div>
+              <button type="button" onclick="document.getElementById('avatarFileInput').click()" class="absolute top-3 right-3 p-2 rounded-full bg-surface/90 backdrop-blur-md text-on-surface hover:bg-surface transition-all shadow-md" title="Change Cover Photo">
+                <span class="material-symbols-outlined text-sm">photo_camera</span>
+              </button>
             @endif
+          </div>
+
+          <!-- Secondary Thumbnail Grid -->
+          <div class="grid grid-cols-3 gap-space-sm mt-space-md">
+            <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-container group/thumb cursor-pointer shadow-xs">
+              <img class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" 
+                   loading="lazy"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFGgnjhB0HydaHvc_VPHGS4gD5sjo9kmWwMWWyOkudmhravYv9lArV4fDe9zDOcWp3Fm0AN1JsT15Ju-kqmW1ZlutDSCNE57-8ApbpRRu2RLt5mGbru9XbzPlnxPflrxAWAK2QVBxy83csvQXIZmME80q5MaZZQ8vUwpRRk-B73d-XgyyWebeipoxdCk_O9ffMWz7EUBfYdiUqTGeM8Lz2nPXoTIQDUgjSLWmk38RA-zztL5RADOUJqQ"
+                   alt="Atelier Session"/>
+              <span class="absolute inset-x-0 bottom-0 bg-primary-container/80 text-on-primary font-label-sm text-[10px] py-0.5 text-center truncate px-1 font-medium">Atelier Session</span>
+            </div>
+            <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-container group/thumb cursor-pointer shadow-xs">
+              <img class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" 
+                   loading="lazy"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxGyXFsD5R_YWdRyOrgg4oQYB10Oioh_ATrlPyFxV3DAUki6Wj14Aj0QteFuCDDtdE2e3RnvuaYZcZ9ZN725RSuEKd-Cfl5241peTJfxgTZNxvRsguo0BmZ3PZWAeYlpAPi_phnP9Wv7N0L7jg8vbYcT0nEIRZtec_i_laK7ETyTdj4dKRxFivn2y-M2q8aPd65W-mLOpyMNiQFG4CpoIE8VoA2AaqWmDu2fn0GiCm0JcpcPZt_OBQwg"
+                   alt="Boutique Café"/>
+              <span class="absolute inset-x-0 bottom-0 bg-primary-container/80 text-on-primary font-label-sm text-[10px] py-0.5 text-center truncate px-1 font-medium">Boutique Café</span>
+            </div>
+            <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-container group/thumb cursor-pointer shadow-xs">
+              <img class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" 
+                   loading="lazy"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuB04UGK_KQxMf0cSjo1GBgg-LGePP5R76hYA-tEJsRUnpBFbXcvQSNRxckOgjsf62CSaAAEM4NsORWSxrECftL5Fx6tHGYb6xBBQGBB6xJ2wYP2qjl_jHTGBUIXz90DC1-0PAoLUpx0oASAMg-0fnxjRIPHKqxnhM_jhUs7erUlM9q5V1k050mmn8o3oAELsnHVZ8CdhY1ZTyoNYFH4BhTMDRppc9ZvR4BednOsngy7p3SGIHuz__Hwlw"
+                   alt="Mountain Sun"/>
+              <span class="absolute inset-x-0 bottom-0 bg-primary-container/80 text-on-primary font-label-sm text-[10px] py-0.5 text-center truncate px-1 font-medium">Scenic Escape</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Right: Bio, Traits, Details -->
-        <div class="md:col-span-2 space-y-6">
-            <!-- Bio Card -->
-            <div class="bg-white border border-[#e5d5ca] rounded-3xl p-6 shadow-none">
-                <h3 class="font-['Plus_Jakarta_Sans'] font-extrabold text-base text-[#24140d] mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-quote-left text-[#8b5a2b]"></i> About Me
-                </h3>
-                <p class="text-sm text-[#4a383e] leading-relaxed">
-                    {{ $targetUser->bio ?? 'No bio written yet. Ready to meet over a warm cup of coffee!' }}
-                </p>
+        <!-- Coffee Persona Card -->
+        <div class="bg-surface-container-low p-space-lg rounded-2xl shadow-sm flex flex-col gap-space-md border border-outline-variant/30">
+          <div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/20">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-secondary text-headline-sm">coffee</span>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">The Coffee Persona</h3>
+            </div>
+            <span class="px-space-md py-space-xs rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider font-bold">
+              Tasting Notes
+            </span>
+          </div>
+
+          <div class="space-y-space-md">
+            <!-- Signature Order -->
+            <div class="bg-surface p-space-md rounded-xl shadow-xs flex items-start gap-space-md border border-outline-variant/20">
+              <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 text-secondary">
+                <span class="material-symbols-outlined">local_cafe</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Signature Order</span>
+                <span class="font-body-md text-body-md font-semibold text-on-surface">{{ $targetUser->coffee_style ?? 'Oat Milk Cortado (extra hot)' }}</span>
+                <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Rich ristretto shot with velvety micro-foam texture and delicate natural sweetness.</p>
+              </div>
             </div>
 
-            <!-- Coffee Persona & Vibe -->
-            <div class="bg-white border border-[#e5d5ca] rounded-3xl p-6 shadow-none">
-                <h3 class="font-['Plus_Jakarta_Sans'] font-extrabold text-base text-[#24140d] mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-mug-hot text-[#8b5a2b]"></i> Coffee Persona & Traits
-                </h3>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <div class="p-3 bg-[#fbf8f5] border border-[#e5d5ca] rounded-2xl shadow-none">
-                        <span class="text-[10px] text-[#7a666c] uppercase font-bold block">Coffee Style</span>
-                        <strong class="text-sm text-[#8b5a2b] font-extrabold flex items-center gap-1">
-                            ☕ {{ $targetUser->coffee_style ?: 'Vanilla Oat Latte' }}
-                        </strong>
-                    </div>
-                    <div class="p-3 bg-[#fbf8f5] border border-[#e5d5ca] rounded-2xl shadow-none">
-                        <span class="text-[10px] text-[#7a666c] uppercase font-bold block">MBTI Type</span>
-                        <strong class="text-sm text-[#8b5a2b] font-extrabold">{{ $targetUser->mbti ?: 'ENFP' }}</strong>
-                    </div>
-                    <div class="p-3 bg-[#fbf8f5] border border-[#e5d5ca] rounded-2xl shadow-none">
-                        <span class="text-[10px] text-[#7a666c] uppercase font-bold block">Zodiac Sign</span>
-                        <strong class="text-sm text-[#8b5a2b] font-extrabold">{{ $targetUser->astrology ?: 'Leo' }}</strong>
-                    </div>
-                    <div class="p-3 bg-[#fbf8f5] border border-[#e5d5ca] rounded-2xl shadow-none">
-                        <span class="text-[10px] text-[#7a666c] uppercase font-bold block">City</span>
-                        <strong class="text-sm text-[#8b5a2b] font-extrabold">{{ $targetUser->country ?: 'Pune, India' }}</strong>
-                    </div>
-                    <div class="p-3 bg-[#fbf8f5] border border-[#e5d5ca] rounded-2xl shadow-none">
-                        <span class="text-[10px] text-[#7a666c] uppercase font-bold block">Member ID</span>
-                        <strong class="text-sm text-[#8b5a2b] font-extrabold">#{{ $targetUser->formatted_member_id }}</strong>
-                    </div>
-                    <div class="p-3 bg-[#fbf8f5] border border-[#e5d5ca] rounded-2xl shadow-none">
-                        <span class="text-[10px] text-[#7a666c] uppercase font-bold block">Verification</span>
-                        <strong class="text-sm text-[#065f46] font-extrabold flex items-center gap-1">
-                            <i class="fa-solid fa-circle-check text-[#065f46]"></i> Selfie Pass
-                        </strong>
-                    </div>
-                </div>
+            <!-- Go-to Cafe Vibe -->
+            <div class="bg-surface p-space-md rounded-xl shadow-xs flex items-start gap-space-md border border-outline-variant/20">
+              <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 text-secondary">
+                <span class="material-symbols-outlined">nature_people</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Go-To Café Vibe</span>
+                <span class="font-body-md text-body-md font-semibold text-on-surface">Sunlit verandas, vinyl records, quiet chatter</span>
+                <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Places where conversation floats gently and cozy corner booths invite thoughtful dialog.</p>
+              </div>
             </div>
 
-            <!-- Social Connect Handles -->
-            @if($targetUser->instagram || $targetUser->snapchat)
-                <div class="bg-white border border-[#e5d5ca] rounded-3xl p-6 shadow-none">
-                    <h3 class="font-['Plus_Jakarta_Sans'] font-extrabold text-base text-[#24140d] mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-share-nodes text-[#8b5a2b]"></i> Social Handles
-                    </h3>
-                    <div class="flex flex-wrap gap-3">
-                        @if($targetUser->instagram)
-                            <span class="inline-flex items-center gap-2 bg-[#fbf8f5] border border-[#e5d5ca] px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#24140d]">
-                                <i class="fa-brands fa-instagram text-[#8b5a2b] text-sm"></i> {{ $targetUser->instagram }}
-                            </span>
-                        @endif
-                        @if($targetUser->snapchat)
-                            <span class="inline-flex items-center gap-2 bg-[#fbf8f5] border border-[#e5d5ca] px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#24140d]">
-                                <i class="fa-brands fa-snapchat text-[#f59e0b] text-sm"></i> {{ $targetUser->snapchat }}
-                            </span>
-                        @endif
-                    </div>
+            <!-- Caffeine Tolerance -->
+            <div class="bg-surface p-space-md rounded-xl shadow-xs flex items-start gap-space-md border border-outline-variant/20">
+              <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 text-secondary">
+                <span class="material-symbols-outlined">battery_charging_full</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Caffeine Tolerance</span>
+                <span class="font-body-md text-body-md font-semibold text-on-surface">Exactly 2 cups before noon</span>
+                <div class="flex items-center gap-1.5 mt-space-xs">
+                  <span class="w-6 h-2 rounded-full bg-secondary"></span>
+                  <span class="w-6 h-2 rounded-full bg-secondary"></span>
+                  <span class="w-6 h-2 rounded-full bg-surface-variant"></span>
+                  <span class="font-label-sm text-label-sm text-on-surface-variant ml-space-xs font-medium">Strict sunset cutoff</span>
                 </div>
-            @endif
+              </div>
+            </div>
+          </div>
 
-            <!-- Interests & Hobbies -->
-            @if($targetUser->interests)
-                <div class="bg-white border border-[#e5d5ca] rounded-3xl p-6 shadow-none">
-                    <h3 class="font-['Plus_Jakarta_Sans'] font-extrabold text-base text-[#24140d] mb-3">Interests & Favorites</h3>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach(explode(',', $targetUser->interests) as $item)
-                            @if(trim($item))
-                                <span class="bg-[#f5ede6] text-[#8b5a2b] border border-[#e5d5ca] px-3.5 py-1 rounded-full text-xs font-bold shadow-none">
-                                    #{{ trim($item) }}
-                                </span>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+          <!-- Specialty Brew Chart Visual -->
+          <div class="bg-surface-container p-space-md rounded-xl flex items-center justify-between mt-space-xs border border-outline-variant/20">
+            <div class="flex flex-col">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Flavor Profile Affinity</span>
+              <span class="font-headline-sm text-body-lg font-serif italic text-on-surface">Stone fruit, bergamot &amp; dark cacao</span>
+            </div>
+            <svg class="w-16 h-16 text-secondary shrink-0" viewBox="0 0 36 36">
+              <path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+              <path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="3.5"></path>
+              <text class="font-label-sm fill-current text-center text-on-surface font-bold" text-anchor="middle" x="18" y="21">88%</text>
+            </svg>
+          </div>
         </div>
-    </div>
-</div>
 
-<!-- Edit Profile Modal with Rich Trait Selectors -->
-@if($isOwnProfile)
-<div id="editProfileModal" class="custom-modal-backdrop">
-    <div class="custom-modal-card max-h-[90vh] overflow-y-auto border border-[#e5d5ca] shadow-none">
-        <button onclick="document.getElementById('editProfileModal').classList.remove('active')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h3 class="font-['Plus_Jakarta_Sans'] font-extrabold text-lg text-[#24140d] mb-4">Edit Profile & Coffee Persona</h3>
+        <!-- Verification & Trust Badge -->
+        <div class="bg-surface-container-high/80 p-space-md rounded-2xl flex items-center justify-between shadow-xs border border-outline-variant/30">
+          <div class="flex items-center gap-space-md">
+            <div class="w-9 h-9 rounded-full bg-on-tertiary-container text-on-tertiary flex items-center justify-center shrink-0 font-bold">
+              <span class="material-symbols-outlined text-base">verified_user</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-label-md text-label-md font-bold text-on-surface">ID &amp; Live Selfie Verified</span>
+              <span class="font-body-sm text-body-sm text-secondary">Verified Member of CupDate Society</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 px-space-md py-space-xs rounded-full bg-surface text-on-surface font-label-sm text-label-sm shadow-xs border border-outline-variant/20">
+            <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+            <span class="font-semibold">Active today</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- RIGHT COLUMN (Deep Dives, Prompts, Neighborhoods, Intentions) - 7 cols -->
+      <!-- ========================================================================= -->
+      <div class="lg:col-span-7 flex flex-col gap-space-lg">
         
-        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <!-- Profile Masthead & Bio -->
+        <div class="bg-surface-container-low p-space-xl rounded-2xl shadow-sm flex flex-col gap-space-md relative overflow-hidden border border-outline-variant/30">
+          <div class="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-secondary-container/20 blur-2xl pointer-events-none"></div>
+          
+          <div class="flex flex-wrap items-center justify-between gap-space-sm">
+            <div class="flex items-baseline gap-space-sm">
+              <h1 class="font-headline-xl text-headline-xl text-on-surface font-semibold tracking-tight">
+                {{ $targetUser->full_name }}
+              </h1>
+              <span class="font-headline-md text-headline-md text-secondary italic font-normal">
+                {{ $targetUser->age }}
+              </span>
+            </div>
+            <div class="flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface text-on-surface font-label-md text-label-md shadow-xs border border-outline-variant/20">
+              <span class="material-symbols-outlined text-sm text-on-tertiary-container">favorite</span>
+              <span class="font-semibold">Mutual Coffee Vibe • 94% Match</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-space-xs text-secondary font-label-lg text-label-lg font-medium">
+            <span class="material-symbols-outlined text-base">palette</span>
+            <span>{{ $targetUser->gender ? ucfirst($targetUser->gender) : 'Intentional Member' }} · {{ $targetUser->mbti ? $targetUser->mbti . ' Personality' : 'Creative Visionary' }}</span>
+            <span class="opacity-40">•</span>
+            <span class="material-symbols-outlined text-base">location_on</span>
+            <span>{{ $targetUser->country ?? 'Himachal Pradesh, India' }}</span>
+          </div>
+
+          <!-- Editorial Lead Quote / Statement -->
+          <div class="bg-surface p-space-lg rounded-xl shadow-xs relative border border-outline-variant/20">
+            <span class="font-headline-lg text-headline-xl leading-none text-secondary/20 absolute top-2 left-3 select-none quote-mark">“</span>
+            <p class="font-headline-md text-body-lg text-on-surface italic font-serif leading-relaxed pl-space-md">
+              {{ $targetUser->bio ?? 'Believer in slow mornings, analog film, natural wine, and deep conversations over well-roasted beans. Looking for someone intentional who appreciates cozy café corners.' }}
+            </p>
+          </div>
+
+          <!-- Daily Ritual Micro-Tags -->
+          <div class="flex flex-wrap items-center gap-space-xs pt-space-xs">
+            <span class="font-label-sm text-label-sm uppercase tracking-wider text-outline mr-space-xs font-bold">Rituals:</span>
+            @if($targetUser->mbti)
+              <span class="px-space-md py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant font-semibold">{{ $targetUser->mbti }}</span>
+            @endif
+            @if($targetUser->astrology)
+              <span class="px-space-md py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant font-semibold">{{ $targetUser->astrology }}</span>
+            @endif
+            <span class="px-space-md py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">Early riser</span>
+            <span class="px-space-md py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">Analog film</span>
+            <span class="px-space-md py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">Weekend markets</span>
+            <span class="px-space-md py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">Acoustic indie playlists</span>
+          </div>
+        </div>
+
+        <!-- Prompt 1: The Quickest Way to My Heart -->
+        <div class="bg-surface-container-low p-space-xl rounded-2xl shadow-sm flex flex-col gap-space-md group border border-outline-variant/30">
+          <div class="flex items-center justify-between">
+            <span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-bold">Editorial Prompt • Vol. I</span>
+            <span class="material-symbols-outlined text-on-tertiary-container group-hover:scale-110 transition-transform">bakery_dining</span>
+          </div>
+          <h2 class="font-headline-md text-headline-md text-on-surface font-semibold">
+            The quickest way to my heart...
+          </h2>
+          <div class="bg-surface p-space-lg rounded-xl shadow-xs border border-outline-variant/20">
+            <p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+              Surprise me with a still-warm cardamom bun or pain au chocolat from a quiet artisanal bakery, walk with me through scenic cobblestone alleys, and explore an indie bookstore where we pick out paperbacks for each other.
+            </p>
+          </div>
+          <div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant">
+            <span class="material-symbols-outlined text-sm text-secondary">storefront</span>
+            <span>Preferred rendez-vous spots: Roasteries, botanical garden benches, vinyl lounges</span>
+          </div>
+        </div>
+
+        <!-- Prompt 2: Typical Saturday Routine -->
+        <div class="bg-surface-container-low p-space-xl rounded-2xl shadow-sm flex flex-col gap-space-md group border border-outline-variant/30">
+          <div class="flex items-center justify-between">
+            <span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-bold">Editorial Prompt • Vol. II</span>
+            <span class="material-symbols-outlined text-secondary group-hover:scale-110 transition-transform">wb_sunny</span>
+          </div>
+          <h2 class="font-headline-md text-headline-md text-on-surface font-semibold">
+            Typical weekend routine...
+          </h2>
+          <div class="bg-surface p-space-lg rounded-xl shadow-xs flex flex-col gap-space-md border border-outline-variant/20">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+              <div class="flex flex-col gap-1 p-space-sm bg-surface-container-low rounded-lg">
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">08:00 AM</span>
+                <span class="font-body-md text-body-md font-semibold text-on-surface">Mountain Breeze Walk</span>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">Early fresh morning air through pine trees.</p>
+              </div>
+              <div class="flex flex-col gap-1 p-space-sm bg-surface-container-low rounded-lg">
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">10:30 AM</span>
+                <span class="font-body-md text-body-md font-semibold text-on-surface">Cold Brew &amp; Reading</span>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">Sitting by sunny window banquettes listening to jazz.</p>
+              </div>
+              <div class="flex flex-col gap-1 p-space-sm bg-surface-container-low rounded-lg">
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">02:00 PM</span>
+                <span class="font-body-md text-body-md font-semibold text-on-surface">Creative Pursuits</span>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">Photography &amp; journal musings until sunset.</p>
+              </div>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface italic font-serif pt-space-xs">
+              Bonus points if the evening ends with quiet rooftop conversation under clear starry skies.
+            </p>
+          </div>
+        </div>
+
+        <!-- Mutual Connections, Passions & Sparks -->
+        <div class="bg-surface-container-low p-space-xl rounded-2xl shadow-sm flex flex-col gap-space-md border border-outline-variant/30">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Mutual Sparks</span>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Interests &amp; Shared Passions</h3>
+            </div>
+            <span class="px-space-md py-space-xs rounded-full bg-secondary-container/40 text-on-secondary-container font-label-sm text-label-sm font-bold">
+              Shared Affinity Tags
+            </span>
+          </div>
+          
+          <div class="flex flex-wrap gap-space-sm">
+            @php
+              $interestsList = !empty($targetUser->interests) ? explode(',', $targetUser->interests) : ['Specialty Coffee', 'Design & Typography', 'Mid-Century Modern', 'Vinyl Records', 'Matcha Tasting', '35mm Film', 'Acoustic Indie'];
+            @endphp
+            @foreach($interestsList as $interest)
+              <div class="px-space-lg py-space-sm rounded-full bg-surface text-on-surface font-label-md text-label-md flex items-center gap-space-xs shadow-xs border border-outline-variant/20 font-medium">
+                <span class="material-symbols-outlined text-secondary text-base">coffee_maker</span>
+                <span>{{ trim($interest) }}</span>
+              </div>
+            @endforeach
+          </div>
+        </div>
+
+        <!-- Neighborhood Map Preview Card -->
+        <div class="bg-surface-container-low p-space-lg rounded-2xl shadow-sm flex flex-col gap-space-md border border-outline-variant/30">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-secondary">explore</span>
+              <span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Stomping Grounds</span>
+            </div>
+            <span class="font-label-md text-label-md text-secondary font-medium">{{ $targetUser->country ?? 'Himachal Pradesh' }}</span>
+          </div>
+          <div class="w-full h-48 bg-cover bg-center rounded-xl relative overflow-hidden shadow-xs border border-outline-variant/30" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApp_ZFRa1LnNiH_1xynyYBAtmmtDxi0OYiGxqaNZVYt6oFGTzQ7vVoC4G_5GuzoSjQYJOmyYJf4wyyRBLRFEywzpxVZPOjR2ctZsp8ukpN9RMr-pE9VKcXaUqfK2K3FiA4pO5Ugf23IQJEAaPgwF3MNreCsVEy9ycCUzC2P1mYsLCvkXxYXYqKjHna7Citc4rZ83144MmDfCJQyBOaepEGTuTCOEMBs0_b_c2x5M3c-nkLaFuFB0vrbg')">
+            <div class="absolute inset-0 bg-primary-container/20"></div>
+            <div class="absolute bottom-space-md left-space-md bg-surface/95 backdrop-blur-md px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface shadow-md flex items-center gap-space-xs border border-outline-variant/20">
+              <span class="w-2.5 h-2.5 rounded-full bg-on-tertiary-container"></span>
+              <span>Partner Café: Himalayan Roastery, {{ $targetUser->country ?? 'Central Square' }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Floating / Sticky Action Dock for Connection & Dating -->
+    <div class="sticky bottom-6 z-40 w-full max-w-4xl mx-auto mt-space-lg">
+      <div class="bg-surface/90 backdrop-blur-xl p-space-md rounded-full shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-space-md ring-1 ring-outline-variant/30 border border-outline-variant/20">
+        
+        <!-- Left: Quick Coffee Matchmaker Context -->
+        <div class="flex items-center gap-space-md pl-space-sm">
+          <img class="w-12 h-12 rounded-full object-cover shadow-sm ring-2 ring-surface" 
+               src="{{ $targetUser->avatar_url }}" 
+               alt="{{ $targetUser->full_name }}"/>
+          <div class="hidden sm:flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="font-label-lg text-label-lg font-bold text-on-surface">{{ $targetUser->full_name }}, {{ $targetUser->age }}</span>
+              <span class="material-symbols-outlined text-xs text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            </div>
+            <span class="font-body-sm text-body-sm text-secondary font-medium">Ready for a slow coffee this weekend</span>
+          </div>
+        </div>
+
+        <!-- Right: Action CTA Cluster -->
+        <div class="flex items-center gap-space-sm w-full sm:w-auto justify-end">
+          @if(!$isOwnProfile)
+            <!-- Bookmark Button -->
+            <button class="w-11 h-11 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-all shrink-0 hover:scale-105 active:scale-95 cursor-pointer shadow-xs" id="bookmark-btn" title="Save to Atelier Bookmarks">
+              <span class="material-symbols-outlined text-lg" id="bookmark-icon">bookmark_border</span>
+            </button>
+            
+            <!-- Send Note / Message Button -->
+            <a href="{{ route('messages', ['user_id' => $targetUser->id]) }}" class="px-space-lg py-space-sm rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg flex items-center gap-space-xs transition-all hover:scale-[1.02] active:scale-95 shadow-xs font-semibold">
+              <span class="material-symbols-outlined text-base">chat_bubble_outline</span>
+              <span class="hidden md:inline">Send a Note</span>
+              <span class="md:hidden">Chat</span>
+            </a>
+
+            <!-- Primary Direct Coffee Invite with Calendar Shortcut -->
+            <button class="px-space-xl py-space-sm rounded-full bg-on-tertiary-container hover:bg-tertiary-container text-on-tertiary font-label-lg text-label-lg flex items-center gap-space-xs transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 font-bold cursor-pointer" id="brew-date-btn">
+              <span class="material-symbols-outlined text-base">calendar_today</span>
+              <span>Suggest Coffee Date</span>
+            </button>
+          @else
+            <button onclick="openEditModal()" class="px-space-xl py-space-sm rounded-full bg-primary hover:bg-primary/90 text-on-primary font-label-lg text-label-lg flex items-center gap-space-xs transition-all shadow-md hover:scale-[1.02] font-bold cursor-pointer">
+              <span class="material-symbols-outlined text-base">edit</span>
+              <span>Edit Your Dossier</span>
+            </button>
+          @endif
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Interactive Modal: Suggest Coffee Date Scheduler -->
+    <div class="fixed inset-0 z-50 bg-primary-container/40 backdrop-blur-sm hidden items-center justify-center p-space-md" id="date-picker-modal">
+      <div class="bg-surface max-w-lg w-full rounded-2xl p-space-xl shadow-2xl flex flex-col gap-space-lg relative animate-in fade-in zoom-in duration-200 border border-outline-variant/30">
+        
+        <div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/20">
+          <div class="flex items-center gap-space-sm">
+            <div class="w-10 h-10 rounded-full bg-secondary-container/60 text-secondary flex items-center justify-center">
+              <span class="material-symbols-outlined">local_cafe</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-headline-sm text-headline-sm font-semibold text-on-surface">Brew a Date with {{ explode(' ', $targetUser->full_name)[0] }}</span>
+              <span class="font-body-sm text-body-sm text-secondary font-medium">Step 1: Pick an atelier café &amp; time</span>
+            </div>
+          </div>
+          <button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer" id="close-modal-btn">
+            <span class="material-symbols-outlined text-base">close</span>
+          </button>
+        </div>
+
+        <!-- Venue Selection -->
+        <div class="flex flex-col gap-space-xs">
+          <label class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Selected Sanctuary</label>
+          <div class="bg-surface-container-low p-space-md rounded-xl flex items-center justify-between border border-outline-variant/20">
+            <div class="flex flex-col">
+              <span class="font-body-md text-body-md font-semibold text-on-surface">The Himalayan Roastery &amp; Café</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">{{ $targetUser->country ?? 'Central District' }} • Match for “Vinyl &amp; Cortados”</span>
+            </div>
+            <span class="px-space-md py-space-xs rounded-full bg-surface text-secondary font-label-sm text-label-sm font-bold shadow-xs">
+              {{ explode(' ', $targetUser->full_name)[0] }}’s Favorite
+            </span>
+          </div>
+        </div>
+
+        <!-- Day Selection Pills -->
+        <div class="flex flex-col gap-space-xs">
+          <label class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Proposed Morning</label>
+          <div class="grid grid-cols-3 gap-space-sm" id="day-pill-group">
+            <button class="day-opt p-space-md rounded-xl bg-surface-container text-on-surface font-label-md text-label-md flex flex-col items-center gap-1 hover:bg-secondary-container/40 transition-colors cursor-pointer" type="button">
+              <span class="font-bold">Sat, Nov 18</span>
+              <span class="text-xs text-on-surface-variant">10:30 AM</span>
+            </button>
+            <button class="day-opt p-space-md rounded-xl bg-on-tertiary-container text-on-tertiary font-label-md text-label-md flex flex-col items-center gap-1 shadow-sm cursor-pointer" type="button">
+              <span class="font-bold">Sun, Nov 19</span>
+              <span class="text-xs text-on-tertiary/80">11:00 AM</span>
+            </button>
+            <button class="day-opt p-space-md rounded-xl bg-surface-container text-on-surface font-label-md text-label-md flex flex-col items-center gap-1 hover:bg-secondary-container/40 transition-colors cursor-pointer" type="button">
+              <span class="font-bold">Tue, Nov 21</span>
+              <span class="text-xs text-on-surface-variant">04:00 PM</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Personal Invite Note -->
+        <div class="flex flex-col gap-space-xs">
+          <label class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Opening Dispatch</label>
+          <textarea id="inviteCustomNote" class="w-full bg-surface-container-low p-space-md rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container transition-colors resize-none border border-outline-variant/30" placeholder="I’ll pick up the warm cinnamon buns if you promise to tell me the story behind your favorite roast..." rows="3"></textarea>
+        </div>
+
+        <!-- Modal Submit Actions -->
+        <div class="flex items-center justify-between pt-space-xs">
+          <button class="px-space-md py-space-sm text-secondary font-label-md text-label-md hover:text-on-surface transition-colors cursor-pointer font-semibold" id="cancel-modal-btn">
+            Cancel
+          </button>
+          <button class="px-space-xl py-space-sm rounded-full bg-on-tertiary-container text-on-tertiary font-label-lg text-label-lg hover:bg-tertiary-container transition-colors shadow-md flex items-center gap-space-xs font-bold cursor-pointer" id="confirm-invite-btn">
+            <span class="material-symbols-outlined text-sm">send</span>
+            <span>Send Coffee Invitation</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Edit Profile Modal (for own profile) -->
+    @if($isOwnProfile)
+      <div id="editProfileModal" class="fixed inset-0 z-50 bg-primary-container/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-surface max-w-xl w-full rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto border border-outline-variant/30">
+          <div class="flex items-center justify-between pb-3 border-b border-outline-variant/20">
+            <h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Edit Atelier Dossier</h3>
+            <button onclick="closeEditModal()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+
+          <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
             @csrf
             
-            <!-- Hidden Avatar File Input -->
             <input type="file" id="avatarFileInput" name="avatar_file" accept="image/*" class="hidden" onchange="previewAvatar(this)">
 
-            <div>
-                <label class="block text-xs font-bold text-[#7a666c] mb-1">Full Name</label>
-                <input type="text" name="full_name" value="{{ $targetUser->full_name }}" required class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
+            <div class="flex flex-col gap-1">
+              <label class="font-label-md text-label-md font-bold text-on-surface">Full Name</label>
+              <input type="text" name="full_name" value="{{ $targetUser->full_name }}" required class="w-full px-4 py-2 bg-surface-container-high rounded-full font-body-md text-on-surface focus:outline-none focus:bg-surface-container">
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-[#7a666c] mb-1">Bio / Dating Vibe</label>
-                <textarea name="bio" rows="3" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b] resize-none">{{ $targetUser->bio }}</textarea>
+            <div class="flex flex-col gap-1">
+              <label class="font-label-md text-label-md font-bold text-on-surface">Bio / Slow Dating Philosophy</label>
+              <textarea name="bio" rows="3" class="w-full p-3 bg-surface-container-high rounded-xl font-body-md text-on-surface focus:outline-none focus:bg-surface-container resize-none">{{ $targetUser->bio }}</textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold text-[#7a666c] mb-1">Coffee Style</label>
-                    <select name="coffee_style" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
-                        @foreach(['Vanilla Oat Latte', 'Espresso Macchiato', 'Cold Brew Nitro', 'Cappuccino Cinnamon', 'Dark Roast Mocha', 'Pour-Over Arabica'] as $cStyle)
-                            <option value="{{ $cStyle }}" {{ ($targetUser->coffee_style === $cStyle) ? 'selected' : '' }}>{{ $cStyle }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-[#7a666c] mb-1">City / Region</label>
-                    <input type="text" name="country" value="{{ $targetUser->country ?? 'Pune, India' }}" placeholder="e.g. Pune, India" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
-                </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="flex flex-col gap-1">
+                <label class="font-label-md text-label-md font-bold text-on-surface">Coffee Style</label>
+                <select name="coffee_style" class="w-full px-4 py-2 bg-surface-container-high rounded-full font-body-md text-on-surface focus:outline-none">
+                  @foreach(['Oat Milk Cortado', 'Single-Origin V60 Pour-Over', 'Espresso Macchiato', 'Cold Brew Nitro', 'Ceremonial Matcha Latte', 'Flat White (Velvet)'] as $style)
+                    <option value="{{ $style }}" {{ ($targetUser->coffee_style === $style) ? 'selected' : '' }}>{{ $style }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="font-label-md text-label-md font-bold text-on-surface">Home City / Roastery District</label>
+                <input type="text" name="country" value="{{ $targetUser->country ?? 'Himachal Pradesh' }}" class="w-full px-4 py-2 bg-surface-container-high rounded-full font-body-md text-on-surface focus:outline-none">
+              </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold text-[#7a666c] mb-1">MBTI Type</label>
-                    <select name="mbti" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
-                        @foreach(['ENFP','INFJ','INTJ','INTP','ENTP','ENTJ','INFP','ENFJ','ISFP','ESFP','ISTP','ESTP','ISFJ','ESFJ','ISTJ','ESTJ'] as $mbti)
-                            <option value="{{ $mbti }}" {{ ($targetUser->mbti === $mbti) ? 'selected' : '' }}>{{ $mbti }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-[#7a666c] mb-1">Zodiac Sign</label>
-                    <select name="astrology" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
-                        @foreach(['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'] as $zodiac)
-                            <option value="{{ $zodiac }}" {{ ($targetUser->astrology === $zodiac) ? 'selected' : '' }}>{{ $zodiac }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="flex flex-col gap-1">
+                <label class="font-label-md text-label-md font-bold text-on-surface">Gender</label>
+                <select name="gender" class="w-full px-4 py-2 bg-surface-container-high rounded-full font-body-md text-on-surface focus:outline-none">
+                  <option value="male" {{ $targetUser->gender === 'male' ? 'selected' : '' }}>Male</option>
+                  <option value="female" {{ $targetUser->gender === 'female' ? 'selected' : '' }}>Female</option>
+                  <option value="nonbinary" {{ $targetUser->gender === 'nonbinary' ? 'selected' : '' }}>Non-binary</option>
+                  <option value="other" {{ $targetUser->gender === 'other' ? 'selected' : '' }}>Other</option>
+                </select>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="font-label-md text-label-md font-bold text-on-surface">MBTI</label>
+                <input type="text" name="mbti" value="{{ $targetUser->mbti ?? 'ENFP' }}" class="w-full px-4 py-2 bg-surface-container-high rounded-full font-body-md text-on-surface focus:outline-none">
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="font-label-md text-label-md font-bold text-on-surface">Zodiac Sign</label>
+                <input type="text" name="astrology" value="{{ $targetUser->astrology ?? 'Taurus' }}" class="w-full px-4 py-2 bg-surface-container-high rounded-full font-body-md text-on-surface focus:outline-none">
+              </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold text-[#7a666c] mb-1">Instagram (@handle)</label>
-                    <input type="text" name="instagram" value="{{ $targetUser->instagram }}" placeholder="@username" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-[#7a666c] mb-1">Snapchat (@handle)</label>
-                    <input type="text" name="snapchat" value="{{ $targetUser->snapchat }}" placeholder="@username" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
-                </div>
+            <div class="flex flex-col gap-1">
+              <label class="font-label-md text-label-md font-bold text-on-surface">Interests (Comma-separated)</label>
+              <input type="text" name="interests" value="{{ $targetUser->interests ?? 'Specialty Coffee, Books, Indie Music, Photography, Traveling' }}" class="w-full px-4 py-2 bg-surface-container-high rounded-full font-body-md text-on-surface focus:outline-none">
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-[#7a666c] mb-1">Interests (Comma-separated)</label>
-                <input type="text" name="interests" value="{{ $targetUser->interests }}" placeholder="Coffee, Books, Indie Music, Photography, Traveling" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
+            <div class="pt-2 flex items-center justify-end gap-3">
+              <button type="button" onclick="closeEditModal()" class="px-4 py-2 text-secondary font-label-md font-semibold hover:text-on-surface">Cancel</button>
+              <button type="submit" class="px-6 py-2.5 rounded-full bg-primary text-on-primary font-label-md font-bold hover:opacity-90 shadow-sm">Save Changes ☕</button>
             </div>
+          </form>
+        </div>
+      </div>
+    @endif
 
-            <button type="submit" class="w-full py-3 bg-[#8b5a2b] text-white rounded-xl text-xs font-extrabold hover:bg-[#6d441e] transition cursor-pointer mt-2 shadow-none">
-                Save Profile Changes ☕
-            </button>
-        </form>
+    <!-- Notification Toast for Invite / Bookmark action -->
+    <div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-primary-container text-inverse-on-surface px-space-xl py-space-md rounded-full shadow-2xl flex items-center gap-space-sm opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 border border-outline-variant/30" id="toast">
+      <span class="material-symbols-outlined text-on-tertiary-container" id="toast-icon">check_circle</span>
+      <span class="font-label-md text-label-md font-medium" id="toast-message">Invitation dispatched to {{ $targetUser->full_name }}</span>
     </div>
-</div>
 
+  </div>
+</div>
+@endsection
+
+@section('extra_js')
 <script>
-function previewAvatar(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('avatarDisplay').src = e.target.result;
-        }
-        reader.readAsDataURL(input.files[0]);
+  (function() {
+    const modal = document.getElementById('date-picker-modal');
+    const openBtn = document.getElementById('brew-date-btn');
+    const closeBtn = document.getElementById('close-modal-btn');
+    const cancelBtn = document.getElementById('cancel-modal-btn');
+    const confirmBtn = document.getElementById('confirm-invite-btn');
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    const bookmarkIcon = document.getElementById('bookmark-icon');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    let isBookmarked = false;
+
+    function showToast(text, icon = 'check_circle') {
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = text;
+      const tIcon = document.getElementById('toast-icon');
+      if (tIcon) tIcon.textContent = icon;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 3500);
     }
-}
+
+    if (openBtn) {
+      openBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      });
+    }
+
+    const hideModal = () => {
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', hideModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', hideModal);
+
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+      });
+    }
+
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', async () => {
+        hideModal();
+        const customNote = document.getElementById('inviteCustomNote').value.trim() || '☕ Would love to invite you for a 45-min coffee date at our favorite roastery!';
+        
+        // Dispatch invitation as a message via AJAX
+        try {
+          const formData = new FormData();
+          formData.append('_token', '{{ csrf_token() }}');
+          formData.append('receiver_id', '{{ $targetUser->id }}');
+          formData.append('message', customNote);
+
+          await fetch("{{ route('api.messages.send') }}", {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: formData
+          });
+        } catch(e) {}
+
+        showToast('☕ Coffee invitation sent to {{ $targetUser->full_name }}! Redirecting to chat...', 'coffee');
+        setTimeout(() => {
+          window.location.href = "{{ route('messages', ['user_id' => $targetUser->id]) }}";
+        }, 1200);
+      });
+    }
+
+    // Toggle Day Selection
+    const dayPills = document.querySelectorAll('.day-opt');
+    dayPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        dayPills.forEach(p => {
+          p.classList.remove('bg-on-tertiary-container', 'text-on-tertiary', 'shadow-sm');
+          p.classList.add('bg-surface-container', 'text-on-surface');
+        });
+        pill.classList.remove('bg-surface-container', 'text-on-surface');
+        pill.classList.add('bg-on-tertiary-container', 'text-on-tertiary', 'shadow-sm');
+      });
+    });
+
+    // Bookmark Toggle
+    if (bookmarkBtn) {
+      bookmarkBtn.addEventListener('click', () => {
+        isBookmarked = !isBookmarked;
+        if (isBookmarked) {
+          bookmarkIcon.textContent = 'bookmark';
+          bookmarkIcon.style.fontVariationSettings = "'FILL' 1";
+          bookmarkBtn.classList.add('text-on-tertiary-container');
+          showToast('{{ $targetUser->full_name }} saved to your Atelier Bookmarks', 'bookmark_added');
+        } else {
+          bookmarkIcon.textContent = 'bookmark_border';
+          bookmarkIcon.style.fontVariationSettings = "'FILL' 0";
+          bookmarkBtn.classList.remove('text-on-tertiary-container');
+          showToast('Removed from Bookmarks', 'delete');
+        }
+      });
+    }
+  })();
+
+  function openEditModal() {
+    const modal = document.getElementById('editProfileModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  }
+
+  function closeEditModal() {
+    const modal = document.getElementById('editProfileModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  function previewAvatar(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById('mainProfileImg');
+        if (img) img.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
 </script>
-@endif
 @endsection

@@ -128,6 +128,53 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function showSetup()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        // If profile already complete (has bio & avatar), skip to feed
+        if (!empty($user->bio) && !empty($user->avatar)) {
+            return redirect()->route('feed');
+        }
+        return view('auth.profile-setup', compact('user'));
+    }
+
+    public function completeSetup(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $validated = $request->validate([
+            'bio' => 'nullable|string|max:500',
+            'interests' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:100',
+            'coffee_style' => 'nullable|string|max:100',
+            'mbti' => 'nullable|string|max:10',
+            'astrology' => 'nullable|string|max:50',
+            'avatar_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        if ($request->hasFile('avatar_file')) {
+            $file = $request->file('avatar_file');
+            $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $destDir = public_path('uploads/avatars');
+            if (!is_dir($destDir)) {
+                @mkdir($destDir, 0755, true);
+            }
+            $file->move($destDir, $filename);
+            $validated['avatar'] = 'uploads/avatars/' . $filename;
+        }
+
+        unset($validated['avatar_file']);
+        $user->update($validated);
+
+        return redirect()->route('feed')->with('success', '🎉 Profile all set! Welcome to the CupDate community! Start discovering amazing singles. ☕');
+    }
+
     public function boostProfile(Request $request)
     {
         $user = Auth::user();

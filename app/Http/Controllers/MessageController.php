@@ -36,9 +36,17 @@ class MessageController extends Controller
                 return $msg->sender_id === $user->id ? $msg->receiver_id : $msg->sender_id;
             });
 
-        $allPartnerIds = collect($matches)->merge($messagedUsers)->unique()->values();
+        $allPartnerIds = collect($matches)->merge($messagedUsers)->unique()->filter(function($id) use ($user) {
+            return $id != $user->id;
+        })->values();
 
-        // If no conversations yet, provide top recommended verified daters
+        // If specific user_id is requested (e.g. ?user_id=4), ensure it is included
+        if ($activePartnerId && $activePartnerId != $user->id) {
+            $allPartnerIds->prepend((int)$activePartnerId);
+            $allPartnerIds = $allPartnerIds->unique()->values();
+        }
+
+        // If no conversations yet, provide top recommended verified daters (excluding self)
         if ($allPartnerIds->isEmpty()) {
             $allPartnerIds = User::where('id', '!=', $user->id)
                 ->where('status', 'active')
@@ -48,11 +56,41 @@ class MessageController extends Controller
 
         $partners = User::whereIn('id', $allPartnerIds)->get();
 
+        // Enrich partners with latest message and unread count
+        $partners = $partners->map(function($p) use ($user) {
+            $lastMsg = Message::where(function($q) use ($user, $p) {
+                $q->where('sender_id', $user->id)->where('receiver_id', $p->id);
+            })->orWhere(function($q) use ($user, $p) {
+                $q->where('sender_id', $p->id)->where('receiver_id', $user->id);
+            })->latest('id')->first();
+
+            $unreadCount = Message::where('sender_id', $p->id)
+                ->where('receiver_id', $user->id)
+                ->where('is_read', 0)
+                ->count();
+
+            $p->latest_message = $lastMsg;
+            $p->unread_count = $unreadCount;
+            return $p;
+        });
+
+        // Sort so activePartner or most recent is first
+        if ($activePartnerId) {
+            $partners = $partners->sortByDesc(function($p) use ($activePartnerId) {
+                return $p->id == $activePartnerId ? 1 : 0;
+            })->values();
+        }
+
         $activePartner = null;
         if ($activePartnerId) {
             $activePartner = User::find($activePartnerId);
         } elseif ($partners->isNotEmpty()) {
             $activePartner = $partners->first();
+        }
+
+        // Ensure active partner is never self
+        if ($activePartner && $activePartner->id === $user->id) {
+            $activePartner = $partners->firstWhere('id', '!=', $user->id);
         }
 
         $messages = [];
@@ -63,14 +101,21 @@ class MessageController extends Controller
                 $q->where('sender_id', $activePartner->id)->where('receiver_id', $user->id);
             })->orderBy('created_at', 'asc')->get();
 
-            // Mark unread as read
+            // Mark unread messages from activePartner as read
             Message::where('sender_id', $activePartner->id)
                 ->where('receiver_id', $user->id)
                 ->where('is_read', 0)
                 ->update(['is_read' => 1]);
         }
 
-        return view('messages', compact('user', 'partners', 'activePartner', 'messages'));
+        // Fetch new sparks/matches for horizontal carousel
+        $sparks = User::where('id', '!=', $user->id)
+            ->where('status', 'active')
+            ->orderBy('is_verified', 'desc')
+            ->take(8)
+            ->get();
+
+        return view('messages', compact('user', 'partners', 'activePartner', 'messages', 'sparks'));
     }
 
     public function sendMessage(Request $request)
@@ -85,6 +130,10 @@ class MessageController extends Controller
             'message' => 'nullable|string|max:1000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
+
+        if ($request->receiver_id == $user->id) {
+            return response()->json(['success' => false, 'message' => 'Cannot send messages to yourself.'], 422);
+        }
 
         $messageText = trim($request->input('message', ''));
         $attachmentPath = null;
@@ -178,7 +227,7 @@ class MessageController extends Controller
             $q->where('sender_id', $partner->id)->where('receiver_id', $user->id);
         })->orderBy('created_at', 'asc')->get();
 
-        // Mark read
+        // Mark unread as read
         Message::where('sender_id', $partner->id)
             ->where('receiver_id', $user->id)
             ->where('is_read', 0)
@@ -191,8 +240,10 @@ class MessageController extends Controller
                 'name' => $partner->full_name,
                 'avatar' => $partner->avatar_url,
                 'country' => $partner->country,
+                'bio' => $partner->bio,
                 'member_id' => $partner->formatted_member_id,
                 'is_verified' => (bool)$partner->is_verified,
+                'coffee_style' => $partner->coffee_style ?? 'Vanilla Oat Latte',
             ],
             'messages' => $messages->map(function($m) use ($user) {
                 return [
