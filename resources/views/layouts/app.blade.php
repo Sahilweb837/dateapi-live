@@ -347,50 +347,90 @@
 
                 @auth
                     <!-- Daily Streak Coins Pill -->
-                    <button onclick="openStreakModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/60 text-secondary hover:bg-surface-container font-label-md text-label-md transition-all cursor-pointer" title="Coffee Bean Streak & Coins">
+                    <button onclick="openStreakModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/60 text-secondary hover:bg-surface-container font-label-md text-label-md transition-all cursor-pointer" title="Coffee Bean Streak &amp; Coins">
                         <span class="material-symbols-outlined text-base text-amber-600 leading-none">monetization_on</span>
                         <span id="headerCoinsCount">{{ Auth::user()->coins ?? 50 }}</span>
-                        <span class="text-[10px] bg-secondary text-white px-1.5 py-0.2 rounded-full font-bold">Streak</span>
+                        <span class="text-[10px] bg-secondary text-white px-1.5 py-0.2 rounded-full font-bold">Coins</span>
                     </button>
 
-                    <!-- User Profile Avatar + Menu -->
+                    <!-- User Profile Avatar + Dropdown -->
                     <div class="relative flex items-center" id="globalProfileMenuContainer">
-                        <button type="button" onclick="toggleGlobalProfileMenu()" class="relative cursor-pointer p-0.5 rounded-full ring-1 ring-outline-variant/60 hover:ring-secondary transition-all focus:outline-none" aria-label="Open Profile Menu">
-                            <img alt="{{ Auth::user()->full_name }}" class="w-8 h-8 rounded-full object-cover" src="{{ Auth::user()->avatar_url }}"/>
-                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-700 ring-2 ring-surface"></span>
+                        <button type="button" onclick="toggleGlobalProfileMenu()" class="relative cursor-pointer flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 transition-all focus:outline-none" aria-label="Open Profile Menu">
+                            <div class="relative shrink-0">
+                                <img alt="{{ Auth::user()->full_name }}" class="w-8 h-8 rounded-full object-cover ring-2 ring-outline-variant/60" src="{{ Auth::user()->avatar_url }}"/>
+                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-surface border border-white"></span>
+                            </div>
+                            <span class="hidden sm:block font-label-md text-label-md text-on-surface font-semibold max-w-[90px] truncate">{{ Str::words(Auth::user()->full_name, 1, '') }}</span>
+                            <span class="material-symbols-outlined text-sm text-on-surface-variant">expand_more</span>
                         </button>
 
                         <!-- Profile Dropdown Popup -->
-                        <div id="globalProfileDropdown" class="hidden absolute right-0 top-11 w-56 bg-surface-container-lowest rounded-2xl shadow-xl border border-outline-variant/40 py-2 z-50">
-                            <div class="px-4 py-2.5 border-b border-surface-container-high/70">
-                                <p class="font-label-md text-label-md font-bold text-on-surface truncate">{{ Auth::user()->full_name }}</p>
-                                <p class="text-[11px] text-on-surface-variant font-mono">ID: #{{ Auth::user()->formatted_member_id ?? 'CD-10001' }}</p>
-                                <p class="text-[11px] text-secondary font-medium mt-0.5">Wallet: {{ Auth::user()->coins ?? 50 }} Coins</p>
+                        <div id="globalProfileDropdown" class="hidden absolute right-0 top-12 w-64 bg-white rounded-2xl shadow-2xl border border-outline-variant/30 overflow-hidden z-50">
+                            <!-- User Identity Card -->
+                            <div class="p-4 bg-gradient-to-br from-surface-container-low to-surface-container">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative shrink-0">
+                                        <img alt="{{ Auth::user()->full_name }}" class="w-12 h-12 rounded-full object-cover ring-2 ring-white shadow-md" src="{{ Auth::user()->avatar_url }}"/>
+                                        @if(!empty(Auth::user()->google_id))
+                                        <span class="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow" title="Signed in with Google">
+                                            <svg viewBox="0 0 24 24" class="w-3.5 h-3.5"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
+                                        </span>
+                                        @endif
+                                    </div>
+                                    <div class="flex flex-col overflow-hidden">
+                                        <p class="font-label-md text-label-md font-bold text-on-surface truncate">{{ Auth::user()->full_name }}</p>
+                                        <!-- Email is only shown to the logged-in user themselves -->
+                                        <p class="text-[11px] text-on-surface-variant truncate">{{ Auth::user()->email }}</p>
+                                        <div class="flex items-center gap-1.5 mt-0.5">
+                                            <span class="font-label-sm text-[10px] text-secondary font-mono">{{ Auth::user()->formatted_member_id ?? 'CD-00001' }}</span>
+                                            @if(Auth::user()->is_verified)
+                                            <span class="flex items-center gap-0.5 text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full font-bold">
+                                                <span class="material-symbols-outlined text-[10px]">verified</span> Verified
+                                            </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Coins + XP bar -->
+                                <div class="flex items-center gap-2 mt-3 pt-2.5 border-t border-outline-variant/20">
+                                    <span class="flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded-full border border-amber-200">
+                                        <span class="material-symbols-outlined text-sm">monetization_on</span>
+                                        {{ Auth::user()->coins ?? 50 }} Coins
+                                    </span>
+                                    <span class="flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 px-2 py-1 rounded-full border border-indigo-200">
+                                        <span class="material-symbols-outlined text-sm">bolt</span>
+                                        {{ Auth::user()->xp ?? 10 }} XP
+                                    </span>
+                                </div>
                             </div>
-                            <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
-                                <span class="material-symbols-outlined text-base text-secondary leading-none">account_circle</span>
-                                <span>My Profile</span>
-                            </a>
-                            <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
-                                <span class="material-symbols-outlined text-base text-amber-600 leading-none">style</span>
-                                <span>Discover Deck</span>
-                            </a>
-                            <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
-                                <span class="material-symbols-outlined text-base text-secondary leading-none">local_cafe</span>
-                                <span>Pitch Date Idea</span>
-                            </a>
-                            <a href="{{ route('video') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
-                                <span class="material-symbols-outlined text-base text-emerald-600 leading-none">videocam</span>
-                                <span>Live Video Portal</span>
-                            </a>
-                            <div class="border-t border-surface-container-high/70 my-1"></div>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="w-full text-left flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-error hover:bg-error-container/20 transition-colors cursor-pointer">
-                                    <span class="material-symbols-outlined text-base leading-none">logout</span>
-                                    <span>Log Out</span>
-                                </button>
-                            </form>
+
+                            <!-- Nav Links -->
+                            <div class="py-1">
+                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                    <span class="material-symbols-outlined text-base text-secondary leading-none">account_circle</span>
+                                    <span>My Profile</span>
+                                </a>
+                                <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                    <span class="material-symbols-outlined text-base text-amber-600 leading-none">style</span>
+                                    <span>Discover Deck</span>
+                                </a>
+                                <a href="{{ route('messages') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                    <span class="material-symbols-outlined text-base text-blue-500 leading-none">chat</span>
+                                    <span>My Messages</span>
+                                </a>
+                                <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                    <span class="material-symbols-outlined text-base text-secondary leading-none">local_cafe</span>
+                                    <span>Coffee Feed</span>
+                                </a>
+                                <div class="border-t border-surface-container-high/70 my-1"></div>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-error hover:bg-red-50 transition-colors cursor-pointer">
+                                        <span class="material-symbols-outlined text-base leading-none">logout</span>
+                                        <span>Log Out</span>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 @else
@@ -406,22 +446,74 @@
         </div>
 
         <!-- Mobile Drawer Navigation -->
-        <div id="mobileNavDrawer" class="hidden lg:hidden w-full bg-surface-container-lowest/98 border-t border-outline-variant/30 px-6 py-4 flex flex-col gap-2 shadow-lg">
-            <a href="{{ route('cities.index') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Explore &amp; Cities</a>
-            <a href="{{ route('swipes') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Discover Deck</a>
-            <a href="{{ route('dates') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Nearby Cafés</a>
-            <a href="{{ route('messages') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container flex items-center justify-between">
-                <span>Messages &amp; Dates</span>
-                @auth <span class="px-2 py-0.5 rounded-full bg-on-tertiary-container text-on-tertiary text-xs font-bold">3</span> @endauth
-            </a>
+        <div id="mobileNavDrawer" class="hidden lg:hidden w-full bg-surface-container-lowest/98 border-t border-outline-variant/30 px-4 py-3 flex flex-col gap-1 shadow-lg max-h-[80vh] overflow-y-auto">
             @auth
-                <a href="{{ route('feed') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Community Feed</a>
-                <a href="{{ route('profile') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">My Profile</a>
-                <button onclick="openStreakModal()" class="text-left px-4 py-2 rounded-xl text-sm font-semibold text-secondary hover:bg-surface-container">Claim Daily Streak ({{ Auth::user()->coins ?? 50 }} Coins)</button>
+                <!-- Mobile User Info Card -->
+                <div class="flex items-center gap-3 px-3 py-3 mb-2 bg-surface-container rounded-2xl">
+                    <div class="relative shrink-0">
+                        <img alt="{{ Auth::user()->full_name }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-outline-variant/40" src="{{ Auth::user()->avatar_url }}"/>
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-1 ring-white"></span>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-label-md text-label-md font-bold text-on-surface truncate">{{ Auth::user()->full_name }}</p>
+                        <p class="text-[11px] text-on-surface-variant truncate">{{ Auth::user()->email }}</p>
+                        @if(!empty(Auth::user()->google_id))
+                        <p class="text-[10px] text-blue-600 font-semibold mt-0.5 flex items-center gap-1">
+                            <svg viewBox="0 0 24 24" class="w-3 h-3 inline"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
+                            Google Account
+                        </p>
+                        @endif
+                    </div>
+                </div>
+                <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-base text-secondary">local_cafe</span>
+                    <span>Coffee Feed</span>
+                </a>
+                <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-base text-amber-600">style</span>
+                    <span>Discover Deck</span>
+                </a>
+                <a href="{{ route('messages') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <span class="material-symbols-outlined text-base text-blue-500">chat</span>
+                        <span>Messages &amp; Dates</span>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full bg-on-tertiary-container text-on-tertiary text-xs font-bold">3</span>
+                </a>
+                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-base text-secondary">account_circle</span>
+                    <span>My Profile</span>
+                </a>
+                <div class="border-t border-outline-variant/20 my-1"></div>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full text-left flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-error hover:bg-red-50 cursor-pointer">
+                        <span class="material-symbols-outlined text-base">logout</span>
+                        <span>Log Out</span>
+                    </button>
+                </form>
             @else
-                <a href="{{ route('blog.index') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">Dating Guides</a>
-                <a href="{{ route('login') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-secondary hover:bg-surface-container">Login</a>
-                <a href="{{ route('register') }}" class="px-4 py-2 rounded-xl text-sm font-semibold text-on-tertiary-container hover:bg-surface-container">Join Free</a>
+                <a href="{{ route('cities.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-base text-secondary">explore</span>
+                    <span>Explore &amp; Cities</span>
+                </a>
+                <a href="{{ route('dates') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-base text-secondary">local_cafe</span>
+                    <span>Nearby Cafés</span>
+                </a>
+                <a href="{{ route('blog.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-base text-secondary">article</span>
+                    <span>Dating Guides</span>
+                </a>
+                <div class="border-t border-outline-variant/20 my-1"></div>
+                <a href="{{ route('login') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-secondary hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-base">login</span>
+                    <span>Login</span>
+                </a>
+                <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-on-tertiary-container text-on-tertiary">
+                    <span class="material-symbols-outlined text-base">person_add</span>
+                    <span>Join CupDate Free</span>
+                </a>
             @endauth
         </div>
     </header>

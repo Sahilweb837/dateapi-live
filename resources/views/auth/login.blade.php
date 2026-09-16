@@ -199,15 +199,15 @@
 
             <!-- Social Auth: Google Sign-in -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-              <a href="{{ route('auth.google') }}" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-surface-container hover:bg-surface-container-high transition-all text-on-surface font-label-md text-label-md rounded-full shadow-sm border border-outline-variant/30 group">
+              <a href="{{ route('auth.google') }}" id="google-signin-btn" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-white hover:bg-gray-50 transition-all text-gray-700 font-label-md text-label-md rounded-full shadow-sm border border-gray-200 group" onclick="handleGoogleSignIn(event)">
                 <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                   <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"></path>
                   <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"></path>
                   <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"></path>
                   <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"></path>
                 </svg>
-                <span class="font-bold">Continue with Google</span>
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-auto"></span>
+                <span class="font-bold" id="google-btn-text">Continue with Google</span>
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-auto" id="google-btn-dot"></span>
               </a>
 
               <button type="button" onclick="simulateToast('Connecting to Apple ID...')" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-surface-container hover:bg-surface-container-high transition-all text-on-surface font-label-md text-label-md rounded-full shadow-sm border border-outline-variant/30">
@@ -234,7 +234,7 @@
                 <div class="relative flex items-center">
                   <span class="material-symbols-outlined absolute left-3.5 text-secondary text-lg">alternate_email</span>
                   <input class="w-full pl-11 pr-4 py-space-sm bg-surface-container-high rounded-full font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/40 transition-all" 
-                         id="signin-email" name="email" value="{{ old('email', 'aditi.rao@cupdate.in') }}" required type="email" placeholder="yourname@gmail.com"/>
+                         id="signin-email" name="email" value="{{ old('email') }}" required type="email" placeholder="yourname@gmail.com" autocomplete="email"/>
                 </div>
               </div>
 
@@ -295,14 +295,14 @@
             </div>
 
             <!-- Google 1-Click Sign-up -->
-            <a href="{{ route('auth.google') }}" class="flex items-center justify-center gap-space-sm px-space-md py-3 bg-surface-container hover:bg-surface-container-high transition-all text-on-surface font-label-md text-label-md rounded-full shadow-sm border border-outline-variant/30 group">
+            <a href="{{ route('auth.google') }}" id="google-signup-btn" onclick="handleGoogleSignIn(event)" class="flex items-center justify-center gap-space-sm px-space-md py-3 bg-white hover:bg-gray-50 transition-all text-gray-700 font-label-md text-label-md rounded-full shadow-sm border border-gray-200 group">
               <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                 <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"></path>
                 <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"></path>
                 <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"></path>
                 <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"></path>
               </svg>
-              <span class="font-bold">1-Click Sign Up with Google</span>
+              <span class="font-bold">Continue with Google</span>
               <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full ml-auto">Instant</span>
             </a>
 
@@ -415,8 +415,8 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
                 <div class="flex flex-col gap-1.5">
                   <label class="font-label-md text-label-md text-on-surface font-semibold" for="reg-dob">Date of Birth</label>
-                  <input class="w-full px-4 py-space-sm bg-surface-container-high rounded-full font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container transition-all" 
-                         id="reg-dob" name="dob" value="{{ old('dob', '2001-05-15') }}" required type="date"/>
+                  <input class="w-full px-4 py-space-sm bg-surface-container-high rounded-full font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/40 transition-all" 
+                         id="reg-dob" name="dob" value="{{ old('dob') }}" required type="date" max="{{ date('Y-m-d', strtotime('-18 years')) }}"/>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
@@ -703,10 +703,27 @@
     );
   }
 
+  // Google Sign-In loading state handler
+  function handleGoogleSignIn(e) {
+    // Show loading state on the clicked button
+    const btn = e.currentTarget;
+    if (btn) {
+      const textSpan = btn.querySelector('span.font-bold, [id$="btn-text"]');
+      const dotSpan  = btn.querySelector('[id$="btn-dot"]');
+      if (textSpan) textSpan.textContent = 'Signing in with Google...';
+      if (dotSpan) dotSpan.className = 'w-2 h-2 rounded-full bg-amber-500 animate-pulse ml-auto';
+      btn.style.opacity = '0.75';
+      btn.style.pointerEvents = 'none';
+    }
+    // Allow the href navigation to proceed naturally — no preventDefault
+  }
+
+  // Auto-detect location on register tab load
   document.addEventListener('DOMContentLoaded', () => {
     if (navigator.geolocation && "{{ $initialTab }}" === 'register') {
       detectUserLocation();
     }
   });
+
 </script>
 @endsection
