@@ -16,26 +16,42 @@ class HomeController extends Controller
         $user = Auth::user();
 
         // 1. Featured verified active singles for hero and discovery showcase
-        $featuredDaters = User::where('status', 'active')
-            ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
-            ->orderBy('is_verified', 'desc')
-            ->orderBy('last_active', 'desc')
-            ->take(8)
-            ->get();
+        try {
+            $featuredDaters = User::where('status', 'active')
+                ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
+                ->orderBy('is_verified', 'desc')
+                ->orderBy('last_active', 'desc')
+                ->take(8)
+                ->get();
+        } catch (\Throwable $e) {
+            $featuredDaters = collect();
+        }
 
         // 2. Curated Landmark Coffee Date Spots
-        $hotspots = DatePlace::orderBy('rating', 'desc')->take(5)->get();
+        try {
+            $hotspots = DatePlace::orderBy('rating', 'desc')->take(5)->get();
+        } catch (\Throwable $e) {
+            $hotspots = collect();
+        }
 
         // 3. Recent coffee date ideas from the community
-        $recentIdeas = Idea::with('user')
-            ->orderBy('created_at', 'desc')
-            ->take(4)
-            ->get();
+        try {
+            $recentIdeas = Idea::with('user')
+                ->orderBy('created_at', 'desc')
+                ->take(4)
+                ->get();
+        } catch (\Throwable $e) {
+            $recentIdeas = collect();
+        }
 
         // 4. Editorial guides for E-E-A-T AdSense compliance
-        $editorialBlogs = Blog::orderBy('created_at', 'desc')
-            ->take(3)
-            ->get();
+        try {
+            $editorialBlogs = Blog::orderBy('created_at', 'desc')
+                ->take(3)
+                ->get();
+        } catch (\Throwable $e) {
+            $editorialBlogs = collect();
+        }
 
         // 5. If logged in, calculate profile completeness percentage
         $profileCompleteness = 0;

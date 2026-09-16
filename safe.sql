@@ -1,21 +1,18 @@
 -- ==============================================================================
 -- CupDate.in - Standalone Production-Ready Database Schema (safe.sql)
 -- Database Target: `cupamate1_backenlaraveldate`
--- User Target: `backendlaraveldate2s`
+-- User Target: `cupamate1_backendlaraveldate2s`
 -- Complete schema for users, messages, swipes, matches, blogs, date spots & rewards
 -- Compatible with MySQL 5.7+, MySQL 8.0+, MariaDB 10.3+
 -- ==============================================================================
 
 -- ------------------------------------------------------------------------------
 -- DIRECT CPANEL / PHPMYADMIN NOTICE:
--- If you are importing directly into an already selected database in phpMyAdmin,
--- you may safely keep or remove the CREATE DATABASE line below.
+-- Select `cupamate1_backenlaraveldate` from the left menu in phpMyAdmin FIRST,
+-- then click Import and upload this file.
 -- ------------------------------------------------------------------------------
-CREATE DATABASE IF NOT EXISTS `cupamate1_backenlaraveldate` 
-  DEFAULT CHARACTER SET utf8mb4 
-  COLLATE utf8mb4_unicode_ci;
-
-USE `cupamate1_backenlaraveldate`;
+-- CREATE DATABASE IF NOT EXISTS `cupamate1_backenlaraveldate` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE `cupamate1_backenlaraveldate`;
 
 SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";

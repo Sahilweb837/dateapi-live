@@ -127,3 +127,29 @@ Route::redirect('/jaipur.php', '/city/jaipur', 301);
 Route::redirect('/goa.php', '/city/goa', 301);
 Route::redirect('/sitemap.php', '/sitemap', 301);
 
+// Emergency One-Time Database Initialization & Cache Clear (Secured)
+Route::get('/system/setup-db', function (\Illuminate\Http\Request $request) {
+    if ($request->query('key') !== 'cupdate_secure_init_2026') {
+        abort(403, 'Unauthorized setup access');
+    }
+    try {
+        $sqlPath = base_path('safe.sql');
+        if (!file_exists($sqlPath)) {
+            return response()->json(['status' => 'error', 'message' => 'safe.sql file not found'], 404);
+        }
+        \Illuminate\Support\Facades\DB::unprepared(file_get_contents($sqlPath));
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Database tables and initial seed data imported successfully! Cache cleared.',
+            'database' => config('database.connections.mysql.database'),
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
