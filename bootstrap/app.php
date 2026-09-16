@@ -4,13 +4,29 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-// Production self-healing: ensure .env is populated with production key & DB if missing or empty
+// Production self-healing: ensure environment, directories, and cache are healthy
 $baseDir = dirname(__DIR__);
+
+// Auto-clean stale config cache so new credentials and key are always picked up
+if (file_exists($baseDir.'/bootstrap/cache/config.php')) {
+    @unlink($baseDir.'/bootstrap/cache/config.php');
+}
+
+// Auto-create essential storage directories if missing
+@mkdir($baseDir.'/storage/framework/views', 0775, true);
+@mkdir($baseDir.'/storage/framework/sessions', 0775, true);
+@mkdir($baseDir.'/storage/framework/cache/data', 0775, true);
+@mkdir($baseDir.'/storage/logs', 0775, true);
+
+// Sync .env from .env.production if .env is absent or missing credentials
 if (file_exists($baseDir.'/.env.production')) {
     if (!file_exists($baseDir.'/.env')) {
         @copy($baseDir.'/.env.production', $baseDir.'/.env');
-    } elseif (!str_contains((string)@file_get_contents($baseDir.'/.env'), 'APP_KEY=base64:')) {
-        @copy($baseDir.'/.env.production', $baseDir.'/.env');
+    } else {
+        $envContent = (string)@file_get_contents($baseDir.'/.env');
+        if (!str_contains($envContent, 'cupamate1_backendlaraveldate2s') || !str_contains($envContent, 'APP_KEY=base64:')) {
+            @copy($baseDir.'/.env.production', $baseDir.'/.env');
+        }
     }
 }
 

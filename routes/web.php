@@ -153,3 +153,48 @@ Route::get('/system/setup-db', function (\Illuminate\Http\Request $request) {
     }
 });
 
+// Diagnostic System Status Endpoint
+Route::get('/system/status', function () {
+    $envPath = base_path('.env');
+    $hasEnv = file_exists($envPath);
+    $appKeySet = !empty(config('app.key'));
+    $dbConnected = false;
+    $dbError = null;
+    $tables = [];
+    try {
+        \Illuminate\Support\Facades\DB::connection()->getPdo();
+        $dbConnected = true;
+        $tables = \Illuminate\Support\Facades\DB::select('SHOW TABLES');
+    } catch (\Throwable $e) {
+        $dbError = $e->getMessage();
+    }
+    return response()->json([
+        'laravel_version' => app()->version(),
+        'app_env' => config('app.env'),
+        'app_debug' => config('app.debug'),
+        'app_key_present' => $appKeySet,
+        'dot_env_file_exists' => $hasEnv,
+        'db_connection' => [
+            'connected' => $dbConnected,
+            'database' => config('database.connections.mysql.database'),
+            'username' => config('database.connections.mysql.username'),
+            'tables_count' => count($tables),
+            'error' => $dbError,
+        ]
+    ]);
+});
+
+// Diagnostic Log Viewer (Secured)
+Route::get('/system/error-log', function (\Illuminate\Http\Request $request) {
+    if ($request->query('key') !== 'cupdate_secure_init_2026') {
+        abort(403, 'Unauthorized log access');
+    }
+    $logFile = storage_path('logs/laravel.log');
+    if (!file_exists($logFile)) {
+        return response()->json(['message' => 'No log file found yet.']);
+    }
+    $lines = file($logFile);
+    $lastLines = array_slice($lines, -80);
+    return response('<pre>'.htmlspecialchars(implode('', $lastLines)).'</pre>');
+});
+
