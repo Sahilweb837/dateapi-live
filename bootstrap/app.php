@@ -12,11 +12,18 @@ if (file_exists($baseDir.'/bootstrap/cache/config.php')) {
     @unlink($baseDir.'/bootstrap/cache/config.php');
 }
 
-// Auto-create essential storage directories if missing
-@mkdir($baseDir.'/storage/framework/views', 0775, true);
-@mkdir($baseDir.'/storage/framework/sessions', 0775, true);
-@mkdir($baseDir.'/storage/framework/cache/data', 0775, true);
-@mkdir($baseDir.'/storage/logs', 0775, true);
+// Auto-create and set permissions on essential storage directories if missing
+@mkdir($baseDir.'/storage/framework/views', 0777, true);
+@mkdir($baseDir.'/storage/framework/sessions', 0777, true);
+@mkdir($baseDir.'/storage/framework/cache/data', 0777, true);
+@mkdir($baseDir.'/storage/logs', 0777, true);
+@chmod($baseDir.'/storage', 0777);
+@chmod($baseDir.'/storage/framework', 0777);
+@chmod($baseDir.'/storage/framework/views', 0777);
+@chmod($baseDir.'/storage/framework/sessions', 0777);
+@chmod($baseDir.'/storage/framework/cache', 0777);
+@chmod($baseDir.'/storage/logs', 0777);
+@chmod($baseDir.'/bootstrap/cache', 0777);
 
 // Sync .env from .env.production if .env is absent or missing credentials
 if (file_exists($baseDir.'/.env.production')) {
