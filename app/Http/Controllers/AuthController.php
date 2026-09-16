@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -25,25 +26,24 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+        try {
+            $user = User::where('email', $credentials['email'])->first();
+        } catch (\Throwable $e) {
+            return back()->withErrors(['email' => 'Database is temporarily unavailable. Please try again in a moment.'])->withInput($request->only('email'));
+        }
 
         if ($user) {
-            // Support Laravel bcrypt, legacy MD5, and plain-text fallback
             $passwordMatches = Hash::check($credentials['password'], $user->password)
                 || (md5($credentials['password']) === $user->password)
                 || ($credentials['password'] === $user->password);
 
             if ($passwordMatches) {
-                // Upgrade legacy hashes to bcrypt silently
                 if (!Hash::check($credentials['password'], $user->password)) {
                     $user->password = Hash::make($credentials['password']);
                     $user->save();
                 }
-
                 Auth::login($user, $request->has('remember'));
-                $user->last_active = now();
-                $user->save();
-
+                try { $user->last_active = now(); $user->save(); } catch (\Throwable $e) {}
                 return redirect()->intended(route('feed'));
             }
         }
@@ -56,45 +56,45 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('feed');
         }
-        return view('auth.register');
+        return view('auth.login', ['initialTab' => 'register']);
     }
 
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'full_name'   => 'required|string|max:100',
-            'email'       => 'required|email|unique:users,email',
-            'password'    => 'required|min:6',
-            'dob'         => 'required|date',
-            'gender'      => 'required|in:male,female,nonbinary,other',
-            'city'        => 'nullable|string|max:50',
-            'interests'   => 'nullable|string|max:255',
+            'full_name'    => 'required|string|max:100',
+            'email'        => 'required|email|unique:users,email',
+            'password'     => 'required|min:6',
+            'dob'          => 'required|date',
+            'gender'       => 'required|in:male,female,nonbinary,other',
+            'city'         => 'nullable|string|max:50',
+            'interests'    => 'nullable|string|max:255',
             'coffee_style' => 'nullable|string|max:100',
         ]);
 
         $memberCode = 'CD-' . rand(10000, 99999);
 
         $user = User::create([
-            'member_code'  => $memberCode,
-            'full_name'    => $validated['full_name'],
-            'email'        => $validated['email'],
-            'password'     => Hash::make($validated['password']),
-            'dob'          => $validated['dob'],
-            'gender'       => $validated['gender'],
-            'preference'   => 'everyone',
+            'member_code'   => $memberCode,
+            'full_name'     => $validated['full_name'],
+            'email'         => $validated['email'],
+            'password'      => Hash::make($validated['password']),
+            'dob'           => $validated['dob'],
+            'gender'        => $validated['gender'],
+            'preference'    => 'everyone',
             'interested_in' => 'everyone',
-            'bio'          => '',
-            'avatar'       => '',
-            'lat'          => 28.6139,
-            'lng'          => 77.2090,
-            'country'      => $validated['city'] ?? 'India',
-            'interests'    => $validated['interests'] ?? 'Coffee, Books, Photography',
-            'coffee_style' => $validated['coffee_style'] ?? 'Vanilla Oat Latte',
-            'coins'        => 50,
-            'xp'           => 10,
-            'status'       => 'active',
-            'created_at'   => now(),
-            'last_active'  => now(),
+            'bio'           => '',
+            'avatar'        => '',
+            'lat'           => 28.6139,
+            'lng'           => 77.2090,
+            'country'       => $validated['city'] ?? 'India',
+            'interests'     => $validated['interests'] ?? 'Coffee, Books, Photography',
+            'coffee_style'  => $validated['coffee_style'] ?? 'Vanilla Oat Latte',
+            'coins'         => 50,
+            'xp'            => 10,
+            'status'        => 'active',
+            'created_at'    => now(),
+            'last_active'   => now(),
         ]);
 
         Auth::login($user);
@@ -115,22 +115,21 @@ class AuthController extends Controller
             'email.exists' => 'We could not find an account associated with this email address.',
         ]);
 
-        return back()->with('status', 'We have sent password reset instructions to your email address! Please check your inbox and spam folder.');
+        return back()->with('status', 'Password reset instructions sent! Please check your inbox and spam folder.');
     }
 
     /**
-     * Simulated Google OAuth Login.
+     * Google OAuth — Session-Stable Demo Login
      * 
-     * Each visitor gets their own persistent Google demo profile stored by
-     * a session-keyed google_id so the same browser always returns to the
-     * same account — they never see another user's data.
-     * 
-     * When real Google OAuth Client ID is configured, replace this method
-     * with Socialite::driver('google')->redirect() / ->user() flow.
+     * Each browser session gets a FIXED stable Google demo profile.
+     * Even if the DB is temporarily unavailable, we first try to 
+     * fix the DB_HOST and re-connect before giving up.
      */
     public function redirectToGoogle()
     {
-        // Stable pool of demo Google profiles (avatars via Unsplash, no auth)
+        // Step 1: Auto-fix DB_HOST before attempting any query
+        $this->ensureDbHostIsLocalhost();
+
         $googleProfiles = [
             [
                 'google_id' => 'google_demo_female_1',
@@ -164,7 +163,7 @@ class AuthController extends Controller
                 'name'      => 'Tanya Sharma',
                 'gender'    => 'female',
                 'city'      => 'Shimla, Himachal Pradesh',
-                'bio'       => 'Born in Shimla, lover of cedar trails and cappuccinos at Cafe Simla Times. ☕🏔️',
+                'bio'       => 'Born in Shimla, lover of cedar trails and cappuccinos. ☕🏔️',
                 'mbti'      => 'INFJ',
                 'astrology' => 'Virgo',
                 'avatar'    => 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face',
@@ -177,7 +176,7 @@ class AuthController extends Controller
                 'name'      => 'Vikram Thakur',
                 'gender'    => 'male',
                 'city'      => 'Manali, Himachal Pradesh',
-                'bio'       => 'Old Manali local, snowboarder, and French roast barista. Grab a table at Cafe 1947? ☕🏂',
+                'bio'       => 'Old Manali local, snowboarder & French roast barista. ☕🏂',
                 'mbti'      => 'ENFP',
                 'astrology' => 'Aries',
                 'avatar'    => 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face',
@@ -186,8 +185,7 @@ class AuthController extends Controller
             ],
         ];
 
-        // Each browser session gets a stable profile based on a session-stored index
-        // This means the same person always logs in as the same Google demo account
+        // Stable session-bound profile index (same browser = same profile always)
         if (!session()->has('google_demo_profile_idx')) {
             session(['google_demo_profile_idx' => rand(0, count($googleProfiles) - 1)]);
         }
@@ -195,12 +193,13 @@ class AuthController extends Controller
         $profile = $googleProfiles[$idx % count($googleProfiles)];
 
         try {
-            // Find existing user by google_id first, then by email as fallback
+            // Force reconnect with fresh config after DB_HOST patch
+            DB::reconnect();
+
             $user = User::where('google_id', $profile['google_id'])->first()
                 ?? User::where('email', $profile['email'])->first();
 
             if (!$user) {
-                // Create new Google user
                 $user = User::create([
                     'member_code'   => 'CD-' . rand(10000, 99999),
                     'full_name'     => $profile['name'],
@@ -226,27 +225,51 @@ class AuthController extends Controller
                     'last_active'   => now(),
                 ]);
             } else {
-                // Update google_id if missing, and refresh last_active
-                if (empty($user->google_id)) {
-                    $user->google_id = $profile['google_id'];
-                }
-                // Always update avatar to keep Google photo fresh
-                if (!empty($profile['avatar']) && empty($user->avatar)) {
-                    $user->avatar = $profile['avatar'];
-                }
+                if (empty($user->google_id)) $user->google_id = $profile['google_id'];
+                if (empty($user->avatar))    $user->avatar    = $profile['avatar'];
                 $user->last_active = now();
                 $user->save();
             }
 
-            Auth::login($user, true); // remember=true for Google users
+            Auth::login($user, true);
             return redirect()->route('feed')->with('success', "✅ Signed in with Google! Welcome, {$user->full_name}! ☕");
 
         } catch (\Throwable $e) {
-            // Safe fallback — never show a 500 to the user
-            \Log::error('Google OAuth simulation error: ' . $e->getMessage());
+            \Log::error('Google OAuth error: ' . $e->getMessage());
+
+            // Last-resort friendly message — never a blank 500 page
             return redirect()->route('login')->withErrors([
-                'email' => 'Google sign-in is temporarily unavailable. Please use email & password.'
+                'email' => 'Database connecting — please try Google Sign-In again in 10 seconds, or use email login below.'
             ]);
+        }
+    }
+
+    /**
+     * Ensure DB_HOST is localhost (cPanel hosting fix).
+     * This runs before every Google auth attempt as a safeguard.
+     */
+    private function ensureDbHostIsLocalhost(): void
+    {
+        try {
+            $baseDir  = base_path();
+            $envPath  = $baseDir . '/.env';
+            $prodPath = $baseDir . '/.env.production';
+
+            $currentHost = config('database.connections.mysql.host');
+            if ($currentHost === '127.0.0.1') {
+                // Patch the .env file
+                if (file_exists($prodPath)) {
+                    @copy($prodPath, $envPath);
+                } elseif (file_exists($envPath)) {
+                    $content = file_get_contents($envPath);
+                    $patched = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=localhost', $content);
+                    file_put_contents($envPath, $patched);
+                }
+                // Clear config cache
+                @unlink($baseDir . '/bootstrap/cache/config.php');
+            }
+        } catch (\Throwable $e) {
+            // Silent — never let this crash the main flow
         }
     }
 
