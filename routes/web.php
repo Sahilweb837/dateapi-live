@@ -29,8 +29,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
 
-// Google OAuth
-Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+// Google OAuth & Popup Handler
+Route::match(['get', 'post'], '/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
 
 // 1. Feed
 Route::get('/feed', [FeedController::class, 'index'])->name('feed')->middleware('auth.cupdate');

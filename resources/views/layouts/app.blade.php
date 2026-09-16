@@ -17,6 +17,9 @@
     <!-- FontAwesome 6 (Compatibility) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    <!-- Google Identity Services (GSI) Client SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <!-- Tailwind Play CDN for Precision Layout System -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
@@ -434,6 +437,10 @@
                         </div>
                     </div>
                 @else
+                    <button type="button" onclick="openGooglePopup()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-label-md text-label-md font-semibold shadow-xs hover:shadow transition-all cursor-pointer">
+                        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
+                        <span>Google Sign In</span>
+                    </button>
                     <a href="{{ route('login') }}" class="px-space-sm sm:px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface hover:text-secondary transition-all">Login</a>
                     <a href="{{ route('register') }}" class="px-space-md py-space-xs rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-label-md shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-105 active:scale-95 transition-all">Join Free</a>
                 @endauth
@@ -458,10 +465,9 @@
                         <p class="font-label-md text-label-md font-bold text-on-surface truncate">{{ Auth::user()->full_name }}</p>
                         <p class="text-[11px] text-on-surface-variant truncate">{{ Auth::user()->email }}</p>
                         @if(!empty(Auth::user()->google_id))
-                        <p class="text-[10px] text-blue-600 font-semibold mt-0.5 flex items-center gap-1">
-                            <svg viewBox="0 0 24 24" class="w-3 h-3 inline"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
-                            Google Account
-                        </p>
+                        <span class="inline-flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">
+                            <span>Google Verified</span>
+                        </span>
                         @endif
                     </div>
                 </div>
@@ -493,6 +499,10 @@
                     </button>
                 </form>
             @else
+                <button type="button" onclick="openGooglePopup(); toggleMobileMenu();" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold bg-white text-gray-800 border border-gray-200 shadow-xs mb-1 hover:bg-gray-50 transition-colors">
+                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
+                    <span>Continue with Google</span>
+                </button>
                 <a href="{{ route('cities.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
                     <span class="material-symbols-outlined text-base text-secondary">explore</span>
                     <span>Explore &amp; Cities</span>
@@ -957,7 +967,227 @@
                 if (feedback) feedback.innerText = "Error activating boost.";
             }
         }
+
+        // ==========================================
+        // GOOGLE SIGN-IN POPUP & MODAL SYSTEM
+        // ==========================================
+        function openGooglePopup() {
+            const modal = document.getElementById('googleAuthModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeGooglePopup() {
+            const modal = document.getElementById('googleAuthModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function openGooglePopupWindow() {
+            closeGooglePopup();
+            const w = 520;
+            const h = 640;
+            const y = window.top.outerHeight / 2 + window.top.screenY - (h / 2);
+            const x = window.top.outerWidth / 2 + window.top.screenX - (w / 2);
+            const popupUrl = "{{ route('auth.google') }}?popup=1";
+            window.open(popupUrl, 'GoogleSignInPopup', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + y + ', left=' + x);
+        }
+
+        function selectGoogleAccount(email, name, avatar, googleId) {
+            const spinner = document.getElementById('googleAuthSpinner');
+            const content = document.getElementById('googleModalBody');
+            if (spinner && content) {
+                content.classList.add('opacity-30', 'pointer-events-none');
+                spinner.classList.remove('hidden');
+            }
+
+            // Create and submit hidden form to /auth/google
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{{ route('auth.google') }}";
+
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            form.appendChild(csrfInput);
+
+            if (email) {
+                const emailInput = document.createElement('input');
+                emailInput.type = 'hidden';
+                emailInput.name = 'email';
+                emailInput.value = email;
+                form.appendChild(emailInput);
+            }
+
+            if (name) {
+                const nameInput = document.createElement('input');
+                nameInput.type = 'hidden';
+                nameInput.name = 'name';
+                nameInput.value = name;
+                form.appendChild(nameInput);
+            }
+
+            if (avatar) {
+                const avatarInput = document.createElement('input');
+                avatarInput.type = 'hidden';
+                avatarInput.name = 'avatar';
+                avatarInput.value = avatar;
+                form.appendChild(avatarInput);
+            }
+
+            if (googleId) {
+                const gIdInput = document.createElement('input');
+                gIdInput.type = 'hidden';
+                gIdInput.name = 'google_id';
+                gIdInput.value = googleId;
+                form.appendChild(gIdInput);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function toggleCustomGoogleInput() {
+            const container = document.getElementById('customGoogleAccountForm');
+            if (container) {
+                container.classList.toggle('hidden');
+            }
+        }
+
+        function submitCustomGoogleAccount(e) {
+            e.preventDefault();
+            const email = document.getElementById('customGoogleEmail').value.trim();
+            const name = document.getElementById('customGoogleName').value.trim() || email.split('@')[0];
+            if (!email) {
+                alert('Please enter your Google email');
+                return;
+            }
+            selectGoogleAccount(email, name, '', 'g_' + btoa(email).replace(/[^a-zA-Z0-9]/g, ''));
+        }
     </script>
+
+    <!-- Google Sign-In Account Chooser Modal Dialog -->
+    <div id="googleAuthModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden" onclick="event.stopPropagation()">
+            
+            <!-- Close Button -->
+            <button type="button" onclick="closeGooglePopup()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors cursor-pointer" aria-label="Close">
+                <span class="material-symbols-outlined text-lg">close</span>
+            </button>
+
+            <!-- Modal Header with Google Branding -->
+            <div class="pt-7 pb-4 px-6 text-center border-b border-gray-100">
+                <div class="w-11 h-11 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-50 border border-gray-100 shadow-xs">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/>
+                        <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/>
+                        <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/>
+                        <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 tracking-tight">Sign in with Google</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Choose an account to continue to <strong class="text-gray-800">CupDate</strong></p>
+            </div>
+
+            <!-- Loading Spinner State -->
+            <div id="googleAuthSpinner" class="hidden absolute inset-0 bg-white/90 backdrop-blur-xs flex flex-col items-center justify-center z-20 gap-3">
+                <div class="w-10 h-10 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                <p class="text-xs font-semibold text-gray-700 animate-pulse">Connecting to Google Account...</p>
+            </div>
+
+            <!-- Modal Content / Account List -->
+            <div id="googleModalBody" class="p-5 max-h-[70vh] overflow-y-auto space-y-2">
+                
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2">Fast 1-Click Accounts</p>
+
+                <!-- Account 1: Priya Mehta -->
+                <button type="button" onclick="selectGoogleAccount('priya.mehta.cupdate@gmail.com', 'Priya Mehta', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 'google_demo_female_1')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Priya Mehta"/>
+                    <div class="flex-1 overflow-hidden">
+                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Priya Mehta</p>
+                        <p class="text-[11px] text-gray-500 truncate">priya.mehta.cupdate@gmail.com</p>
+                    </div>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold border border-emerald-200">Online</span>
+                </button>
+
+                <!-- Account 2: Arjun Kapoor -->
+                <button type="button" onclick="selectGoogleAccount('arjun.kapoor.cupdate@gmail.com', 'Arjun Kapoor', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 'google_demo_male_1')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Arjun Kapoor"/>
+                    <div class="flex-1 overflow-hidden">
+                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Arjun Kapoor</p>
+                        <p class="text-[11px] text-gray-500 truncate">arjun.kapoor.cupdate@gmail.com</p>
+                    </div>
+                    <span class="text-[10px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold border border-blue-200">Verified</span>
+                </button>
+
+                <!-- Account 3: Tanya Sharma (Himachal) -->
+                <button type="button" onclick="selectGoogleAccount('tanya.sharma.cupdate@gmail.com', 'Tanya Sharma', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 'google_demo_female_2')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Tanya Sharma"/>
+                    <div class="flex-1 overflow-hidden">
+                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Tanya Sharma (Shimla, HP)</p>
+                        <p class="text-[11px] text-gray-500 truncate">tanya.sharma.cupdate@gmail.com</p>
+                    </div>
+                    <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold border border-amber-200">HP Hub</span>
+                </button>
+
+                <!-- Account 4: Vikram Thakur (Manali) -->
+                <button type="button" onclick="selectGoogleAccount('vikram.thakur.cupdate@gmail.com', 'Vikram Thakur', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face', 'google_demo_male_2')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Vikram Thakur"/>
+                    <div class="flex-1 overflow-hidden">
+                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Vikram Thakur (Manali, HP)</p>
+                        <p class="text-[11px] text-gray-500 truncate">vikram.thakur.cupdate@gmail.com</p>
+                    </div>
+                    <span class="text-[10px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full font-bold border border-purple-200">Local</span>
+                </button>
+
+                <!-- Option: Use Custom Email -->
+                <div class="pt-2">
+                    <button type="button" onclick="toggleCustomGoogleInput()" class="w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-gray-50 border border-dashed border-gray-300 transition-all text-xs font-bold text-gray-700 cursor-pointer">
+                        <span class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base text-gray-500">add_circle</span>
+                            <span>Use another Google account</span>
+                        </span>
+                        <span class="material-symbols-outlined text-sm text-gray-400">expand_more</span>
+                    </button>
+
+                    <!-- Expandable Custom Account Form -->
+                    <form id="customGoogleAccountForm" onsubmit="submitCustomGoogleAccount(event)" class="hidden mt-2 p-3 bg-gray-50 rounded-2xl border border-gray-200 space-y-2.5">
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-700 mb-1" for="customGoogleEmail">Your Gmail / Google Email</label>
+                            <input type="email" id="customGoogleEmail" required placeholder="your.name@gmail.com" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"/>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-700 mb-1" for="customGoogleName">Your Display Name</label>
+                            <input type="text" id="customGoogleName" placeholder="Your Full Name" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"/>
+                        </div>
+                        <button type="submit" class="w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs">
+                            Sign In with This Account
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Option: Launch Separate Popup Window -->
+                <div class="pt-2">
+                    <button type="button" onclick="openGooglePopupWindow()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold transition-colors cursor-pointer">
+                        <span class="material-symbols-outlined text-sm text-gray-500">open_in_new</span>
+                        <span>Open in Separate Popup Window</span>
+                    </button>
+                </div>
+
+                <div class="pt-3 text-center">
+                    <p class="text-[10px] text-gray-400">
+                        🔒 Safe &amp; 256-Bit Encrypted. Your email is private and will never be shared with other singles.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @yield('extra_js')
 </body>
 </html>

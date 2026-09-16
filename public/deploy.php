@@ -23,6 +23,7 @@ $filesToUpdate = [
     'bootstrap/app.php',
     'resources/views/layouts/app.blade.php',
     'resources/views/auth/login.blade.php',
+    'resources/views/profile.blade.php',
     'routes/web.php',
 ];
 

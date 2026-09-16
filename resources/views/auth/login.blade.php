@@ -199,16 +199,16 @@
 
             <!-- Social Auth: Google Sign-in -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-              <a href="{{ route('auth.google') }}" id="google-signin-btn" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-white hover:bg-gray-50 transition-all text-gray-700 font-label-md text-label-md rounded-full shadow-sm border border-gray-200 group" onclick="handleGoogleSignIn(event)">
+              <button type="button" onclick="handleGoogleSignIn(event)" id="google-signin-btn" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-white hover:bg-gray-50 transition-all text-gray-700 font-label-md text-label-md rounded-full shadow-sm border border-gray-200 group cursor-pointer hover:shadow hover:scale-[1.01] active:scale-[0.99]">
                 <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                   <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"></path>
                   <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"></path>
                   <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"></path>
                   <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"></path>
                 </svg>
-                <span class="font-bold" id="google-btn-text">Continue with Google</span>
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-auto" id="google-btn-dot"></span>
-              </a>
+                <span class="font-bold text-xs sm:text-sm" id="google-btn-text">Sign in with Google</span>
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-auto" id="google-btn-dot" title="Popup Ready"></span>
+              </button>
 
               <button type="button" onclick="simulateToast('Connecting to Apple ID...')" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-surface-container hover:bg-surface-container-high transition-all text-on-surface font-label-md text-label-md rounded-full shadow-sm border border-outline-variant/30">
                 <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 170 170">
@@ -295,16 +295,16 @@
             </div>
 
             <!-- Google 1-Click Sign-up -->
-            <a href="{{ route('auth.google') }}" id="google-signup-btn" onclick="handleGoogleSignIn(event)" class="flex items-center justify-center gap-space-sm px-space-md py-3 bg-white hover:bg-gray-50 transition-all text-gray-700 font-label-md text-label-md rounded-full shadow-sm border border-gray-200 group">
+            <button type="button" onclick="handleGoogleSignIn(event)" id="google-signup-btn" class="flex items-center justify-center gap-space-sm px-space-md py-3 bg-white hover:bg-gray-50 transition-all text-gray-700 font-label-md text-label-md rounded-full shadow-sm border border-gray-200 group cursor-pointer hover:shadow hover:scale-[1.01] active:scale-[0.99]">
               <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                 <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"></path>
                 <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"></path>
                 <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"></path>
                 <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"></path>
               </svg>
-              <span class="font-bold">Continue with Google</span>
-              <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full ml-auto">Instant</span>
-            </a>
+              <span class="font-bold text-xs sm:text-sm">Join instantly with Google</span>
+              <span class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full ml-auto">1-Click Popup</span>
+            </button>
 
             <!-- Divider -->
             <div class="flex items-center gap-space-md">
@@ -703,19 +703,14 @@
     );
   }
 
-  // Google Sign-In loading state handler
+  // Google Sign-In trigger - opens Google Account Chooser popup modal
   function handleGoogleSignIn(e) {
-    // Show loading state on the clicked button
-    const btn = e.currentTarget;
-    if (btn) {
-      const textSpan = btn.querySelector('span.font-bold, [id$="btn-text"]');
-      const dotSpan  = btn.querySelector('[id$="btn-dot"]');
-      if (textSpan) textSpan.textContent = 'Signing in with Google...';
-      if (dotSpan) dotSpan.className = 'w-2 h-2 rounded-full bg-amber-500 animate-pulse ml-auto';
-      btn.style.opacity = '0.75';
-      btn.style.pointerEvents = 'none';
+    if (e) e.preventDefault();
+    if (typeof openGooglePopup === 'function') {
+      openGooglePopup();
+    } else {
+      window.location.href = "{{ route('auth.google') }}";
     }
-    // Allow the href navigation to proceed naturally — no preventDefault
   }
 
   // Auto-detect location on register tab load

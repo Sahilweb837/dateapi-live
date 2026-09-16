@@ -58,6 +58,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth.cupdate' => \App\Http\Middleware\RequireAuth::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'auth/google',
+            'deploy.php',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

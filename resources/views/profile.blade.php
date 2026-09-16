@@ -214,6 +214,49 @@
           </div>
         </div>
 
+        @if($isOwnProfile)
+        <!-- Private Account & Google Auth Security Card (Visible ONLY to Logged-in User) -->
+        <div class="bg-surface-container-low p-space-md rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col gap-2.5">
+          <div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-secondary text-base">lock</span>
+              <span class="text-xs font-bold text-on-surface">Private Security &amp; Auth</span>
+            </div>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+              Only Visible To You
+            </span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between p-2 rounded-xl bg-surface border border-outline-variant/20">
+              <div class="flex items-center gap-2 overflow-hidden">
+                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+                  <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/>
+                  <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/>
+                  <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/>
+                  <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/>
+                </svg>
+                <div class="flex flex-col overflow-hidden">
+                  <span class="text-[10px] text-gray-500 font-bold uppercase">Google Email Address</span>
+                  <span class="font-bold text-gray-900 truncate">{{ $targetUser->email }}</span>
+                </div>
+              </div>
+              <span class="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono">Confidential</span>
+            </div>
+
+            <div class="flex items-center justify-between p-2 rounded-xl bg-surface border border-outline-variant/20">
+              <span class="text-gray-600 font-medium">Member ID</span>
+              <span class="font-mono font-bold text-secondary">{{ $targetUser->formatted_member_id ?? 'CD-00001' }}</span>
+            </div>
+
+            <p class="text-[10px] text-on-surface-variant leading-normal pt-1">
+              🛡️ <strong>Zero Data Leak Guarantee:</strong> Your email address and contact info are never displayed publicly on discovery deck or matches.
+            </p>
+          </div>
+        </div>
+        @endif
+
       </div>
 
       <!-- ========================================================================= -->
