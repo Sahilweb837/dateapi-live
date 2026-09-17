@@ -89,7 +89,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
       
       <!-- Left Editorial Storytelling Visual Column (5 Columns on Desktop) -->
-      <div class="lg:col-span-5 flex flex-col justify-between relative rounded-3xl overflow-hidden bg-surface-container-high shadow-xl min-h-[520px] lg:min-h-[720px]">
+      <div class="order-2 lg:order-1 lg:col-span-5 flex flex-col justify-between relative rounded-3xl overflow-hidden bg-surface-container-high shadow-xl min-h-[340px] sm:min-h-[460px] lg:min-h-[720px]">
         <!-- Background Editorial Image -->
         <img class="absolute inset-0 w-full h-full object-cover brightness-[0.88] contrast-[1.03] transform scale-100 transition-transform duration-700 hover:scale-105" 
              loading="lazy"
@@ -147,8 +147,8 @@
       </div>
 
       <!-- Right Column: Interactive Auth Suite (7 Columns on Desktop) -->
-      <div class="lg:col-span-7 flex flex-col justify-center">
-        <div class="bg-surface-container-lowest p-6 sm:p-space-lg md:p-space-xl rounded-3xl shadow-lg border border-outline-variant/30 flex flex-col gap-space-lg">
+      <div class="order-1 lg:order-2 lg:col-span-7 flex flex-col justify-center">
+        <div class="bg-surface-container-lowest p-4 sm:p-space-lg md:p-space-xl rounded-3xl shadow-lg border border-outline-variant/30 flex flex-col gap-space-lg">
           
           <!-- Mode Switcher Tabs (Sign In vs Join CupDate) -->
           <div class="flex items-center justify-between flex-wrap gap-space-md pb-space-xs border-b border-outline-variant/30">

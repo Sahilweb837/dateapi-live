@@ -146,7 +146,7 @@
 
     <style>
       @layer base {
-        html, body { margin: 0; padding: 0; }
+        html, body { margin: 0; padding: 0; overflow-x: hidden; width: 100%; max-width: 100vw; -webkit-overflow-scrolling: touch; }
         body { overscroll-behavior: none; }
       }
       ::-webkit-scrollbar { display: none; }
@@ -261,7 +261,7 @@
     </style>
     @yield('extra_css')
 </head>
-<body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col pb-16 md:pb-0">
+<body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col pb-24 md:pb-0 overflow-x-hidden w-full">
 
     @php
         $headerUnreadCount = 0;
@@ -279,7 +279,7 @@
 
     <!-- Global Top Fixed Editorial Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] border-b border-[#ebdcd7]/80 transition-all">
-        <div class="h-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-6">
+        <div class="h-16 sm:h-20 max-w-[1360px] mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-6">
             
             <!-- Brand Logo & Atelier Moniker -->
             <div class="flex items-center gap-3">
@@ -354,10 +354,10 @@
                 
                 <!-- Live GPS & City Location Selector -->
                 <div class="relative flex items-center" id="globalLocationContainer">
-                    <button type="button" onclick="toggleGlobalLocationDropdown()" class="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-surface-container-high/90 hover:bg-surface-container border border-outline-variant/40 text-on-surface transition-all cursor-pointer shadow-xs active:scale-95" title="Change or detect your dating city">
-                        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" id="headerGpsDot"></span>
-                        <span class="material-symbols-outlined text-secondary text-base leading-none">location_on</span>
-                        <span id="globalHeaderCityName" class="font-label-md text-xs sm:text-label-md text-on-surface font-bold max-w-[90px] sm:max-w-[140px] truncate">
+                    <button type="button" onclick="toggleGlobalLocationDropdown()" class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-surface-container-high/90 hover:bg-surface-container border border-outline-variant/40 text-on-surface transition-all cursor-pointer shadow-xs active:scale-95" title="Change or detect your dating city">
+                        <span class="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" id="headerGpsDot"></span>
+                        <span class="material-symbols-outlined text-secondary text-sm sm:text-base leading-none">location_on</span>
+                        <span id="globalHeaderCityName" class="font-label-md text-[11px] sm:text-xs text-on-surface font-bold max-w-[65px] sm:max-w-[140px] truncate">
                             @if(isset($cityData['name']))
                                 {{ $cityData['name'] }}
                             @elseif(Auth::check() && (Auth::user()->country || Auth::user()->city))
@@ -370,7 +370,7 @@
                     </button>
 
                     <!-- Location Dropdown Panel -->
-                    <div id="globalLocationDropdown" class="hidden absolute right-0 top-11 w-72 bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/40 py-3 px-3 z-50 animate-in fade-in zoom-in duration-150">
+                    <div id="globalLocationDropdown" class="hidden absolute right-0 top-12 w-72 max-w-[calc(100vw-24px)] bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/40 py-3 px-3 z-50 animate-in fade-in zoom-in duration-150">
                         <div class="flex items-center justify-between pb-2 mb-2 border-b border-outline-variant/20">
                             <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Your Dating Location</span>
                             <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold border border-emerald-200 flex items-center gap-1">
@@ -510,8 +510,8 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     </button>
 
-                    <a href="{{ route('login') }}" class="px-3 py-1.5 rounded-full text-xs font-bold text-on-surface hover:text-secondary hover:bg-surface-container transition-all">Sign In</a>
-                    <a href="{{ route('register') }}" class="px-4 py-1.5 rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-xs font-bold shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-105 active:scale-95 transition-all">Join Free</a>
+                    <a href="{{ route('login') }}" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-bold text-on-surface hover:text-secondary hover:bg-surface-container transition-all">Sign In</a>
+                    <a href="{{ route('register') }}" class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-xs font-bold shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-105 active:scale-95 transition-all whitespace-nowrap">Join Free</a>
                 @endauth
 
                 <!-- Mobile Hamburger Toggle -->
@@ -616,8 +616,8 @@
         </div>
     @endif
 
-    <!-- Main Content Container (pt-20 offsets fixed 80px header) -->
-    <main class="w-full pt-20 bg-surface min-h-screen flex-grow">
+    <!-- Main Content Container (pt-16 sm:pt-20 offsets fixed header) -->
+    <main class="w-full pt-16 sm:pt-20 bg-surface min-h-screen flex-grow">
         @yield('content')
     </main>
 
@@ -749,45 +749,56 @@
 
     <!-- Mobile Bottom Navigation for Quick Thumb Access -->
     @auth
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface/95 backdrop-blur-md border-t border-outline-variant/30 flex items-center justify-around z-40">
-            <a href="{{ route('feed') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('feed*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">local_cafe</span>
-                <span>Feed</span>
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-xl border-t border-[#ebdcd7] flex items-center justify-around z-40 pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
+            <a href="{{ route('feed') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('feed*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <span class="material-symbols-outlined text-2xl leading-none">local_cafe</span>
+                <span class="mt-0.5">Feed</span>
             </a>
-            <a href="{{ route('swipes') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('swipes*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">style</span>
-                <span>Swipes</span>
+            <a href="{{ route('swipes') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('swipes*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <span class="material-symbols-outlined text-2xl leading-none">style</span>
+                <span class="mt-0.5">Discover</span>
             </a>
-            <a href="{{ route('messages') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('messages*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">chat_bubble</span>
-                <span>Chat</span>
+            <a href="{{ route('messages') }}" class="relative flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('messages*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <div class="relative inline-flex">
+                    <span class="material-symbols-outlined text-2xl leading-none">chat</span>
+                    @if($headerUnreadCount > 0)
+                        <span class="absolute -top-1 -right-2 px-1.5 py-0.2 rounded-full bg-[#ff007f] text-white text-[9px] font-black leading-tight shadow-xs animate-pulse">{{ $headerUnreadCount }}</span>
+                    @endif
+                </div>
+                <span class="mt-0.5">Chat</span>
             </a>
-            <a href="{{ route('profile') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('profile*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">account_circle</span>
-                <span>Profile</span>
+            <a href="{{ route('dates') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('dates*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <span class="material-symbols-outlined text-2xl leading-none">storefront</span>
+                <span class="mt-0.5">Cafés</span>
+            </a>
+            <a href="{{ route('profile') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('profile*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <div class="relative w-6 h-6 rounded-full overflow-hidden ring-2 {{ request()->routeIs('profile*') ? 'ring-[#ff007f]' : 'ring-gray-300' }}">
+                    <img src="{{ Auth::user()->avatar_url }}" alt="{{ Auth::user()->full_name }}" class="w-full h-full object-cover">
+                </div>
+                <span class="mt-0.5">Profile</span>
             </a>
         </nav>
     @else
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface/95 backdrop-blur-md border-t border-outline-variant/30 flex items-center justify-around z-40">
-            <a href="{{ route('home') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('home') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">home</span>
-                <span>Home</span>
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-xl border-t border-[#ebdcd7] flex items-center justify-around z-40 pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
+            <a href="{{ route('home') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('home') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <span class="material-symbols-outlined text-2xl leading-none">home</span>
+                <span class="mt-0.5">Home</span>
             </a>
-            <a href="{{ route('cities.index') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">explore</span>
-                <span>Cities</span>
+            <a href="{{ route('cities.index') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <span class="material-symbols-outlined text-2xl leading-none">explore</span>
+                <span class="mt-0.5">Cities</span>
             </a>
-            <a href="{{ route('dates') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('dates*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">local_cafe</span>
-                <span>Cafés</span>
+            <a href="{{ route('dates') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('dates*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <span class="material-symbols-outlined text-2xl leading-none">storefront</span>
+                <span class="mt-0.5">Cafés</span>
             </a>
-            <a href="{{ route('login') }}" class="flex flex-col items-center gap-0.5 text-xs font-semibold {{ request()->routeIs('login*') ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">
-                <span class="material-symbols-outlined text-xl">login</span>
-                <span>Login</span>
+            <a href="{{ route('login') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('login*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+                <span class="material-symbols-outlined text-2xl leading-none">login</span>
+                <span class="mt-0.5">Login</span>
             </a>
-            <a href="{{ route('register') }}" class="flex flex-col items-center gap-0.5 text-xs font-bold text-on-tertiary-container">
-                <span class="material-symbols-outlined text-xl">add_circle</span>
-                <span>Join</span>
+            <a href="{{ route('register') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-bold text-[#ff007f] hover:scale-105 transition-all">
+                <span class="material-symbols-outlined text-2xl leading-none">add_circle</span>
+                <span class="mt-0.5">Join Free</span>
             </a>
         </nav>
     @endauth

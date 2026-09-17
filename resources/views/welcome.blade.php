@@ -74,7 +74,7 @@
                     <span>A Slower, Tastier Way to Meet</span>
                 </div>
                 
-                <h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight leading-tight">
+                <h1 class="font-headline-xl text-3xl sm:text-4xl md:text-5xl lg:text-headline-xl text-on-surface tracking-tight leading-tight">
                     Meet over good coffee, <span class="italic font-normal text-secondary">not endless swiping.</span>
                 </h1>
                 
@@ -106,18 +106,18 @@
                 </div>
 
                 <!-- Stat Pill Strip -->
-                <div class="mt-space-xl grid grid-cols-3 gap-space-sm sm:gap-space-md w-full pt-space-md">
-                    <div class="flex flex-col p-space-md rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
-                        <span class="font-headline-sm text-headline-sm text-on-surface font-semibold">42,000+</span>
-                        <span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Dates Brewed</span>
+                <div class="mt-space-lg sm:mt-space-xl grid grid-cols-3 gap-2 sm:gap-space-md w-full pt-space-md">
+                    <div class="flex flex-col p-2 sm:p-space-md rounded-xl sm:rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
+                        <span class="font-headline-sm text-base sm:text-headline-sm text-on-surface font-bold sm:font-semibold">42,000+</span>
+                        <span class="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant mt-0.5">Dates Brewed</span>
                     </div>
-                    <div class="flex flex-col p-space-md rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
-                        <span class="font-headline-sm text-headline-sm text-on-surface font-semibold">850+</span>
-                        <span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Partner Cafés</span>
+                    <div class="flex flex-col p-2 sm:p-space-md rounded-xl sm:rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
+                        <span class="font-headline-sm text-base sm:text-headline-sm text-on-surface font-bold sm:font-semibold">850+</span>
+                        <span class="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant mt-0.5">Partner Cafés</span>
                     </div>
-                    <div class="flex flex-col p-space-md rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
-                        <span class="font-headline-sm text-headline-sm text-on-tertiary-container font-semibold">74%</span>
-                        <span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Second Date Rate</span>
+                    <div class="flex flex-col p-2 sm:p-space-md rounded-xl sm:rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
+                        <span class="font-headline-sm text-base sm:text-headline-sm text-on-tertiary-container font-bold sm:font-semibold">74%</span>
+                        <span class="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant mt-0.5">Second Date Rate</span>
                     </div>
                 </div>
             </div>
@@ -444,7 +444,7 @@
                     </p>
 
                     <!-- Input Group -->
-                    <form class="w-full max-w-md mt-space-sm flex flex-col sm:flex-row items-center gap-space-xs p-1.5 rounded-full bg-surface-container-lowest/10 backdrop-blur-md shadow-inner transition-all focus-within:ring-2 focus-within:ring-on-tertiary-container/60" onsubmit="handleInviteForm(event)">
+                    <form class="w-full max-w-md mt-space-sm flex flex-col sm:flex-row items-center gap-space-xs p-1.5 rounded-2xl sm:rounded-full bg-surface-container-lowest/10 backdrop-blur-md shadow-inner transition-all focus-within:ring-2 focus-within:ring-on-tertiary-container/60" onsubmit="handleInviteForm(event)">
                         <input id="inviteContactInput" class="w-full px-space-md py-space-sm rounded-full bg-transparent text-surface placeholder:text-primary-fixed-dim/60 font-body-sm text-body-sm focus:outline-none" placeholder="Enter your phone or email..." required="" type="text"/>
                         <button class="w-full sm:w-auto shrink-0 px-space-lg py-space-sm rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-label-md shadow-md hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer" type="submit">
                             Get Invitation
