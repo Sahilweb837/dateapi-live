@@ -17,6 +17,23 @@
     <!-- FontAwesome 6 (Compatibility) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    <!-- Google tag (gtag.js) - Google Analytics GA4 -->
+    @php
+        $gaId = env('GOOGLE_ANALYTICS_ID', 'G-ZJVCSCJ51G');
+    @endphp
+    @if($gaId)
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ $gaId }}', {
+        send_page_view: true,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+    </script>
+    @endif
+
     <!-- Google Identity Services (GSI) Client SDK -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -1406,6 +1423,62 @@
                 openGooglePopup();
             }
         };
+    </script>
+
+    <!-- High-Speed Instant Page Prefetcher & Smart Image Lazy-Loader (Vite/Vue SPA Speed) -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // 1. Automatic Native & Blur-up Image Lazy Loading
+        const images = document.querySelectorAll('img:not([loading])');
+        images.forEach(img => {
+          if (!img.closest('.hero-section') && !img.hasAttribute('fetchpriority')) {
+            img.setAttribute('loading', 'lazy');
+            img.setAttribute('decoding', 'async');
+          }
+        });
+
+        // 2. High-speed Instant Page Prefetcher (Preloads on link hover/touch for 50ms transitions)
+        const prefetchedUrls = new Set();
+        function prefetchUrl(url) {
+          if (!url || prefetchedUrls.has(url)) return;
+          try {
+            const parsed = new URL(url, window.location.origin);
+            if (parsed.origin !== window.location.origin) return;
+            if (parsed.pathname.includes('/auth/') || parsed.pathname.includes('/logout') || parsed.pathname.includes('/api/')) return;
+            prefetchedUrls.add(url);
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = url;
+            link.as = 'document';
+            document.head.appendChild(link);
+          } catch(e) {}
+        }
+
+        // On hover or touch, prefetch target page
+        document.body.addEventListener('mouseover', function(e) {
+          const anchor = e.target.closest('a');
+          if (anchor && anchor.href && !anchor.target && !anchor.href.includes('#')) {
+            prefetchUrl(anchor.href);
+          }
+        }, { passive: true });
+
+        document.body.addEventListener('touchstart', function(e) {
+          const anchor = e.target.closest('a');
+          if (anchor && anchor.href && !anchor.target && !anchor.href.includes('#')) {
+            prefetchUrl(anchor.href);
+          }
+        }, { passive: true });
+
+        // 3. Top Progress Bar for Snappy Nav
+        const progressBar = document.createElement('div');
+        progressBar.id = 'top-nav-progress';
+        progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2.5px;width:0%;background:linear-gradient(90deg,#8b5a2b,#d65b6c);z-index:99999;transition:width 0.2s ease,opacity 0.2s ease;pointer-events:none;';
+        document.body.appendChild(progressBar);
+
+        window.addEventListener('beforeunload', function() {
+          progressBar.style.width = '75%';
+        });
+      });
     </script>
 
     @yield('extra_js')
