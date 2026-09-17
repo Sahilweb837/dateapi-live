@@ -198,6 +198,19 @@ class AppServiceProvider extends ServiceProvider
                 expiration INTEGER
             )");
 
+            // Page Views Analytics table
+            $db->exec("CREATE TABLE IF NOT EXISTS page_views (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ip_address TEXT,
+                url TEXT,
+                route_name TEXT,
+                method TEXT DEFAULT 'GET',
+                user_agent TEXT,
+                referer TEXT,
+                user_id INTEGER,
+                created_at TEXT
+            )");
+
             // Seed demo singles if users table is empty
             $stmtUsers = $db->query("SELECT COUNT(*) FROM users");
             if ($stmtUsers && $stmtUsers->fetchColumn() == 0) {

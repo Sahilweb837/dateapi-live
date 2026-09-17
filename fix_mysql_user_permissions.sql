@@ -267,6 +267,25 @@ CREATE TABLE IF NOT EXISTS `cache` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
+-- 15. Table: page_views (Visitor IP Capture & Analytics)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `page_views` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ip_address` VARCHAR(45) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `route_name` VARCHAR(100) DEFAULT NULL,
+  `method` VARCHAR(10) DEFAULT 'GET',
+  `user_agent` TEXT DEFAULT NULL,
+  `referer` VARCHAR(255) DEFAULT NULL,
+  `user_id` INT(11) DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_pv_ip` (`ip_address`),
+  KEY `idx_pv_url` (`url`),
+  KEY `idx_pv_created` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 -- SEED DATA: Curated Cafe Spots (Himachal Pradesh & Metros)
 -- --------------------------------------------------------
 INSERT INTO `date_places` (`name`, `type`, `city`, `description`, `address`, `lat`, `lng`, `rating`, `cup_offer`) VALUES

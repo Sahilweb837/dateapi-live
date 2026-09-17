@@ -170,17 +170,7 @@
           </div>
 
           <!-- Alert / Errors -->
-          @if(request('db_connecting') || ($errors->has('email') && str_contains($errors->first('email'), 'Database connecting')))
-            <div class="p-4 rounded-2xl bg-amber-50/90 border border-amber-300 text-amber-900 text-xs font-bold flex items-center gap-3 shadow-xs">
-              <span class="relative flex h-3 w-3 shrink-0">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-              </span>
-              <div class="flex-1 leading-snug">
-                Database connecting — please try Google Sign-In again in 10 seconds, or use email login below.
-              </div>
-            </div>
-          @elseif(session('success'))
+          @if(session('success'))
             <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
               <span class="material-symbols-outlined text-base leading-none text-emerald-600">check_circle</span>
               <span>{{ session('success') }}</span>

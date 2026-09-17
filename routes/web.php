@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\AdminBlogController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\PageController;
@@ -90,6 +91,12 @@ Route::get('/coffee-date-ideas', [PageController::class, 'coffeeDateIdeas'])->na
 // Editorial Blogs & AdSense Compliance
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+// Admin Command Center & Real-time Visitor Analytics
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::post('/admin/user/verify/{id}', [AdminController::class, 'toggleVerify'])->name('admin.user.verify');
+Route::post('/admin/user/coins/{id}', [AdminController::class, 'addCoins'])->name('admin.user.coins');
+Route::post('/admin/analytics/clear', [AdminController::class, 'clearAnalytics'])->name('admin.analytics.clear');
 
 // Admin Automated Blogging Engine
 Route::get('/admin/blogs', [AdminBlogController::class, 'index'])->name('admin.blogs');

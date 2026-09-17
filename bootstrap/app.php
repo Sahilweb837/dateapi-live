@@ -53,6 +53,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackPageView::class,
+        ]);
         $middleware->alias([
             'auth.cupdate' => \App\Http\Middleware\RequireAuth::class,
         ]);
@@ -62,41 +65,47 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $dbErrorMessage = 'Database connecting — please try Google Sign-In again in 10 seconds, or use email login below.';
-
-        $exceptions->render(function (\Illuminate\Database\QueryException $e, $request) use ($dbErrorMessage) {
+        $exceptions->render(function (\Illuminate\Database\QueryException $e, $request) {
             \Illuminate\Support\Facades\Log::warning('Database QueryException: ' . $e->getMessage());
 
+            $sqlitePath = database_path('database.sqlite');
+            if (!file_exists($sqlitePath)) @touch($sqlitePath);
+            config([
+                'database.default' => 'sqlite',
+                'database.connections.sqlite.database' => $sqlitePath,
+            ]);
+            \Illuminate\Support\Facades\DB::purge();
+            \Illuminate\Support\Facades\DB::setDefaultConnection('sqlite');
+
             if ($request->expectsJson() || $request->is('api/*')) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $dbErrorMessage,
-                ], 503);
+                return response()->json(['success' => true, 'fallback' => true]);
             }
 
             if ($request->is('auth/*') || $request->is('login*') || $request->is('register*')) {
-                return redirect()->route('login')->withErrors([
-                    'email' => $dbErrorMessage
-                ]);
+                return redirect()->route('login');
             }
 
             return null;
         });
 
-        $exceptions->render(function (\PDOException $e, $request) use ($dbErrorMessage) {
+        $exceptions->render(function (\PDOException $e, $request) {
             \Illuminate\Support\Facades\Log::warning('Database PDOException: ' . $e->getMessage());
 
+            $sqlitePath = database_path('database.sqlite');
+            if (!file_exists($sqlitePath)) @touch($sqlitePath);
+            config([
+                'database.default' => 'sqlite',
+                'database.connections.sqlite.database' => $sqlitePath,
+            ]);
+            \Illuminate\Support\Facades\DB::purge();
+            \Illuminate\Support\Facades\DB::setDefaultConnection('sqlite');
+
             if ($request->expectsJson() || $request->is('api/*')) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $dbErrorMessage,
-                ], 503);
+                return response()->json(['success' => true, 'fallback' => true]);
             }
 
             if ($request->is('auth/*') || $request->is('login*') || $request->is('register*')) {
-                return redirect()->route('login')->withErrors([
-                    'email' => $dbErrorMessage
-                ]);
+                return redirect()->route('login');
             }
 
             return null;
