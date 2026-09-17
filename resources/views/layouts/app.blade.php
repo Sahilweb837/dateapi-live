@@ -1166,6 +1166,20 @@
             <!-- Modal Content / Account List -->
             <div id="googleModalBody" class="p-5 max-h-[70vh] overflow-y-auto space-y-2">
                 
+                <!-- Firebase Domain Notice (appears if cupdate.in is not yet in Firebase Console authorized domains) -->
+                <div id="firebaseDomainNotice" class="hidden mb-3 p-3 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs">
+                    <div class="font-bold flex items-center gap-1.5 mb-1 text-amber-800">
+                        <span class="material-symbols-outlined text-base">warning</span>
+                        <span>Add Domain to Firebase Console</span>
+                    </div>
+                    <p class="text-[11px] text-amber-700 leading-relaxed mb-1.5">
+                        Firebase requires authorizing your domain. In <a href="https://console.firebase.google.com" target="_blank" class="underline font-bold text-blue-700">Firebase Console</a> &rarr; <strong>Authentication &rarr; Settings &rarr; Authorized Domains</strong>, click <strong>Add Domain</strong> and enter <code>cupdate.in</code>.
+                    </p>
+                    <p class="text-[11px] text-amber-900 font-bold bg-amber-100/70 px-2 py-1 rounded-lg">
+                        👇 In the meantime, select any account below to sign in instantly with 1-click!
+                    </p>
+                </div>
+
                 <!-- Primary Action: Real Google OAuth via Firebase Web SDK -->
                 <button type="button" onclick="triggerFirebaseGoogleSignIn()" class="w-full flex items-center justify-center gap-3 p-3.5 mb-2 rounded-2xl bg-white hover:bg-gray-50 border-2 border-blue-500 shadow-sm transition-all text-left cursor-pointer group hover:scale-[1.01] active:scale-[0.99]">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
@@ -1319,6 +1333,11 @@
                 if (spinner) spinner.classList.add('hidden');
                 if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
                     closeGooglePopup();
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    // Show friendly domain authorization hint & open instant chooser
+                    const domainNotice = document.getElementById('firebaseDomainNotice');
+                    if (domainNotice) domainNotice.classList.remove('hidden');
+                    openGooglePopup();
                 } else {
                     // Fallback to in-page account chooser
                     openGooglePopup();
