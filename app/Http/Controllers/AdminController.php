@@ -48,29 +48,56 @@ class AdminController extends Controller
 
         try {
             if (Schema::hasTable('page_views')) {
-                $totalViews = DB::table('page_views')->count();
-                $uniqueVisitors = DB::table('page_views')->distinct()->count('ip_address');
+                // Get all admin user IDs so their views NEVER pollute analytics
+                $adminUserIds = User::where('is_admin', 1)->pluck('id')->toArray();
+
+                $basePvQuery = DB::table('page_views')
+                    ->where('url', 'not like', '/admin%')
+                    ->where('url', 'not like', 'admin%');
+
+                if (!empty($adminUserIds)) {
+                    $basePvQuery->where(function($q) use ($adminUserIds) {
+                        $q->whereNull('user_id')->orWhereNotIn('user_id', $adminUserIds);
+                    });
+                }
+
+                $totalViews = (clone $basePvQuery)->count();
+                $uniqueVisitors = (clone $basePvQuery)->distinct()->count('ip_address');
                 
                 $todayDate = date('Y-m-d');
-                $viewsToday = DB::table('page_views')->where('created_at', 'like', "{$todayDate}%")->count();
-                $uniqueToday = DB::table('page_views')->where('created_at', 'like', "{$todayDate}%")->distinct()->count('ip_address');
+                $viewsToday = (clone $basePvQuery)->where('created_at', 'like', "{$todayDate}%")->count();
+                $uniqueToday = (clone $basePvQuery)->where('created_at', 'like', "{$todayDate}%")->distinct()->count('ip_address');
 
-                $viewsPerPage = DB::table('page_views')
+                $viewsPerPage = (clone $basePvQuery)
                     ->select('url', DB::raw('count(*) as total'), DB::raw('count(distinct ip_address) as uniques'))
                     ->groupBy('url')
                     ->orderBy('total', 'desc')
                     ->take(12)
                     ->get();
 
-                $query = DB::table('page_views')
+                // Deduplicated Unique Recent Visitors by IP: Each person appears once with their hit count
+                $query = (clone $basePvQuery)
                     ->leftJoin('users', 'page_views.user_id', '=', 'users.id')
-                    ->select('page_views.*', 'users.full_name as user_name', 'users.email as user_email');
+                    ->select(
+                        'page_views.ip_address',
+                        DB::raw('MAX(page_views.id) as id'),
+                        DB::raw('MAX(page_views.created_at) as created_at'),
+                        DB::raw('MAX(page_views.url) as url'),
+                        DB::raw('MAX(page_views.method) as method'),
+                        DB::raw('MAX(page_views.user_agent) as user_agent'),
+                        DB::raw('MAX(users.full_name) as user_name'),
+                        DB::raw('MAX(users.email) as user_email'),
+                        DB::raw('COUNT(*) as total_hits')
+                    );
 
                 if ($searchIp) {
                     $query->where('page_views.ip_address', 'like', "%{$searchIp}%");
                 }
 
-                $recentVisitors = $query->orderBy('page_views.id', 'desc')->take(30)->get();
+                $recentVisitors = $query->groupBy('page_views.ip_address')
+                    ->orderBy('id', 'desc')
+                    ->take(40)
+                    ->get();
             }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('Admin analytics error: ' . $e->getMessage());

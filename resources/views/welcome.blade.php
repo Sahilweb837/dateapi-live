@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'CupDate — Meet Verified Singles Over Coffee | Intentional Dating')
-@section('meta_desc', 'Meet over good coffee, not endless swiping. CupDate matches intentional singles nearby who share your taste in brew, neighborhood spots, and genuine conversation.')
+@section('title', 'Best Dating Website in Himachal Pradesh (Kangra, Kullu, Mandi, Shimla) & India — CupDate')
+@section('meta_desc', 'CupDate is the #1 best dating website in Himachal Pradesh (Kangra, Kullu, Mandi, Dharamshala, Shimla, Manali), India & worldwide. Connect with 100% selfie-verified singles for meaningful coffee dates, serious relationships & lifelong romance.')
 
 @section('content')
 <div class="flex flex-col w-full">
@@ -818,6 +818,165 @@
         </section>
     @endif
 
+    <!-- ========================================================================= -->
+    <!-- #1 BEST DATING WEBSITE IN HIMACHAL PRADESH, INDIA & WORLDWIDE (SEO SUITE) -->
+    <!-- ========================================================================= -->
+    <section class="w-full py-20 bg-gradient-to-b from-surface via-surface-container-low/40 to-surface-container-high/30 border-t border-[#ebdcd7]" id="himachal-dating-hub">
+        <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E87A88]/40 shadow-xs mb-4">
+                    <span class="material-symbols-outlined text-sm text-[#E87A88]">mountain_flag</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-[#8b5a2b]">The #1 Dating Destination in the Hills</span>
+                </div>
+                <h2 class="font-headline-xl text-3xl sm:text-4xl md:text-5xl font-black text-primary tracking-tight text-balance leading-tight">
+                    The Best Dating Website in Himachal Pradesh, India &amp; Worldwide
+                </h2>
+                <p class="font-body-lg text-base sm:text-lg text-on-surface-variant mt-4 leading-relaxed text-balance">
+                    From the lush tea estates of <strong>Kangra</strong> and riverine apple orchards of <strong>Kullu</strong> to the temple riverbanks of <strong>Mandi</strong>, pine ridges of <strong>Shimla</strong>, and vibrant metros across India and abroad — CupDate pairs verified, intentional singles over unhurried coffee dates.
+                </p>
+            </div>
+
+            <!-- Himachal Pradesh Major Dating Chapters (Kangra, Kullu, Mandi & Hills) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                
+                <!-- Kangra Chapter Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#e8d8cc] shadow-sm hover:shadow-md transition-all flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4 shadow-xs group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-2xl">eco</span>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Dhauladhar Valleys &amp; Tea Trails</span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-primary mt-1 mb-3">Dating in Kangra</h3>
+                        <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-4">
+                            Surrounded by the majestic snowcapped Dhauladhar range, Kangra offers scenic terraced tea estates, historic fort pathways, and peaceful streamside cafes. Whether you live in Kangra town, Dharamshala, or Palampur, connect with authentic local singles who appreciate mountain life, meaningful conversation, and slow sips.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-secondary">Verified Local Singles</span>
+                        <a href="{{ route('city.show', 'kangra') }}" class="inline-flex items-center gap-1 text-xs font-bold text-[#E87A88] group-hover:translate-x-1 transition-transform">
+                            <span>Explore Kangra</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kullu & Manali Chapter Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#e8d8cc] shadow-sm hover:shadow-md transition-all flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center mb-4 shadow-xs group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-2xl">nature_people</span>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Valley of Gods &amp; River Beas</span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-primary mt-1 mb-3">Dating in Kullu &amp; Manali</h3>
+                        <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-4">
+                            From riverside open-air log cabins in Old Manali to pine-fringed cafes around Dhalpur in Kullu, this alpine haven brings adventurous, nature-loving singles together. Share fresh apple pies, artisan French roast coffees, and conversations that easily flow into weekend treks and starry terrace strolls.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-secondary">Alpine Coffee Romance</span>
+                        <a href="{{ route('city.show', 'kullu') }}" class="inline-flex items-center gap-1 text-xs font-bold text-[#E87A88] group-hover:translate-x-1 transition-transform">
+                            <span>Explore Kullu</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mandi Chapter Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#e8d8cc] shadow-sm hover:shadow-md transition-all flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center mb-4 shadow-xs group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-2xl">temple_hindu</span>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-rose-700">Chhoti Kashi &amp; Beas Promenades</span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-primary mt-1 mb-3">Dating in Mandi</h3>
+                        <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-4">
+                            Known as the Varanasi of the Hills, Mandi pairs 81 historic stone temples with serene riverbanks along the Beas and vibrant cafes around the Sunken Garden. An ideal setting for educated professionals and thoughtful singles seeking genuine, values-aligned courtship with zero ghosting.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-secondary">Heritage &amp; Romance</span>
+                        <a href="{{ route('city.show', 'mandi') }}" class="inline-flex items-center gap-1 text-xs font-bold text-[#E87A88] group-hover:translate-x-1 transition-transform">
+                            <span>Explore Mandi</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Deep Editorial Prose: Why CupDate is #1 in Himachal, India & Globally -->
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-[#e8d8cc] shadow-sm mb-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-[#8b5a2b]">The Mountain Courtship Manifesto</span>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-primary leading-snug">
+                            Why Himachal Singles Choose CupDate Over Superficial Dating Apps
+                        </h3>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Traditional dating apps are saturated with fake accounts, ghosting, and superficial swipe fatigue. CupDate was built on a different premise: <strong>meaningful connection takes daylight, intentionality, and a shared cup of coffee.</strong>
+                        </p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Every member undergoes <strong>100% selfie verification</strong> to ensure authentic identities. Whether you are living in Himachal Pradesh, working remotely from the hills, or seeking a genuine connection across Chandigarh Tri-City, Delhi NCR, or overseas, CupDate provides a private, respectful haven.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 pt-2">
+                            <div class="p-3 rounded-2xl bg-[#faf5f0] border border-[#ebdcd7]">
+                                <span class="font-bold text-base text-[#8b5a2b]">100%</span>
+                                <p class="text-[11px] text-gray-600">Selfie Verified Singles</p>
+                            </div>
+                            <div class="p-3 rounded-2xl bg-[#faf5f0] border border-[#ebdcd7]">
+                                <span class="font-bold text-base text-[#8b5a2b]">45 Mins</span>
+                                <p class="text-[11px] text-gray-600">Low-Pressure Daylight Dates</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- City & Global Quick Directory Pills -->
+                    <div class="flex flex-col gap-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-secondary">Active Dating Hubs &amp; City Guides:</span>
+                        
+                        <!-- Himachal Pradesh Chapters -->
+                        <div>
+                            <span class="text-xs font-semibold text-gray-500 mb-2 block">🏔️ Himachal Pradesh Chapters:</span>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="{{ route('city.show', 'kangra') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Kangra</a>
+                                <a href="{{ route('city.show', 'kullu') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Kullu</a>
+                                <a href="{{ route('city.show', 'mandi') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Mandi</a>
+                                <a href="{{ route('city.show', 'shimla') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Shimla</a>
+                                <a href="{{ route('city.show', 'manali') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Manali</a>
+                                <a href="{{ route('city.show', 'dharamshala') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Dharamshala &amp; McLeodGanj</a>
+                                <a href="{{ route('city.show', 'solan') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Solan</a>
+                                <a href="{{ route('city.show', 'hamirpur') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Hamirpur</a>
+                                <a href="{{ route('city.show', 'bilaspur') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Bilaspur</a>
+                                <a href="{{ route('city.show', 'una') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Una</a>
+                                <a href="{{ route('city.show', 'palampur') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Palampur</a>
+                                <a href="{{ route('city.show', 'kasauli') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Kasauli</a>
+                            </div>
+                        </div>
+
+                        <!-- Pan-India & Global NRI Chapters -->
+                        <div class="pt-2">
+                            <span class="text-xs font-semibold text-gray-500 mb-2 block">🇮🇳 India &amp; 🌍 Worldwide Chapters:</span>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="{{ route('city.show', 'chandigarh') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Chandigarh Tri-City</a>
+                                <a href="{{ route('city.show', 'delhi') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Delhi NCR</a>
+                                <a href="{{ route('city.show', 'pune') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Pune</a>
+                                <a href="{{ route('city.show', 'mumbai') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Mumbai</a>
+                                <a href="{{ route('city.show', 'bangalore') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Bangalore</a>
+                                <a href="{{ route('city.show', 'jaipur') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Jaipur</a>
+                                <a href="{{ route('city.show', 'goa') }}" class="px-3 py-1.5 rounded-full bg-surface-container hover:bg-[#8b5a2b] hover:text-white transition-all text-xs font-semibold shadow-xs">Goa</a>
+                                <a href="{{ route('cities.index') }}" class="px-3 py-1.5 rounded-full bg-[#E87A88] text-white hover:brightness-105 transition-all text-xs font-bold shadow-xs">All 25+ City Guides →</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
     <!-- High-SEO Viral Content Rich FAQ Section -->
     <section class="w-full py-space-xl bg-surface-container-low/60 border-t border-b border-[#ebdcd7]" id="homeFaqSection">
         <div class="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -991,6 +1150,14 @@
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "CupDate complies with India's DPDP Act 2023, employs Ghost Location Fuzzing (1.5-2km location shift), and enables in-app messaging without sharing personal phone numbers."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which is the best dating website in Himachal Pradesh (Kangra, Kullu, Mandi, Shimla)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CupDate.in is rated the #1 best dating website in Himachal Pradesh, connecting intentional singles across Kangra, Kullu, Mandi, Shimla, Manali, Dharamshala, and Solan. It features 100% selfie-verified profiles, safe public partner cafes, and unhurried 45-minute coffee dates."
               }
             },
             {

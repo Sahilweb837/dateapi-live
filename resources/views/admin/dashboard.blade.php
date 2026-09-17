@@ -210,10 +210,15 @@
                                 @foreach($recentVisitors as $visit)
                                     <tr class="hover:bg-[#fdfaf7] transition-colors">
                                         <td class="py-3 px-3 font-mono font-bold text-[#8b5a2b]">
-                                            <a href="https://ipinfo.io/{{ $visit->ip_address }}" target="_blank" class="hover:underline flex items-center gap-1" title="Lookup IP details">
-                                                <span>{{ $visit->ip_address }}</span>
-                                                <span class="material-symbols-outlined text-[10px] text-gray-400">open_in_new</span>
-                                            </a>
+                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                <a href="https://ipinfo.io/{{ $visit->ip_address }}" target="_blank" class="hover:underline flex items-center gap-1" title="Lookup IP details">
+                                                    <span>{{ $visit->ip_address }}</span>
+                                                    <span class="material-symbols-outlined text-[10px] text-gray-400">open_in_new</span>
+                                                </a>
+                                                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200" title="Total pageviews by this IP">
+                                                    {{ $visit->total_hits ?? 1 }} {{ Str::plural('hit', $visit->total_hits ?? 1) }}
+                                                </span>
+                                            </div>
                                         </td>
                                         <td class="py-3 px-3 max-w-[160px] truncate font-mono text-gray-700" title="{{ $visit->url }}">
                                             <span class="text-[10px] uppercase font-bold text-gray-400 mr-1">{{ $visit->method }}</span>
