@@ -152,6 +152,7 @@
             @endphp
             <a href="{{ route('messages', ['user_id' => $partner->id]) }}" 
                class="partner-item p-space-sm rounded-xl transition-all cursor-pointer relative {{ $isActive ? 'active-chat-item shadow-sm' : 'hover:bg-surface-container bg-surface-container-lowest/70' }} flex items-start gap-space-sm"
+               data-id="{{ $partner->id }}"
                data-name="{{ strtolower($partner->full_name) }}">
               <div class="relative shrink-0">
                 <img class="w-11 h-11 rounded-full object-cover ring-1 ring-outline-variant/40" 
@@ -168,9 +169,9 @@
                       <span class="material-symbols-outlined text-emerald-600 text-xs shrink-0">verified</span>
                     @endif
                   </div>
-                  <span class="font-label-sm text-label-sm text-on-tertiary-container font-semibold shrink-0">{{ $previewTime }}</span>
+                  <span class="partner-preview-time font-label-sm text-label-sm text-on-tertiary-container font-semibold shrink-0">{{ $previewTime }}</span>
                 </div>
-                <p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">
+                <p class="partner-preview-text font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">
                   {{ $previewText }}
                 </p>
                 @if($partner->unread_count > 0)
@@ -602,11 +603,38 @@
     }, 3200);
   }
 
-  // Scroll to bottom of message container
-  function scrollToBottom() {
-    const scroller = document.getElementById('chatScrollArea');
-    if (scroller) {
-      scroller.scrollTop = scroller.scrollHeight;
+  // Web Audio Synthesizer for gentle notification chime
+  function playPleasantChime(isIncoming = false) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const now = ctx.currentTime;
+      
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      
+      if (isIncoming) {
+        // Soft incoming bell chime: 659.25Hz -> 830.61Hz
+        osc.frequency.setValueAtTime(659.25, now);
+        osc.frequency.exponentialRampToValueAtTime(830.61, now + 0.12);
+      } else {
+        // Soft sent notification chime: 523.25Hz -> 659.25Hz
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1);
+      }
+      
+      gain.gain.setValueAtTime(0.06, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.start(now);
+      osc.stop(now + 0.3);
+    } catch (e) {
+      // Audio autoplay policy fallback
     }
   }
 
@@ -742,6 +770,19 @@
     `;
 
     container.appendChild(bubble);
+
+    // Update left conversation sidebar preview
+    const receiverInput = document.getElementById('receiverId');
+    if (receiverInput) {
+      const partnerEl = document.querySelector(`.partner-item[data-id="${receiverInput.value}"]`);
+      if (partnerEl) {
+        const previewTextEl = partnerEl.querySelector('.partner-preview-text');
+        if (previewTextEl) previewTextEl.textContent = text || 'Photo attachment 📷';
+        const previewTimeEl = partnerEl.querySelector('.partner-preview-time');
+        if (previewTimeEl) previewTimeEl.textContent = time || 'Just now';
+      }
+    }
+
     scrollToBottom(true);
   }
 
@@ -772,6 +813,18 @@
     `;
 
     container.appendChild(bubble);
+
+    // Update left conversation sidebar preview
+    @if($activePartner)
+      const partnerEl = document.querySelector(`.partner-item[data-id="{{ $activePartner->id }}"]`);
+      if (partnerEl) {
+        const previewTextEl = partnerEl.querySelector('.partner-preview-text');
+        if (previewTextEl) previewTextEl.textContent = text || 'Photo attachment 📷';
+        const previewTimeEl = partnerEl.querySelector('.partner-preview-time');
+        if (previewTimeEl) previewTimeEl.textContent = time || 'Just now';
+      }
+    @endif
+
     scrollToBottom(true);
   }
 

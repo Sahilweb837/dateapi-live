@@ -17,8 +17,11 @@ class SwipeController extends Controller
         $profiles = collect();
 
         try {
-            $swipedIds = Swipe::where('swiper_id', $userId)->pluck('swipee_id')->toArray();
-            $swipedIds[] = $userId;
+            $swipedIds = [];
+            if ($userId) {
+                $swipedIds = Swipe::where('swiper_id', $userId)->pluck('swipee_id')->toArray();
+                $swipedIds[] = $userId;
+            }
 
             $profiles = User::where('status', 'active')
                 ->whereNotIn('id', $swipedIds)
@@ -27,11 +30,57 @@ class SwipeController extends Controller
                 ->orderBy('is_verified', 'desc')
                 ->take(25)
                 ->get();
+
+            // Fallback so the deck never feels empty
+            if ($profiles->isEmpty()) {
+                $profiles = User::where('id', '!=', $userId)
+                    ->where('status', 'active')
+                    ->orderByRaw('COALESCE(is_boosted, 0) DESC')
+                    ->orderBy('is_verified', 'desc')
+                    ->take(15)
+                    ->get();
+            }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('Swipe profiles query fallback: ' . $e->getMessage());
         }
 
-        return view('swipes', compact('profiles', 'user'));
+        // Fetch admirers waiting
+        $admirers = collect();
+        try {
+            $admirers = User::where('id', '!=', $userId)
+                ->where('status', 'active')
+                ->orderBy('is_verified', 'desc')
+                ->take(4)
+                ->get();
+        } catch (\Throwable $e) {}
+
+        // Format profiles for frontend JS deck
+        $deckData = $profiles->map(function($p, $idx) {
+            $photos = [
+                $p->avatar_url,
+                'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80&fit=crop',
+                'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&q=80&fit=crop',
+            ];
+            $synergy = 91 + (($p->id * 7) % 9);
+
+            return [
+                'id' => $p->id,
+                'name' => $p->full_name,
+                'age' => $p->age ?? 27,
+                'location' => $p->country ?? 'Kangra, Himachal Pradesh',
+                'occupation' => !empty($p->bio) ? \Illuminate\Support\Str::limit($p->bio, 45) : 'Coffee Enthusiast & Explorer',
+                'bio' => $p->bio ?? 'Looking for unhurried conversations and shared morning brews. ☕✨',
+                'avatar' => $p->avatar_url,
+                'photos' => $photos,
+                'coffee_style' => $p->coffee_style ?? 'Single-Origin Pour-over',
+                'is_verified' => (bool)$p->is_verified,
+                'synergy' => $synergy,
+                'intent' => 'Lifelong Romance',
+                'interests' => array_filter(array_map('trim', explode(',', $p->interests ?? 'Coffee,Vinyl,Reading,Art'))),
+            ];
+        })->values();
+
+        return view('swipes', compact('profiles', 'deckData', 'admirers', 'user'));
     }
 
     public function swipe(Request $request)
