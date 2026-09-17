@@ -132,12 +132,26 @@ class AppServiceProvider extends ServiceProvider
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
                 idea_text TEXT,
+                content TEXT,
                 cafe_name TEXT,
                 city TEXT,
+                vibe TEXT DEFAULT 'Cozy',
+                budget TEXT DEFAULT '₹₹',
+                image TEXT,
+                image_path TEXT,
                 sparks INTEGER DEFAULT 0,
+                sparks_count INTEGER DEFAULT 0,
                 created_at TEXT,
                 updated_at TEXT
             )");
+
+            try { $db->exec("ALTER TABLE ideas ADD COLUMN content TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE ideas ADD COLUMN idea_text TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE ideas ADD COLUMN image TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE ideas ADD COLUMN image_path TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE ideas ADD COLUMN vibe TEXT DEFAULT 'Cozy'"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE ideas ADD COLUMN budget TEXT DEFAULT '₹₹'"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE ideas ADD COLUMN sparks_count INTEGER DEFAULT 0"); } catch (\Throwable $e) {}
 
             // Swipes table
             $db->exec("CREATE TABLE IF NOT EXISTS swipes (

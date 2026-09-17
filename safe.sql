@@ -130,6 +130,10 @@ CREATE TABLE IF NOT EXISTS `ideas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `image` VARCHAR(255) DEFAULT NULL;
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `idea_text` TEXT NULL;
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `sparks` INT(11) DEFAULT 0;
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `vibe` VARCHAR(50) DEFAULT 'Cozy';
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `budget` VARCHAR(20) DEFAULT '₹₹';
 
 -- --------------------------------------------------------
 -- 6. Table: idea_sparks (Track user sparks/likes on ideas)

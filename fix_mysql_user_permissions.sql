@@ -121,16 +121,26 @@ CREATE TABLE IF NOT EXISTS `ideas` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
   `idea_text` TEXT NOT NULL,
+  `content` TEXT DEFAULT NULL,
   `cafe_name` VARCHAR(150) DEFAULT NULL,
   `city` VARCHAR(50) DEFAULT 'Shimla',
   `vibe` VARCHAR(50) DEFAULT 'Cozy',
   `budget` VARCHAR(20) DEFAULT '₹₹',
+  `image` VARCHAR(255) DEFAULT NULL,
+  `image_path` VARCHAR(255) DEFAULT NULL,
   `sparks` INT(11) NOT NULL DEFAULT 0,
+  `sparks_count` INT(11) NOT NULL DEFAULT 0,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_ideas_user` (`user_id`),
   KEY `idx_ideas_city` (`city`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Migration patches in case ideas table already existed without new columns
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `content` TEXT NULL AFTER `idea_text`;
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `image` VARCHAR(255) NULL AFTER `budget`;
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `image_path` VARCHAR(255) NULL AFTER `image`;
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `sparks_count` INT(11) DEFAULT 0 AFTER `sparks`;
 
 -- --------------------------------------------------------
 -- 6. Table: idea_sparks (Track sparks/likes on community feed)
