@@ -278,4 +278,29 @@ INSERT INTO `blogs` (`id`, `slug`, `title`, `category`, `excerpt`, `content`, `i
 (3, 'romantic-coffee-date-guide-himachal-pradesh', 'The Mountain Romance Guide: Coffee Dates in Shimla & Manali', 'Himachal Dating', 'Discover quiet colonial verandas in Shimla, riverside patios in Old Manali, and literary retreats in McLeodGanj.', 'There is something uniquely magical about sharing hot espresso while wrapped in a woolen shawl overlooking snow-dusted Himalayan peaks. Himachal Pradesh offers the most atmospheric dating backdrop in the subcontinent.\n\nFrom the century-old woodcraft of Shimla\'s Mall Road to the artistic cafes along the rushing Manalsu river in Old Manali, discover our curated guide to mountain coffee dating.', 'fa-mountain', 950, NOW())
 ON DUPLICATE KEY UPDATE `title`=VALUES(`title`), `excerpt`=VALUES(`excerpt`);
 
+-- --------------------------------------------------------
+-- 13. Table: sessions (Database session storage if configured)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` VARCHAR(255) NOT NULL,
+  `user_id` BIGINT UNSIGNED DEFAULT NULL,
+  `ip_address` VARCHAR(45) DEFAULT NULL,
+  `user_agent` TEXT DEFAULT NULL,
+  `payload` LONGTEXT NOT NULL,
+  `last_activity` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sessions_user_id_index` (`user_id`),
+  KEY `sessions_last_activity_index` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- 14. Table: cache (Database cache storage if configured)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cache` (
+  `key` VARCHAR(255) NOT NULL,
+  `value` MEDIUMTEXT NOT NULL,
+  `expiration` INT(11) NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

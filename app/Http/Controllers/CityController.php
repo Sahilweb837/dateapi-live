@@ -316,21 +316,29 @@ class CityController extends Controller
         $cityNameOnly = explode(',', $city['name'])[0];
 
         // Query singles matching this city or state
-        $singles = User::where('status', 'active')
-            ->where(function($q) use ($city, $slug, $cityNameOnly) {
-                $q->where('country', 'like', "%{$slug}%")
-                  ->orWhere('country', 'like', "%{$cityNameOnly}%")
-                  ->orWhere('country', 'like', "%{$city['state']}%")
-                  ->orWhere('is_verified', 1);
-            })
-            ->take(6)
-            ->get();
+        try {
+            $singles = User::where('status', 'active')
+                ->where(function($q) use ($city, $slug, $cityNameOnly) {
+                    $q->where('country', 'like', "%{$slug}%")
+                      ->orWhere('country', 'like', "%{$cityNameOnly}%")
+                      ->orWhere('country', 'like', "%{$city['state']}%")
+                      ->orWhere('is_verified', 1);
+                })
+                ->take(6)
+                ->get();
+        } catch (\Throwable $e) {
+            $singles = collect();
+        }
 
         // Local cafe spots
-        $cafes = DatePlace::where('city', 'like', "%{$slug}%")
-            ->orWhere('city', 'like', "%{$cityNameOnly}%")
-            ->take(4)
-            ->get();
+        try {
+            $cafes = DatePlace::where('city', 'like', "%{$slug}%")
+                ->orWhere('city', 'like', "%{$cityNameOnly}%")
+                ->take(4)
+                ->get();
+        } catch (\Throwable $e) {
+            $cafes = collect();
+        }
 
         // Fallback cafes if date places not seeded for small hill stations
         if ($cafes->isEmpty()) {

@@ -29,7 +29,7 @@ class AuthController extends Controller
         try {
             $user = User::where('email', $credentials['email'])->first();
         } catch (\Throwable $e) {
-            return back()->withErrors(['email' => 'Database is temporarily unavailable. Please try again in a moment.'])->withInput($request->only('email'));
+            return back()->withErrors(['email' => 'Database connecting — please try Google Sign-In again in 10 seconds, or use email login below.'])->withInput($request->only('email'));
         }
 
         if ($user) {
@@ -61,45 +61,52 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'full_name'    => 'required|string|max:100',
-            'email'        => 'required|email|unique:users,email',
-            'password'     => 'required|min:6',
-            'dob'          => 'required|date',
-            'gender'       => 'required|in:male,female,nonbinary,other',
-            'city'         => 'nullable|string|max:50',
-            'interests'    => 'nullable|string|max:255',
-            'coffee_style' => 'nullable|string|max:100',
-        ]);
+        try {
+            $validated = $request->validate([
+                'full_name'    => 'required|string|max:100',
+                'email'        => 'required|email|unique:users,email',
+                'password'     => 'required|min:6',
+                'dob'          => 'required|date',
+                'gender'       => 'required|in:male,female,nonbinary,other',
+                'city'         => 'nullable|string|max:50',
+                'interests'    => 'nullable|string|max:255',
+                'coffee_style' => 'nullable|string|max:100',
+            ]);
 
-        $memberCode = 'CD-' . rand(10000, 99999);
+            $memberCode = 'CD-' . rand(10000, 99999);
 
-        $user = User::create([
-            'member_code'   => $memberCode,
-            'full_name'     => $validated['full_name'],
-            'email'         => $validated['email'],
-            'password'      => Hash::make($validated['password']),
-            'dob'           => $validated['dob'],
-            'gender'        => $validated['gender'],
-            'preference'    => 'everyone',
-            'interested_in' => 'everyone',
-            'bio'           => '',
-            'avatar'        => '',
-            'lat'           => 28.6139,
-            'lng'           => 77.2090,
-            'country'       => $validated['city'] ?? 'India',
-            'interests'     => $validated['interests'] ?? 'Coffee, Books, Photography',
-            'coffee_style'  => $validated['coffee_style'] ?? 'Vanilla Oat Latte',
-            'coins'         => 50,
-            'xp'            => 10,
-            'status'        => 'active',
-            'created_at'    => now(),
-            'last_active'   => now(),
-        ]);
+            $user = User::create([
+                'member_code'   => $memberCode,
+                'full_name'     => $validated['full_name'],
+                'email'         => $validated['email'],
+                'password'      => Hash::make($validated['password']),
+                'dob'           => $validated['dob'],
+                'gender'        => $validated['gender'],
+                'preference'    => 'everyone',
+                'interested_in' => 'everyone',
+                'bio'           => '',
+                'avatar'        => '',
+                'lat'           => 28.6139,
+                'lng'           => 77.2090,
+                'country'       => $validated['city'] ?? 'India',
+                'interests'     => $validated['interests'] ?? 'Coffee, Books, Photography',
+                'coffee_style'  => $validated['coffee_style'] ?? 'Vanilla Oat Latte',
+                'coins'         => 50,
+                'xp'            => 10,
+                'status'        => 'active',
+                'created_at'    => now(),
+                'last_active'   => now(),
+            ]);
 
-        Auth::login($user);
+            Auth::login($user);
 
-        return redirect()->route('profile.setup')->with('success', "Welcome to CupDate! Your Member ID is {$user->formatted_member_id}. Let's set up your profile! ☕");
+            return redirect()->route('profile.setup')->with('success', "Welcome to CupDate! Your Member ID is {$user->formatted_member_id}. Let's set up your profile! ☕");
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            throw $ve;
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Register DB error: ' . $e->getMessage());
+            return back()->withErrors(['email' => 'Database connecting — please try Google Sign-In again in 10 seconds, or use email login below.'])->withInput($request->except('password'));
+        }
     }
 
     public function showForgotPassword()
@@ -270,28 +277,61 @@ class AuthController extends Controller
             }
         }
 
-        // If DB was not available or query threw, ensure graceful login in session
+        // If DB was not available or query threw, gracefully inform user
         if (!$user) {
-            $user = new User([
-                'id'            => 9999,
-                'member_code'   => 'CD-88888',
-                'full_name'     => $targetName,
-                'email'         => $targetEmail,
-                'google_id'     => $targetGId,
-                'avatar'        => $targetAvatar,
-                'dob'           => '1998-06-15',
-                'gender'        => 'other',
-                'preference'    => 'everyone',
-                'country'       => 'Himachal Pradesh, India',
-                'interests'     => 'Coffee, Books, Mountains',
-                'coffee_style'  => 'Cappuccino with Cinnamon',
-                'coins'         => 150,
-                'xp'            => 80,
-                'is_verified'   => 1,
-                'status'        => 'active',
-            ]);
-            Auth::login($user, true);
-            session(['logged_user_data' => $user->toArray()]);
+            $connectingMessage = 'Database connecting — please try Google Sign-In again in 10 seconds, or use email login below.';
+
+            if ($isPopup) {
+                $loginUrl = route('login') . '?db_connecting=1';
+                return response(
+                    "<!DOCTYPE html>
+                    <html lang='en'>
+                    <head>
+                        <meta charset='UTF-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                        <title>CupDate — Connecting</title>
+                        <style>
+                            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #fff8f6; color: #231a15; text-align: center; }
+                            .card { background: #ffffff; padding: 28px; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); max-width: 320px; width: 90%; }
+                            .spinner { width: 36px; height: 36px; border: 3px solid #f3f4f6; border-top: 3px solid #b45309; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+                            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                            h2 { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: #78350f; }
+                            p { margin: 0; font-size: 12px; color: #666; line-height: 1.5; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class='card'>
+                            <div class='spinner'></div>
+                            <h2>Database Connecting...</h2>
+                            <p>Please try Google Sign-In again in 10 seconds, or use email login below.</p>
+                        </div>
+                        <script>
+                            setTimeout(function() {
+                                if (window.opener && !window.opener.closed) {
+                                    try {
+                                        window.opener.location.href = '{$loginUrl}';
+                                    } catch(e) {}
+                                    window.close();
+                                } else {
+                                    window.location.href = '{$loginUrl}';
+                                }
+                            }, 1800);
+                        </script>
+                    </body>
+                    </html>",
+                    200,
+                    ['Content-Type' => 'text/html']
+                );
+            }
+
+            if ($request->expectsJson() || $request->wantsJson()) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => $connectingMessage,
+                ], 503);
+            }
+
+            return redirect()->route('login')->withErrors(['email' => $connectingMessage]);
         }
 
         // If this was opened in a browser popup window, auto-close and redirect the parent window

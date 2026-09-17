@@ -14,17 +14,22 @@ class SwipeController extends Controller
     {
         $user = Auth::user();
         $userId = $user ? $user->id : 0;
+        $profiles = collect();
 
-        $swipedIds = Swipe::where('swiper_id', $userId)->pluck('swipee_id')->toArray();
-        $swipedIds[] = $userId;
+        try {
+            $swipedIds = Swipe::where('swiper_id', $userId)->pluck('swipee_id')->toArray();
+            $swipedIds[] = $userId;
 
-        $profiles = User::where('status', 'active')
-            ->whereNotIn('id', $swipedIds)
-            ->orderByRaw('COALESCE(is_boosted, 0) DESC')
-            ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
-            ->orderBy('is_verified', 'desc')
-            ->take(25)
-            ->get();
+            $profiles = User::where('status', 'active')
+                ->whereNotIn('id', $swipedIds)
+                ->orderByRaw('COALESCE(is_boosted, 0) DESC')
+                ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
+                ->orderBy('is_verified', 'desc')
+                ->take(25)
+                ->get();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Swipe profiles query fallback: ' . $e->getMessage());
+        }
 
         return view('swipes', compact('profiles', 'user'));
     }

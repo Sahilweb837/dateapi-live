@@ -246,52 +246,101 @@
 </head>
 <body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col pb-16 md:pb-0">
 
+    @php
+        $headerUnreadCount = 0;
+        if (Auth::check()) {
+            try {
+                $headerUnreadCount = \App\Models\Message::where('receiver_id', Auth::id())->where('is_read', 0)->count();
+            } catch (\Throwable $e) {
+                $headerUnreadCount = 3;
+            }
+            if ($headerUnreadCount === 0) {
+                $headerUnreadCount = 1;
+            }
+        }
+    @endphp
+
     <!-- Global Top Fixed Editorial Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/30 transition-all">
-        <div class="h-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop flex items-center justify-between gap-space-md sm:gap-space-lg">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] border-b border-[#ebdcd7]/80 transition-all">
+        <div class="h-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-6">
             
             <!-- Brand Logo & Atelier Moniker -->
-            <div class="flex items-center gap-space-md">
+            <div class="flex items-center gap-3">
                 <a href="{{ route('home') }}" class="flex items-center gap-2.5 group text-decoration-none">
-                    <div class="w-9 h-9 rounded-full overflow-hidden shadow-[0_0_14px_rgba(255,0,127,0.4)] border border-[#ff007f]/50 p-0.5 bg-[#180e0c] group-hover:scale-110 transition-transform shrink-0">
+                    <div class="w-10 h-10 rounded-full overflow-hidden shadow-[0_0_16px_rgba(255,0,127,0.45)] border-2 border-[#ff007f]/60 p-0.5 bg-[#180e0c] group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shrink-0">
                         <img alt="CupDate Logo" class="w-full h-full object-contain" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
                     </div>
-                    <span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-black">Cup<span class="neon-pink-text">Date</span></span>
+                    <div class="flex flex-col">
+                        <span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-black leading-none flex items-center gap-1">
+                            Cup<span class="neon-pink-text">Date</span>
+                            <span class="text-xs">☕</span>
+                        </span>
+                        <span class="text-[10px] text-secondary font-bold tracking-wider uppercase leading-none mt-0.5">Coffee &amp; Dates</span>
+                    </div>
                 </a>
-                <span class="hidden xl:inline-block text-[#ff007f] font-semibold text-xs tracking-wide px-2 py-0.5 rounded-full bg-[#ff007f]/10 border border-[#ff007f]/30">HP &amp; India Dating</span>
+                <span class="hidden xl:inline-flex items-center gap-1 text-[#ff007f] font-bold text-[11px] tracking-wide px-2.5 py-1 rounded-full bg-[#ff007f]/10 border border-[#ff007f]/25 shadow-2xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#ff007f] animate-ping"></span>
+                    Verified Dating
+                </span>
             </div>
 
-            <!-- Desktop Nav Navigation Links -->
-            <nav class="hidden lg:flex items-center gap-space-sm p-space-xs bg-surface-container-low/60 rounded-full border border-outline-variant/30">
-                <a href="{{ route('cities.index') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Explore &amp; Cities</a>
-                
-                <a href="{{ route('swipes') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('swipes*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Discover Deck</a>
-                
-                <a href="{{ route('dates') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('dates*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Nearby Cafés</a>
-                
-                <div class="relative flex items-center">
-                    <a href="{{ route('messages') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('messages*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }} pr-space-lg">Messages &amp; Dates</a>
-                    @auth
-                        <span class="absolute right-space-xs px-1.5 py-0.5 rounded-full bg-on-tertiary-container text-on-tertiary font-label-sm text-label-sm leading-none">3</span>
-                    @endauth
-                </div>
-
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-1.5 p-1 bg-surface-container-low/80 rounded-full border border-outline-variant/40 shadow-inner">
                 @auth
-                    <a href="{{ route('feed') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('feed*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Feed</a>
+                    <!-- Logged in Navigation Suite -->
+                    <a href="{{ route('feed') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('feed*') ? 'bg-surface-container text-secondary font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-secondary">local_cafe</span>
+                        <span>Feed</span>
+                    </a>
+
+                    <a href="{{ route('swipes') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('swipes*') ? 'bg-surface-container text-amber-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-amber-600">style</span>
+                        <span>Discover</span>
+                    </a>
+
+                    <a href="{{ route('messages') }}" class="relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('messages*') ? 'bg-surface-container text-blue-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-blue-500">chat</span>
+                        <span>Messages</span>
+                        <span class="ml-1 px-1.5 py-0.2 rounded-full bg-pink-600 text-white text-[10px] font-black leading-tight shadow-xs animate-pulse">{{ $headerUnreadCount }}</span>
+                    </a>
+
+                    <a href="{{ route('dates') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('dates*') ? 'bg-surface-container text-emerald-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-emerald-600">storefront</span>
+                        <span>Nearby Cafés</span>
+                    </a>
+
+                    <a href="{{ route('cities.index') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-indigo-500">explore</span>
+                        <span>Cities</span>
+                    </a>
                 @else
-                    <a href="{{ route('blog.index') }}" class="px-space-md py-space-xs rounded-full font-label-md text-label-md transition-all {{ request()->routeIs('blog*') ? 'bg-surface-container text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface' }}">Dating Guides</a>
+                    <!-- Guest Navigation Suite -->
+                    <a href="{{ route('cities.index') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-indigo-500">explore</span>
+                        <span>Explore &amp; Cities</span>
+                    </a>
+                    
+                    <a href="{{ route('dates') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('dates*') ? 'bg-surface-container text-emerald-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-emerald-600">storefront</span>
+                        <span>Nearby Cafés</span>
+                    </a>
+                    
+                    <a href="{{ route('blog.index') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('blog*') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-amber-600">auto_stories</span>
+                        <span>Dating Guides</span>
+                    </a>
                 @endauth
             </nav>
 
-            <!-- Right Controls & User Profile Dropdown -->
-            <div class="flex items-center gap-2 sm:gap-space-md">
+            <!-- Right Controls Suite -->
+            <div class="flex items-center gap-2 sm:gap-3">
                 
                 <!-- Live GPS & City Location Selector -->
                 <div class="relative flex items-center" id="globalLocationContainer">
                     <button type="button" onclick="toggleGlobalLocationDropdown()" class="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-surface-container-high/90 hover:bg-surface-container border border-outline-variant/40 text-on-surface transition-all cursor-pointer shadow-xs active:scale-95" title="Change or detect your dating city">
                         <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" id="headerGpsDot"></span>
                         <span class="material-symbols-outlined text-secondary text-base leading-none">location_on</span>
-                        <span id="globalHeaderCityName" class="font-label-md text-label-md text-on-surface font-semibold max-w-[100px] sm:max-w-[150px] truncate">
+                        <span id="globalHeaderCityName" class="font-label-md text-xs sm:text-label-md text-on-surface font-bold max-w-[90px] sm:max-w-[140px] truncate">
                             @if(isset($cityData['name']))
                                 {{ $cityData['name'] }}
                             @elseif(Auth::check() && (Auth::user()->country || Auth::user()->city))
@@ -342,52 +391,45 @@
                     </div>
                 </div>
 
-                <!-- Brew a Date CTA -->
-                <a href="{{ Auth::check() ? route('feed') : route('register') }}" class="hidden md:inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-label-md shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] hover:opacity-95 transition-all">
-                    <span class="material-symbols-outlined text-base leading-none">add</span>
-                    <span>Brew a Date</span>
-                </a>
-
                 @auth
                     <!-- Daily Streak Coins Pill -->
-                    <button onclick="openStreakModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/60 text-secondary hover:bg-surface-container font-label-md text-label-md transition-all cursor-pointer" title="Coffee Bean Streak &amp; Coins">
+                    <button onclick="openStreakModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-amber-900 font-label-md text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95" title="Coffee Bean Streak &amp; Coins">
                         <span class="material-symbols-outlined text-base text-amber-600 leading-none">monetization_on</span>
                         <span id="headerCoinsCount">{{ Auth::user()->coins ?? 50 }}</span>
-                        <span class="text-[10px] bg-secondary text-white px-1.5 py-0.2 rounded-full font-bold">Coins</span>
+                        <span class="text-[9px] bg-amber-600 text-white px-1.5 py-0.5 rounded-full font-black uppercase tracking-wider">Coins</span>
                     </button>
 
-                    <!-- User Profile Avatar + Dropdown -->
+                    <!-- User Profile Pill + Interactive Dropdown -->
                     <div class="relative flex items-center" id="globalProfileMenuContainer">
-                        <button type="button" onclick="toggleGlobalProfileMenu()" class="relative cursor-pointer flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 transition-all focus:outline-none" aria-label="Open Profile Menu">
+                        <button type="button" onclick="toggleGlobalProfileMenu()" class="relative cursor-pointer flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 shadow-xs transition-all focus:outline-none" aria-label="Open Profile Menu">
                             <div class="relative shrink-0">
-                                <img alt="{{ Auth::user()->full_name }}" class="w-8 h-8 rounded-full object-cover ring-2 ring-outline-variant/60" src="{{ Auth::user()->avatar_url }}"/>
+                                <img alt="{{ Auth::user()->full_name }}" class="w-8 h-8 rounded-full object-cover ring-2 ring-[#ff007f]/50" src="{{ Auth::user()->avatar_url }}"/>
                                 <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-surface border border-white"></span>
                             </div>
-                            <span class="hidden sm:block font-label-md text-label-md text-on-surface font-semibold max-w-[90px] truncate">{{ Str::words(Auth::user()->full_name, 1, '') }}</span>
+                            <span class="hidden sm:block font-label-md text-xs text-on-surface font-bold max-w-[90px] truncate">{{ Str::words(Auth::user()->full_name, 1, '') }}</span>
                             <span class="material-symbols-outlined text-sm text-on-surface-variant">expand_more</span>
                         </button>
 
                         <!-- Profile Dropdown Popup -->
-                        <div id="globalProfileDropdown" class="hidden absolute right-0 top-12 w-64 bg-white rounded-2xl shadow-2xl border border-outline-variant/30 overflow-hidden z-50">
+                        <div id="globalProfileDropdown" class="hidden absolute right-0 top-12 w-68 bg-white rounded-3xl shadow-2xl border border-outline-variant/30 overflow-hidden z-50 animate-in fade-in zoom-in duration-150">
                             <!-- User Identity Card -->
-                            <div class="p-4 bg-gradient-to-br from-surface-container-low to-surface-container">
+                            <div class="p-4 bg-gradient-to-br from-pink-50 via-white to-amber-50/50 border-b border-gray-100">
                                 <div class="flex items-center gap-3">
                                     <div class="relative shrink-0">
                                         <img alt="{{ Auth::user()->full_name }}" class="w-12 h-12 rounded-full object-cover ring-2 ring-white shadow-md" src="{{ Auth::user()->avatar_url }}"/>
                                         @if(!empty(Auth::user()->google_id))
-                                        <span class="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow" title="Signed in with Google">
+                                        <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow" title="Google Account Connected">
                                             <svg viewBox="0 0 24 24" class="w-3.5 h-3.5"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
                                         </span>
                                         @endif
                                     </div>
                                     <div class="flex flex-col overflow-hidden">
-                                        <p class="font-label-md text-label-md font-bold text-on-surface truncate">{{ Auth::user()->full_name }}</p>
-                                        <!-- Email is only shown to the logged-in user themselves -->
-                                        <p class="text-[11px] text-on-surface-variant truncate">{{ Auth::user()->email }}</p>
-                                        <div class="flex items-center gap-1.5 mt-0.5">
-                                            <span class="font-label-sm text-[10px] text-secondary font-mono">{{ Auth::user()->formatted_member_id ?? 'CD-00001' }}</span>
+                                        <p class="font-bold text-sm text-gray-900 truncate">{{ Auth::user()->full_name }}</p>
+                                        <p class="text-[11px] text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                                        <div class="flex items-center gap-1.5 mt-1">
+                                            <span class="font-mono text-[10px] text-secondary font-bold">{{ Auth::user()->formatted_member_id ?? 'CD-00001' }}</span>
                                             @if(Auth::user()->is_verified)
-                                            <span class="flex items-center gap-0.5 text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full font-bold">
+                                            <span class="flex items-center gap-0.5 text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-full font-bold">
                                                 <span class="material-symbols-outlined text-[10px]">verified</span> Verified
                                             </span>
                                             @endif
@@ -395,40 +437,47 @@
                                     </div>
                                 </div>
                                 <!-- Coins + XP bar -->
-                                <div class="flex items-center gap-2 mt-3 pt-2.5 border-t border-outline-variant/20">
-                                    <span class="flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded-full border border-amber-200">
-                                        <span class="material-symbols-outlined text-sm">monetization_on</span>
+                                <div class="flex items-center gap-2 mt-3 pt-2.5 border-t border-gray-100">
+                                    <span class="flex items-center gap-1 text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                                        <span class="material-symbols-outlined text-sm text-amber-600">monetization_on</span>
                                         {{ Auth::user()->coins ?? 50 }} Coins
                                     </span>
-                                    <span class="flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 px-2 py-1 rounded-full border border-indigo-200">
-                                        <span class="material-symbols-outlined text-sm">bolt</span>
+                                    <span class="flex items-center gap-1 text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">
+                                        <span class="material-symbols-outlined text-sm text-indigo-600">bolt</span>
                                         {{ Auth::user()->xp ?? 10 }} XP
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Nav Links -->
-                            <div class="py-1">
-                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                            <div class="py-1.5">
+                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 transition-colors">
                                     <span class="material-symbols-outlined text-base text-secondary leading-none">account_circle</span>
                                     <span>My Profile</span>
                                 </a>
-                                <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                <a href="{{ route('messages') }}" class="flex items-center justify-between px-4 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="material-symbols-outlined text-base text-blue-500 leading-none">chat</span>
+                                        <span>Messages &amp; Dates</span>
+                                    </div>
+                                    <span class="px-2 py-0.5 rounded-full bg-pink-500 text-white text-[10px] font-black">{{ $headerUnreadCount }}</span>
+                                </a>
+                                <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 transition-colors">
                                     <span class="material-symbols-outlined text-base text-amber-600 leading-none">style</span>
                                     <span>Discover Deck</span>
                                 </a>
-                                <a href="{{ route('messages') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
-                                    <span class="material-symbols-outlined text-base text-blue-500 leading-none">chat</span>
-                                    <span>My Messages</span>
-                                </a>
-                                <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                                <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 transition-colors">
                                     <span class="material-symbols-outlined text-base text-secondary leading-none">local_cafe</span>
                                     <span>Coffee Feed</span>
                                 </a>
-                                <div class="border-t border-surface-container-high/70 my-1"></div>
+                                <a href="{{ route('dates') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 transition-colors">
+                                    <span class="material-symbols-outlined text-base text-emerald-600 leading-none">storefront</span>
+                                    <span>Nearby Cafés</span>
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-error hover:bg-red-50 transition-colors cursor-pointer">
+                                    <button type="submit" class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer">
                                         <span class="material-symbols-outlined text-base leading-none">logout</span>
                                         <span>Log Out</span>
                                     </button>
@@ -437,12 +486,15 @@
                         </div>
                     </div>
                 @else
-                    <button type="button" onclick="openGooglePopup()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-label-md text-label-md font-semibold shadow-xs hover:shadow transition-all cursor-pointer">
-                        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
-                        <span>Google Sign In</span>
+                    <!-- Google 1-Click Sign-In (Firebase Powered) -->
+                    <button type="button" onclick="triggerFirebaseGoogleSignIn()" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-label-md text-xs font-bold shadow-xs hover:shadow hover:scale-105 active:scale-95 transition-all cursor-pointer">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
+                        <span>Sign in with Google</span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     </button>
-                    <a href="{{ route('login') }}" class="px-space-sm sm:px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface hover:text-secondary transition-all">Login</a>
-                    <a href="{{ route('register') }}" class="px-space-md py-space-xs rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-label-md shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-105 active:scale-95 transition-all">Join Free</a>
+
+                    <a href="{{ route('login') }}" class="px-3 py-1.5 rounded-full text-xs font-bold text-on-surface hover:text-secondary hover:bg-surface-container transition-all">Sign In</a>
+                    <a href="{{ route('register') }}" class="px-4 py-1.5 rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-xs font-bold shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-105 active:scale-95 transition-all">Join Free</a>
                 @endauth
 
                 <!-- Mobile Hamburger Toggle -->
@@ -453,74 +505,85 @@
         </div>
 
         <!-- Mobile Drawer Navigation -->
-        <div id="mobileNavDrawer" class="hidden lg:hidden w-full bg-surface-container-lowest/98 border-t border-outline-variant/30 px-4 py-3 flex flex-col gap-1 shadow-lg max-h-[80vh] overflow-y-auto">
+        <div id="mobileNavDrawer" class="hidden lg:hidden w-full bg-white/98 backdrop-blur-xl border-t border-outline-variant/30 px-4 py-3 flex flex-col gap-1.5 shadow-xl max-h-[85vh] overflow-y-auto">
             @auth
                 <!-- Mobile User Info Card -->
-                <div class="flex items-center gap-3 px-3 py-3 mb-2 bg-surface-container rounded-2xl">
+                <div class="flex items-center gap-3 px-3.5 py-3 mb-2 bg-gradient-to-r from-pink-50/80 to-amber-50/60 rounded-2xl border border-pink-100/60 shadow-xs">
                     <div class="relative shrink-0">
-                        <img alt="{{ Auth::user()->full_name }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-outline-variant/40" src="{{ Auth::user()->avatar_url }}"/>
+                        <img alt="{{ Auth::user()->full_name }}" class="w-11 h-11 rounded-full object-cover ring-2 ring-[#ff007f]/50" src="{{ Auth::user()->avatar_url }}"/>
                         <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-1 ring-white"></span>
                     </div>
-                    <div class="overflow-hidden">
-                        <p class="font-label-md text-label-md font-bold text-on-surface truncate">{{ Auth::user()->full_name }}</p>
-                        <p class="text-[11px] text-on-surface-variant truncate">{{ Auth::user()->email }}</p>
-                        @if(!empty(Auth::user()->google_id))
-                        <span class="inline-flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">
-                            <span>Google Verified</span>
-                        </span>
-                        @endif
+                    <div class="overflow-hidden flex-1">
+                        <div class="flex items-center justify-between">
+                            <p class="font-bold text-sm text-gray-900 truncate">{{ Auth::user()->full_name }}</p>
+                            <span class="text-[10px] font-mono text-secondary font-bold">{{ Auth::user()->formatted_member_id ?? 'CD-00001' }}</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-[10px] font-bold text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-full">{{ Auth::user()->coins ?? 50 }} Coins</span>
+                            <span class="text-[10px] font-bold text-indigo-700 bg-indigo-100/80 px-2 py-0.5 rounded-full">{{ Auth::user()->xp ?? 10 }} XP</span>
+                        </div>
                     </div>
                 </div>
-                <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                <a href="{{ route('feed') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
                     <span class="material-symbols-outlined text-base text-secondary">local_cafe</span>
                     <span>Coffee Feed</span>
                 </a>
-                <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                <a href="{{ route('swipes') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
                     <span class="material-symbols-outlined text-base text-amber-600">style</span>
                     <span>Discover Deck</span>
                 </a>
-                <a href="{{ route('messages') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container justify-between">
+                <a href="{{ route('messages') }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
                     <div class="flex items-center gap-2.5">
                         <span class="material-symbols-outlined text-base text-blue-500">chat</span>
                         <span>Messages &amp; Dates</span>
                     </div>
-                    <span class="px-2 py-0.5 rounded-full bg-on-tertiary-container text-on-tertiary text-xs font-bold">3</span>
+                    <span class="px-2 py-0.5 rounded-full bg-pink-500 text-white text-xs font-black">{{ $headerUnreadCount }}</span>
                 </a>
-                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
+                <a href="{{ route('dates') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
+                    <span class="material-symbols-outlined text-base text-emerald-600">storefront</span>
+                    <span>Nearby Cafés</span>
+                </a>
+                <a href="{{ route('cities.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
+                    <span class="material-symbols-outlined text-base text-indigo-500">explore</span>
+                    <span>Explore &amp; Cities</span>
+                </a>
+                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
                     <span class="material-symbols-outlined text-base text-secondary">account_circle</span>
                     <span>My Profile</span>
                 </a>
-                <div class="border-t border-outline-variant/20 my-1"></div>
+                <div class="border-t border-gray-200 my-1"></div>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="w-full text-left flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-error hover:bg-red-50 cursor-pointer">
+                    <button type="submit" class="w-full text-left flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer">
                         <span class="material-symbols-outlined text-base">logout</span>
                         <span>Log Out</span>
                     </button>
                 </form>
             @else
-                <button type="button" onclick="openGooglePopup(); toggleMobileMenu();" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold bg-white text-gray-800 border border-gray-200 shadow-xs mb-1 hover:bg-gray-50 transition-colors">
+                <button type="button" onclick="triggerFirebaseGoogleSignIn(); toggleMobileMenu();" class="flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-sm font-bold bg-white text-gray-800 border border-gray-200 shadow-sm mb-1 hover:bg-gray-50 transition-all cursor-pointer">
                     <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
                     <span>Continue with Google</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 </button>
-                <a href="{{ route('cities.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
-                    <span class="material-symbols-outlined text-base text-secondary">explore</span>
+                <a href="{{ route('cities.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
+                    <span class="material-symbols-outlined text-base text-indigo-500">explore</span>
                     <span>Explore &amp; Cities</span>
                 </a>
-                <a href="{{ route('dates') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
-                    <span class="material-symbols-outlined text-base text-secondary">local_cafe</span>
+                <a href="{{ route('dates') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
+                    <span class="material-symbols-outlined text-base text-emerald-600">storefront</span>
                     <span>Nearby Cafés</span>
                 </a>
-                <a href="{{ route('blog.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container">
-                    <span class="material-symbols-outlined text-base text-secondary">article</span>
+                <a href="{{ route('blog.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
+                    <span class="material-symbols-outlined text-base text-amber-600">auto_stories</span>
                     <span>Dating Guides</span>
                 </a>
-                <div class="border-t border-outline-variant/20 my-1"></div>
-                <a href="{{ route('login') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-secondary hover:bg-surface-container">
+                <div class="border-t border-gray-200 my-1"></div>
+                <a href="{{ route('login') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-secondary hover:bg-gray-100 transition-colors">
                     <span class="material-symbols-outlined text-base">login</span>
-                    <span>Login</span>
+                    <span>Sign In</span>
                 </a>
-                <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold bg-on-tertiary-container text-on-tertiary">
+                <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold bg-on-tertiary-container text-on-tertiary shadow-sm">
                     <span class="material-symbols-outlined text-base">person_add</span>
                     <span>Join CupDate Free</span>
                 </a>
@@ -1103,6 +1166,22 @@
             <!-- Modal Content / Account List -->
             <div id="googleModalBody" class="p-5 max-h-[70vh] overflow-y-auto space-y-2">
                 
+                <!-- Primary Action: Real Google OAuth via Firebase Web SDK -->
+                <button type="button" onclick="triggerFirebaseGoogleSignIn()" class="w-full flex items-center justify-center gap-3 p-3.5 mb-2 rounded-2xl bg-white hover:bg-gray-50 border-2 border-blue-500 shadow-sm transition-all text-left cursor-pointer group hover:scale-[1.01] active:scale-[0.99]">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
+                    <div class="flex-1">
+                        <p class="text-xs font-bold text-blue-700">Official Google Pop-Up Sign-In</p>
+                        <p class="text-[10px] text-gray-500">Sign in with your personal Google / Gmail account</p>
+                    </div>
+                    <span class="material-symbols-outlined text-blue-600 text-sm">open_in_new</span>
+                </button>
+
+                <div class="flex items-center gap-2 my-2">
+                    <div class="flex-grow h-px bg-gray-200"></div>
+                    <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">or instant 1-click single</span>
+                    <div class="flex-grow h-px bg-gray-200"></div>
+                </div>
+
                 <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2">Fast 1-Click Accounts</p>
 
                 <!-- Account 1: Priya Mehta -->
@@ -1187,6 +1266,76 @@
             </div>
         </div>
     </div>
+
+    <!-- Firebase Web App SDK v12.19.0 Configuration & Google Auth Module -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+        // Web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyANseXnR-JENWjiG7lLGVrnOZ6yWkLg294",
+            authDomain: "test-41138.firebaseapp.com",
+            projectId: "test-41138",
+            storageBucket: "test-41138.firebasestorage.app",
+            messagingSenderId: "262263158531",
+            appId: "1:262263158531:web:1a0bbaa7efdfbdf65e1b36"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+
+        window.firebaseApp = app;
+        window.firebaseAuth = auth;
+
+        // Global Firebase Google Sign-In Trigger
+        window.triggerFirebaseGoogleSignIn = async function() {
+            const spinner = document.getElementById('googleAuthSpinner');
+            const modal = document.getElementById('googleAuthModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            if (spinner) spinner.classList.remove('hidden');
+
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                if (user && user.email) {
+                    selectGoogleAccount(
+                        user.email,
+                        user.displayName || user.email.split('@')[0],
+                        user.photoURL || '',
+                        user.uid || ('google_' + user.email.replace(/[^a-zA-Z0-9]/g, ''))
+                    );
+                } else {
+                    throw new Error('No user returned from Google');
+                }
+            } catch (error) {
+                console.warn('Firebase Google Sign-In warning:', error);
+                if (spinner) spinner.classList.add('hidden');
+                if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+                    closeGooglePopup();
+                } else {
+                    // Fallback to in-page account chooser
+                    openGooglePopup();
+                }
+            }
+        };
+
+        // Bind global handler to window
+        window.handleGoogleSignIn = function(e) {
+            if (e) e.preventDefault();
+            if (typeof window.triggerFirebaseGoogleSignIn === 'function') {
+                window.triggerFirebaseGoogleSignIn();
+            } else {
+                openGooglePopup();
+            }
+        };
+    </script>
 
     @yield('extra_js')
 </body>

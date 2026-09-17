@@ -25,15 +25,13 @@ if (file_exists($baseDir.'/bootstrap/cache/config.php')) {
 @chmod($baseDir.'/storage/logs', 0777);
 @chmod($baseDir.'/bootstrap/cache', 0777);
 
-// Sync .env from .env.production if .env is absent, missing credentials, or has wrong DB_HOST
+// Sync .env from .env.production only if .env is missing or APP_KEY is absent
 if (file_exists($baseDir.'/.env.production')) {
     if (!file_exists($baseDir.'/.env')) {
         @copy($baseDir.'/.env.production', $baseDir.'/.env');
     } else {
         $envContent = (string)@file_get_contents($baseDir.'/.env');
-        $needsSync = !str_contains($envContent, 'cupamate1_backendlaraveldate2s')
-            || !str_contains($envContent, 'APP_KEY=base64:')
-            || str_contains($envContent, 'DB_HOST=127.0.0.1');
+        $needsSync = !str_contains($envContent, 'APP_KEY=base64:');
 
         if ($needsSync) {
             @copy($baseDir.'/.env.production', $baseDir.'/.env');
@@ -64,5 +62,43 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $dbErrorMessage = 'Database connecting — please try Google Sign-In again in 10 seconds, or use email login below.';
+
+        $exceptions->render(function (\Illuminate\Database\QueryException $e, $request) use ($dbErrorMessage) {
+            \Illuminate\Support\Facades\Log::warning('Database QueryException: ' . $e->getMessage());
+
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $dbErrorMessage,
+                ], 503);
+            }
+
+            if ($request->is('auth/*') || $request->is('login*') || $request->is('register*')) {
+                return redirect()->route('login')->withErrors([
+                    'email' => $dbErrorMessage
+                ]);
+            }
+
+            return null;
+        });
+
+        $exceptions->render(function (\PDOException $e, $request) use ($dbErrorMessage) {
+            \Illuminate\Support\Facades\Log::warning('Database PDOException: ' . $e->getMessage());
+
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $dbErrorMessage,
+                ], 503);
+            }
+
+            if ($request->is('auth/*') || $request->is('login*') || $request->is('register*')) {
+                return redirect()->route('login')->withErrors([
+                    'email' => $dbErrorMessage
+                ]);
+            }
+
+            return null;
+        });
     })->create();
