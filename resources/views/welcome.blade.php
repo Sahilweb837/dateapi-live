@@ -59,333 +59,727 @@
         </section>
     @endauth
 
-    <!-- Hero Section -->
-    <section class="relative w-full overflow-hidden pb-space-xl pt-space-md sm:pt-space-lg">
-        <!-- Ambient Warm Blurs with subtle aroma motion -->
-        <div class="absolute -top-24 right-10 w-96 h-96 rounded-full bg-secondary-container/25 blur-3xl pointer-events-none -z-10 animate-aroma"></div>
-        <div class="absolute top-1/2 -left-20 w-80 h-80 rounded-full bg-tertiary-fixed/30 blur-3xl pointer-events-none -z-10"></div>
+    <!-- Top Marquee Dispatch -->
+    <div class="w-full bg-surface-container-high py-2.5 overflow-hidden select-none border-b border-outline-variant/20">
+        <div class="flex items-center gap-space-lg whitespace-nowrap animate-marquee">
+            <span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase font-semibold">Intentional Matchmaking For Genuine Romance</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">•</span>
+            <span class="font-body-sm text-body-sm text-on-surface">Curated pairing across intimate romantic sanctuaries in NYC, London, Paris &amp; India</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">•</span>
+            <span class="inline-flex items-center gap-1.5 font-label-md text-label-md text-[#835339] font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                1,420 singles meeting across tables today
+            </span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">•</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant italic">Zero superficial swiping. Pure daylight courtship.</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">•</span>
+            <span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase font-semibold">Intentional Matchmaking For Genuine Romance</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">•</span>
+            <span class="font-body-sm text-body-sm text-on-surface">Curated pairing across intimate romantic sanctuaries in NYC, London, Paris &amp; India</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">•</span>
+            <span class="inline-flex items-center gap-1.5 font-label-md text-label-md text-[#835339] font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                1,420 singles meeting across tables today
+            </span>
+        </div>
+    </div>
+
+    <!-- Bespoke Centered Editorial Romantic Hero Section -->
+    <section class="relative w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-margin-desktop pt-12 sm:pt-16 pb-16 lg:pb-24 overflow-hidden">
+        <!-- Soft Romantic Radiant Warmth -->
+        <div class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[600px] hero-glow blur-3xl -z-10 rounded-full"></div>
         
-        <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop pt-space-lg flex flex-col lg:flex-row items-center justify-between gap-gutter-lg">
-            
-            <!-- Left Column: Editorial Masthead -->
-            <div class="flex-1 flex flex-col items-start max-w-2xl">
-                <div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container text-secondary font-label-md text-label-md mb-space-md shadow-sm">
-                    <span class="material-symbols-outlined text-sm leading-none" style="font-variation-settings: 'FILL' 1;">local_cafe</span>
-                    <span>A Slower, Tastier Way to Meet</span>
+        <!-- Centered Editorial Dating Masthead -->
+        <div class="max-w-4xl mx-auto flex flex-col items-center text-center gap-6">
+            <!-- Live Courtship Status -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/40 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#E87A88] animate-ping"></span>
+                <span class="w-2 h-2 -ml-3.5 rounded-full bg-[#E87A88]"></span>
+                <span class="font-label-sm text-label-sm text-primary font-medium tracking-wide">1,420 Intentional Singles Meeting for Real Dates Today</span>
+                <span class="text-outline-variant">|</span>
+                <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-semibold">Pure Slow Courtship</span>
+            </div>
+
+            <!-- Grand Romantic Headline -->
+            <h1 class="font-headline-xl text-[40px] sm:text-[54px] lg:text-[64px] text-primary tracking-tight font-semibold leading-[1.08] text-balance">
+                Where Real Romance Begins Across the Table.
+            </h1>
+
+            <!-- Focused Dating Subtitle -->
+            <p class="font-body-lg text-[17px] sm:text-[20px] text-on-surface-variant max-w-2xl leading-relaxed text-balance">
+                Leave superficial swipe fatigue behind. CupDate pairs thoughtful singles seeking lifelong devotion and genuine daylight chemistry over unhurried, intimate first dates.
+            </p>
+
+            <!-- Centered Action CTAs -->
+            <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+                @guest
+                    <a href="{{ route('register') }}" class="group inline-flex items-center gap-2.5 px-8 sm:px-9 py-4 rounded-full bg-[#E87A88] text-white font-label-lg text-label-lg shadow-[0_8px_24px_rgba(232,122,136,0.36)] hover:shadow-[0_12px_28px_rgba(232,122,136,0.48)] hover:brightness-105 active:scale-95 transition-all">
+                        <span>Start Your Romance</span>
+                        <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">favorite</span>
+                    </a>
+                    <a href="#intentional-singles" class="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-full bg-surface-container-lowest border border-[#835339]/30 hover:border-[#835339] text-[#22140D] font-label-lg text-label-lg transition-all hover:bg-surface-container-low shadow-sm">
+                        <span class="material-symbols-outlined text-secondary text-base">explore</span>
+                        <span>Explore Intentional Singles</span>
+                    </a>
+                @else
+                    <a href="{{ route('swipes') }}" class="group inline-flex items-center gap-2.5 px-8 sm:px-9 py-4 rounded-full bg-[#E87A88] text-white font-label-lg text-label-lg shadow-[0_8px_24px_rgba(232,122,136,0.36)] hover:shadow-[0_12px_28px_rgba(232,122,136,0.48)] hover:brightness-105 active:scale-95 transition-all">
+                        <span>Enter Discover Deck</span>
+                        <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">style</span>
+                    </a>
+                    <a href="{{ route('feed') }}" class="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-full bg-surface-container-lowest border border-[#835339]/30 hover:border-[#835339] text-[#22140D] font-label-lg text-label-lg transition-all hover:bg-surface-container-low shadow-sm">
+                        <span class="material-symbols-outlined text-secondary text-base">local_cafe</span>
+                        <span>Browse Date Feed</span>
+                    </a>
+                @endguest
+            </div>
+
+            <!-- Micro trust badges -->
+            <div class="flex items-center justify-center gap-6 pt-1 text-on-surface-variant font-label-sm text-label-sm flex-wrap">
+                <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[#E87A88] text-sm">check_circle</span> 100% Identity Vetted</span>
+                <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[#E87A88] text-sm">schedule</span> Unhurried 45-Min Ritual</span>
+                <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[#E87A88] text-sm">favorite</span> Real Long-Term Intentions</span>
+            </div>
+        </div>
+
+        <!-- Centered Dating Showcase & Match Experience -->
+        <div class="mt-12 lg:mt-16 w-full max-w-5xl mx-auto">
+            <!-- Fast Snappy Switcher Tab Bar -->
+            <div class="flex items-center justify-center mb-6">
+                <div class="inline-flex p-1.5 bg-surface-container-low border border-outline-variant/30 rounded-full shadow-sm" id="hero-dating-tab-group">
+                    <button type="button" data-tab="curated" class="hero-toggle-btn active px-6 py-2 rounded-full font-label-md text-label-md font-semibold bg-primary text-on-primary shadow-xs transition-all">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-[#E87A88]"></span>
+                            Curated Matches
+                        </span>
+                    </button>
+                    <button type="button" data-tab="today" class="hero-toggle-btn px-6 py-2 rounded-full font-label-md text-label-md font-semibold text-on-surface-variant hover:text-on-surface transition-all">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-outlined text-xs">local_cafe</span>
+                            Today's Date Dossiers
+                        </span>
+                    </button>
+                    <button type="button" data-tab="verified" class="hero-toggle-btn px-6 py-2 rounded-full font-label-md text-label-md font-semibold text-on-surface-variant hover:text-on-surface transition-all">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-outlined text-xs">verified</span>
+                            Verified Singles Near You
+                        </span>
+                    </button>
                 </div>
-                
-                <h1 class="font-headline-xl text-3xl sm:text-4xl md:text-5xl lg:text-headline-xl text-on-surface tracking-tight leading-tight">
-                    Meet over good coffee, <span class="italic font-normal text-secondary">not endless swiping.</span>
-                </h1>
-                
-                <p class="mt-space-md font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
-                    CupDate matches you with intentional singles nearby who share your taste in brew, neighborhood spots, and genuine conversation.
+            </div>
+
+            <!-- Showcase Card Deck (Curated Matches View) -->
+            <div class="relative bg-surface-container-lowest border border-outline-variant/40 rounded-[2.5rem] p-6 sm:p-8 shadow-[0_20px_50px_rgba(34,20,13,0.06)] overflow-hidden transition-all duration-300" id="hero-dating-display">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Dater Portrait with Romantic Overlays -->
+                    <div class="lg:col-span-6 relative">
+                        <div class="relative rounded-[2rem] overflow-hidden aspect-[4/4.5] shadow-xl border border-outline-variant/20 bg-surface-container">
+                            <img id="hero-dater-img" alt="Elena - Romantic portrait in sunlit café" class="w-full h-full object-cover transition-all duration-500 hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDftoqQPlGJ6nQft-w9OKRyLRqE5d-gXtON0maE6JdAfBUkZdJgdtwKGtGMEgzUqyLCPVqbXE-SoLNH0Dki87vnj3mvU2m9m9T5qclbaoB4iXhrCd-RWJKYmiLfnbA7Du9tDskAm_VUoZ3bpSO6Wkb-vYB5VZ0v9Iq13ilRqJ6ZVXkLAP2DqiSsZkHYAA6YoVQOV4jQO4yFECplYeG4_UZhz08agWIs52Ubru4H-eIoAq0ms3zlqw_2Xg"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
+                            
+                            <!-- Top Floating Match Badge -->
+                            <div class="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-md shadow-md">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span id="hero-dater-spark" class="font-label-sm text-[12px] text-primary font-bold">98% Romantic Synergy</span>
+                            </div>
+
+                            <!-- Verified Dater Badge -->
+                            <div class="absolute top-4 right-4 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/80 backdrop-blur-md text-white font-label-sm text-label-sm">
+                                <span class="material-symbols-outlined text-sm text-[#E87A88]">verified</span>
+                                <span>Vetted Single</span>
+                            </div>
+
+                            <!-- Bottom Romantic Summary Inset -->
+                            <div class="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-surface-container-lowest/95 backdrop-blur-md border border-white/60 shadow-lg flex items-center justify-between">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 id="hero-dater-name" class="font-headline-sm text-base text-primary font-bold">Elena Vance, 28</h3>
+                                        <span class="text-xs text-on-surface-variant font-medium">• SoHo, NYC</span>
+                                    </div>
+                                    <p id="hero-dater-vibe" class="font-body-sm text-[12px] text-secondary font-medium pt-0.5">Looking for: Lifelong romance, shared architecture walks &amp; quiet mornings</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-[#E87A88] flex-shrink-0 shadow-xs">
+                                    <span class="material-symbols-outlined text-lg">favorite</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Match Dossier & Deep Romantic Prompts (Right Column) -->
+                    <div class="lg:col-span-6 flex flex-col justify-between h-full py-2">
+                        <div class="flex flex-col gap-5">
+                            <!-- Courtship Values -->
+                            <div class="flex items-center justify-between pb-3 border-b border-outline-variant/30">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[#E87A88]">auto_awesome</span>
+                                    <span class="font-label-md text-label-md text-primary font-bold uppercase tracking-wider">Courtship Dossier</span>
+                                </div>
+                                <span class="font-label-sm text-label-sm text-secondary font-medium">Profile 01 of 12</span>
+                            </div>
+
+                            <!-- Prompt 1: Ideal Date -->
+                            <div class="p-4 rounded-2xl bg-surface-container-low/70 border border-outline-variant/30">
+                                <span class="font-label-sm text-[11px] text-secondary uppercase font-semibold tracking-wider">The First Rendezvous She Imagines</span>
+                                <p id="hero-prompt-quote" class="font-headline-sm text-[17px] text-primary italic pt-1 leading-snug">
+                                    “A slow pour-over at Devoción on an unhurried Saturday morning, talking about the books that changed our worldview before wandering through the galleries.”
+                                </p>
+                            </div>
+
+                            <!-- Audio Voice Note Snippet -->
+                            <div class="p-4 rounded-2xl bg-surface-container-low/70 border border-outline-variant/30 flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <button id="audio-play-demo" type="button" class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm hover:scale-105 transition-transform cursor-pointer">
+                                        <span class="material-symbols-outlined text-lg">play_arrow</span>
+                                    </button>
+                                    <div>
+                                        <span class="font-label-md text-label-md text-primary font-semibold block">Voice Prompt • 0:28</span>
+                                        <span class="font-body-sm text-[12px] text-on-surface-variant">“What romance means to me in a hyper-digital world...”</span>
+                                    </div>
+                                </div>
+                                <!-- Animated Soundwave Preview -->
+                                <div class="flex items-center gap-1 h-6 pr-2">
+                                    <span class="w-1 bg-[#E87A88] h-3 rounded-full animate-pulse"></span>
+                                    <span class="w-1 bg-[#E87A88] h-5 rounded-full animate-pulse delay-75"></span>
+                                    <span class="w-1 bg-[#E87A88] h-2 rounded-full animate-pulse delay-150"></span>
+                                    <span class="w-1 bg-[#E87A88] h-6 rounded-full animate-pulse delay-100"></span>
+                                    <span class="w-1 bg-[#E87A88] h-3 rounded-full animate-pulse"></span>
+                                </div>
+                            </div>
+
+                            <!-- Romantic Intentions & Values Tags -->
+                            <div id="hero-tag-list" class="flex flex-wrap gap-2 pt-1">
+                                <span class="px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-primary font-medium">💍 Marriage &amp; Partnership</span>
+                                <span class="px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-primary font-medium">☕ Slow Morning Rituals</span>
+                                <span class="px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-primary font-medium">🌿 Deep Listeners</span>
+                            </div>
+                        </div>
+
+                        <!-- Fast Dating Micro-Action Bar -->
+                        <div class="pt-6 mt-4 border-t border-outline-variant/30 flex items-center justify-between gap-4 flex-wrap">
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <button type="button" data-profile="0" class="quick-profile-btn px-4 py-2 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-semibold transition-all cursor-pointer">
+                                    Elena, 28
+                                </button>
+                                <button type="button" data-profile="1" class="quick-profile-btn px-4 py-2 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-md text-label-md font-semibold transition-all cursor-pointer">
+                                    Julian, 31
+                                </button>
+                                <button type="button" data-profile="2" class="quick-profile-btn px-4 py-2 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-md text-label-md font-semibold transition-all cursor-pointer">
+                                    Siobhan, 29
+                                </button>
+                            </div>
+                            <a href="{{ Auth::check() ? route('swipes') : route('register') }}" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#E87A88] text-white font-label-md text-label-md shadow-sm hover:brightness-105 transition-all">
+                                <span class="material-symbols-outlined text-sm">favorite</span>
+                                <span>Arrange Date</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metric Strip / Courtship Social Proof -->
+    <section class="w-full bg-surface-container-low py-10">
+        <div class="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-margin-desktop grid grid-cols-2 md:grid-cols-4 gap-gutter text-center">
+            <div class="flex flex-col items-center">
+                <span class="font-headline-lg text-headline-lg text-primary font-semibold">45m</span>
+                <span class="font-label-md text-label-md text-on-surface-variant">Unhurried First Date Protocol</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="font-headline-lg text-headline-lg text-primary font-semibold">88%</span>
+                <span class="font-label-md text-label-md text-on-surface-variant">Second Date Spark Conversion</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="font-headline-lg text-headline-lg text-primary font-semibold">100%</span>
+                <span class="font-label-md text-label-md text-on-surface-variant">Vetted Long-Term Singles</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="font-headline-lg text-headline-lg text-primary font-semibold">Zero</span>
+                <span class="font-label-md text-label-md text-on-surface-variant">Noisy Bars &amp; Superficial Ghosting</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: "The 45-Minute Courtship Ritual" -->
+    <section class="max-w-[1360px] mx-auto w-full px-4 sm:px-8 lg:px-margin-desktop py-20 lg:py-28" id="intentional-singles">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-space-md">
+            <div>
+                <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">A Civilized Architecture for Love</span>
+                <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight mt-1">
+                    The 45-Minute Courtship Ritual
+                </h2>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+                Thoughtfully designed for genuine chemistry. No alcohol-fueled noise, no hollow high-stakes dinners—just two people, daylight warmth, and intentional conversation.
+            </p>
+        </div>
+
+        <!-- 4-Step Editorial Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+            <!-- Step 01 -->
+            <div class="ritual-step group relative p-space-lg rounded-3xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-space-md">
+                        <span class="font-headline-md text-headline-md text-secondary/40 group-hover:text-secondary transition-colors">01</span>
+                        <span class="material-symbols-outlined text-secondary">tune</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary font-semibold pb-space-xs">
+                        Romantic Values Calibration
+                    </h3>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        Specify your relationship timeline, life aspirations, mutual intellect, and your favorite intimate neighborhood strolls.
+                    </p>
+                </div>
+                <div class="pt-space-lg mt-space-md">
+                    <div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-secondary w-1/4 group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 02 -->
+            <div class="ritual-step group relative p-space-lg rounded-3xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-space-md">
+                        <span class="font-headline-md text-headline-md text-secondary/40 group-hover:text-secondary transition-colors">02</span>
+                        <span class="material-symbols-outlined text-secondary">wb_sunny</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary font-semibold pb-space-xs">
+                        The Daily Rendezvous (12 PM)
+                    </h3>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        Every noon, receive 3 tailored dossiers chosen for emotional maturity and romantic synchronicity. No algorithmic black holes.
+                    </p>
+                </div>
+                <div class="pt-space-lg mt-space-md">
+                    <div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-secondary w-2/4 group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 03 -->
+            <div class="ritual-step group relative p-space-lg rounded-3xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-space-md">
+                        <span class="font-headline-md text-headline-md text-secondary/40 group-hover:text-secondary transition-colors">03</span>
+                        <span class="material-symbols-outlined text-secondary">table_restaurant</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary font-semibold pb-space-xs">
+                        One-Tap Reserved Table
+                    </h3>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        Choose a romantic date sanctuary. CupDate pre-reserves quiet alcove seating for effortless, stress-free arrival.
+                    </p>
+                </div>
+                <div class="pt-space-lg mt-space-md">
+                    <div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-secondary w-3/4 group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 04 -->
+            <div class="ritual-step group relative p-space-lg rounded-3xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-space-md">
+                        <span class="font-headline-md text-headline-md text-secondary/40 group-hover:text-secondary transition-colors">04</span>
+                        <span class="material-symbols-outlined text-secondary">hourglass_top</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary font-semibold pb-space-xs">
+                        45-Minute Daylight Spark
+                    </h3>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        A built-in time boundary protects your heart and schedule. If sparks fly, wander off to an afternoon gallery stroll together.
+                    </p>
+                </div>
+                <div class="pt-space-lg mt-space-md">
+                    <div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+                        <div class="h-full bg-secondary w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Interactive Date Sanctuaries & Romance Spots -->
+    <section class="w-full bg-surface-container-lowest py-20 lg:py-28" id="partner-cafes">
+        <div class="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-margin-desktop">
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-space-md">
+                <div>
+                    <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Handpicked Date Sanctuaries</span>
+                    <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight mt-1">
+                        Spaces Designed for Romantic Chemistry
+                    </h2>
+                </div>
+                <!-- City Filter Tabs -->
+                <div class="flex flex-wrap items-center gap-1.5 p-1.5 bg-surface-container rounded-full" id="city-tabs">
+                    <button type="button" data-city="all" class="city-btn active px-4 py-1.5 rounded-full font-label-md text-label-md bg-primary text-on-primary shadow-sm transition-all cursor-pointer">All Chapters</button>
+                    <button type="button" data-city="nyc" class="city-btn px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all cursor-pointer">New York</button>
+                    <button type="button" data-city="london" class="city-btn px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all cursor-pointer">London</button>
+                    <button type="button" data-city="paris" class="city-btn px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all cursor-pointer">Paris</button>
+                    <button type="button" data-city="tokyo" class="city-btn px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all cursor-pointer">Tokyo</button>
+                </div>
+            </div>
+
+            <!-- Date Haven Showcase Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter" id="cafe-cards-grid">
+                <!-- Sanctuary 1 -->
+                <div class="cafe-card group flex flex-col rounded-3xl overflow-hidden bg-surface-container-low shadow-sm hover:shadow-md transition-all duration-300" data-city-tag="nyc">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Modern botanical date sanctuary in Brooklyn" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAobAPipxuEe3wjCHQ6DAAjbsGuXG-QpQdNnwG2azPiJVx2FYHojtUtrFbLBqLuTj_EHPRP3eBfgBbRHbxdh_48UFCT3mZevReRZEO44m1MS3feYU1_eKfdJvOW_TfHLMMLCriVipm2owKnDVInZRNZ3CqjbrFKjks08a-9uj7DWS5l8wUpvBxTdgZknemFNVf4CAbW0wVPQNeDBISShk0VSI9CprHyFsxq-ytNRYbmN5MKsa3jiw5o7A"/>
+                        <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm font-label-sm text-label-sm text-secondary font-medium">SoHo, NYC</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-primary/80 backdrop-blur-sm font-label-sm text-label-sm text-on-primary flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#E87A88]"></span> 24 First Dates This Week
+                        </span>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1 justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-1">
+                                <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">Devoción</h3>
+                                <span class="font-label-sm text-label-sm text-secondary">Acoustic: Whispered</span>
+                            </div>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant pt-1 leading-relaxed">
+                                Sun-drenched skylight atrium, living plant tapestry, quiet corner banquettes for two.
+                            </p>
+                        </div>
+                        <div class="pt-4 flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Cortado Flight</span>
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Corner Alcoves</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sanctuary 2 -->
+                <div class="cafe-card group flex flex-col rounded-3xl overflow-hidden bg-surface-container-low shadow-sm hover:shadow-md transition-all duration-300" data-city-tag="nyc">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Minimalist airy Scandinavian-style interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCArtSY7xH11PHO1Ur_nPQ0lFlvyD4VfPuRWnsVOqq7w80B0G9B4R1ZNRIuVjfbEZXaF9b2LAt6b6-q-Zp7XJJupTddrBySJrQkxW-JZlChYwXXqgRU95hWZezmn7Trgn8p4wXDmLqEgF4w0eaFxaQLnkGqmKB8JMNGyxARYhJI-Goq4pxqQTJO8ppmYZ1l54cgAKAgFUf5BX3zh-jN9nF1FvrFcUv4iOvf59hAF37m-F88O5RZZLvksg"/>
+                        <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm font-label-sm text-label-sm text-secondary font-medium">Bushwick, NYC</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-primary/80 backdrop-blur-sm font-label-sm text-label-sm text-on-primary flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#E87A88]"></span> 18 First Dates This Week
+                        </span>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1 justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-1">
+                                <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">Sey</h3>
+                                <span class="font-label-sm text-label-sm text-secondary">Acoustic: Gentle</span>
+                            </div>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant pt-1 leading-relaxed">
+                                Nordic warmth, soft natural sunlight, vinyl records spinning quietly in the background.
+                            </p>
+                        </div>
+                        <div class="pt-4 flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Filter for Two</span>
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Vinyl Acoustics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sanctuary 3 -->
+                <div class="cafe-card group flex flex-col rounded-3xl overflow-hidden bg-surface-container-low shadow-sm hover:shadow-md transition-all duration-300" data-city-tag="paris">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Parisian romantic rendezvous cafe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFV5KenDmeR6xdLIjnn6BkCB1fJS9sOZvstxMziAjFDt4w-BLMNjkMd0gicgRWBuYiTU2kEszT6OvxH-cnwA0T_mZ8GJ1i8Jph4yMvZnOdMndtuTS3scIcNwtRTlJxn6yptWTsx6KvcBpR3-avC1H-tJQ8c7vLgFOA832LE9nbQdVaYHoSGwGm2ieKm8CoGzFzJxmKexmCd5ZyTA0tynzTzWNIXiR_wqYnP_exJlr2TMh0fqff9C9KRQ"/>
+                        <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm font-label-sm text-label-sm text-secondary font-medium">Palais-Royal, Paris</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-primary/80 backdrop-blur-sm font-label-sm text-label-sm text-on-primary flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#E87A88]"></span> 32 First Dates This Week
+                        </span>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1 justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-1">
+                                <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">Café Kitsuné</h3>
+                                <span class="font-label-sm text-label-sm text-secondary">Acoustic: Romantic</span>
+                            </div>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant pt-1 leading-relaxed">
+                                Historic arcade colonnades, garden walks, and intimate rendezvous under old limestone arches.
+                            </p>
+                        </div>
+                        <div class="pt-4 flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Matcha &amp; Pastry</span>
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Garden Promenade</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sanctuary 4 -->
+                <div class="cafe-card group flex flex-col rounded-3xl overflow-hidden bg-surface-container-low shadow-sm hover:shadow-md transition-all duration-300" data-city-tag="london">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Moody specialty coffee rendezvous spot in London" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm88rQGGuvZ9kudaMFVAMfS0BVHrYnH2yTxPiZ7ekKk3qk4xxWoOk3LK0EOnvtxgDIHk-RLKUTWoyThiNP_XD0t9pCne7DltkvLYd9xYcUcA8fHuVO5Fh2XODyNE5wqIQCjNnOL-R__jWFp8DuIRNi2o0-lh4HkvoARZXuW-fuRATMnJF0SlfZyJhttS0lvBOqkkHLWJJxpmlla9wkfitCZm7JzlCoGTrzbssYfPqKkfv-fT10s_bG4Q"/>
+                        <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm font-label-sm text-label-sm text-secondary font-medium">Shoreditch, London</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-primary/80 backdrop-blur-sm font-label-sm text-label-sm text-on-primary flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#E87A88]"></span> 21 First Dates This Week
+                        </span>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1 justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-1">
+                                <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">Monmouth</h3>
+                                <span class="font-label-sm text-label-sm text-secondary">Acoustic: Intimate</span>
+                            </div>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant pt-1 leading-relaxed">
+                                Warm glowing lighting, intimate corner two-tops, and fresh warm pain au chocolat.
+                            </p>
+                        </div>
+                        <div class="pt-4 flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Batch Brew</span>
+                            <span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Artisan Bakery</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: "Love on the First Sip" — Editorial Love Stories -->
+    <section class="max-w-[1360px] mx-auto w-full px-4 sm:px-8 lg:px-margin-desktop py-20 lg:py-28">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Real Romance Stories</span>
+            <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight mt-1">
+                Love on the First Sip
+            </h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                Real members who traded chaotic swipe games for an unhurried table and found the love of their life.
+            </p>
+        </div>
+
+        <!-- Magazine Spread Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
+            <!-- Primary Editorial Feature -->
+            <div class="lg:col-span-8 p-8 sm:p-12 rounded-3xl bg-surface-container-low shadow-sm flex flex-col justify-between">
+                <div class="flex flex-col gap-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[#E87A88] text-xl">favorite</span>
+                            <span class="font-label-md text-label-md text-on-surface font-semibold">Matched at Abraço, East Village</span>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-secondary">
+                            Now Engaged • Fall 2026
+                        </span>
+                    </div>
+                    <blockquote class="font-headline-md text-headline-md text-primary italic leading-snug">
+                        “Neither of us wanted another hollow bar date with shouting over bad music. We met at 10 AM on a Tuesday, ordered two Cortados with oat milk and the legendary olive oil cake. Forty-five minutes effortlessly turned into four hours—and now a wedding next spring.”
+                    </blockquote>
+                    <div class="flex items-center gap-4 pt-2">
+                        <div class="flex -space-x-3">
+                            <div class="w-12 h-12 rounded-full overflow-hidden shadow-md">
+                                <img class="w-full h-full object-cover" alt="Siobhan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYW8QfGUtNDKiJMOsp-E6tixTmwp9d3Sf_ZjWAENethisLxVeFIPSSjgysGBjRTmIrTqo96DGk4_HQ5qNzkII6Aar07Uqm8KDYfAoJvffYhp04QvQBS2AYjVIuPX3OPAU5bs-67Y100YKq6RP78YqBl1TvhOI1Wdu-kOPW9wIqOvIrTDpUsd6j2FXFX5IkG4I1uHRbZElBzfmeOTvALHT_IgZrjtctGlix_zglWQjK5KawyKkRjTEgnQ"/>
+                            </div>
+                            <div class="w-12 h-12 rounded-full overflow-hidden shadow-md">
+                                <img class="w-full h-full object-cover" alt="Julian" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJlQ7L_OwIsb-Qt99pYUGj61g_UWKt_ZllS0CEsU0_P_mt74pFu2I5usX2N8sZcymWmKYjzTOVKjxXy5dIE0Bga3vd1jQo2kZea22IZ_MRmPgIuUE7mjY3WZWHVsXEC1QxPl-8zawByw6O5_0OAcSwLUcORhF9sf8o7wnPwgfmJSwvetn67MtGRF13BWMadiqKnMQpQfY8f6MThopdowPO3uneLqkSFj2f3WmJISknS6Ey9CWQwcboww"/>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-label-lg text-label-lg text-primary font-semibold">Julian &amp; Siobhan</p>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant">Shared Passion: <em>Modern Architecture &amp; 35mm Film</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-outline-variant/30 flex flex-wrap items-center justify-between gap-4 text-on-surface-variant font-body-sm text-body-sm">
+                    <span>First Date Topic: Life aspirations, Sunday traditions &amp; family dreams</span>
+                    <span class="text-secondary font-label-sm text-label-sm font-semibold uppercase tracking-wider">Couples Dispatch</span>
+                </div>
+            </div>
+
+            <!-- Secondary Monograph Card -->
+            <div class="lg:col-span-4 p-8 rounded-3xl bg-surface-container flex flex-col justify-between shadow-sm">
+                <div class="flex flex-col gap-4">
+                    <span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Love Story Spotlight</span>
+                    <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">
+                        “No performance. Just genuine presence, mutual respect, and pure daylight chemistry.”
+                    </h3>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        “CupDate feels like an exclusive matchmaking club rather than an endless swiping game. We both came in with open hearts and honest relationship intentions.”
+                    </p>
+                </div>
+                <div class="pt-8 flex items-center justify-between">
+                    <div>
+                        <p class="font-label-md text-label-md text-primary font-semibold">Kaito &amp; Mathilde</p>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">Together 18 Months • Paris Chapter</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-[#E87A88]/20 flex items-center justify-center text-[#E87A88]">
+                        <span class="material-symbols-outlined text-sm">favorite</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: The Manifesto / Contrast Table (Pure Romance & Dating Focus) -->
+    <section class="w-full bg-surface-container-low py-20 lg:py-24">
+        <div class="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-margin-desktop">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">The Philosophy of Intentional Love</span>
+                <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight mt-1">
+                    Why Modern Dating Needs a Slower Roast
+                </h2>
+            </div>
+
+            <!-- Split Contrast Table -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg max-w-4xl mx-auto">
+                <!-- The Swiping Era -->
+                <div class="p-8 rounded-3xl bg-surface-container shadow-sm flex flex-col gap-6 opacity-80">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">The Swipe Fatigue Era</h3>
+                        <span class="material-symbols-outlined text-outline">close</span>
+                    </div>
+                    <ul class="flex flex-col gap-4 font-body-sm text-body-sm text-on-surface-variant">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-outline text-base mt-0.5">remove</span>
+                            <span>Weeks of superficial small talk that never materializes into dates</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-outline text-base mt-0.5">remove</span>
+                            <span>Loud cocktail bars with $25 drinks and endless yelling over noise</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-outline text-base mt-0.5">remove</span>
+                            <span>Dopamine gamification, ghosting culture, and transactional swiping</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-outline text-base mt-0.5">remove</span>
+                            <span>Exhausting multi-hour dinner dates with zero emotional synergy</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- The CupDate Atelier -->
+                <div class="p-8 rounded-3xl bg-surface-container-lowest shadow-md flex flex-col gap-6 border-l-4 border-[#E87A88]">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">The CupDate Singles Atelier</h3>
+                        <span class="material-symbols-outlined text-[#E87A88]">check_circle</span>
+                    </div>
+                    <ul class="flex flex-col gap-4 font-body-sm text-body-sm text-on-surface">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-secondary text-base mt-0.5">check</span>
+                            <span>Curated 45-minute daylight dates arranged with 1 tap</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-secondary text-base mt-0.5">check</span>
+                            <span>Real face-to-face conversation in peaceful, romantic atmospheres</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-secondary text-base mt-0.5">check</span>
+                            <span>Limited to 3 intentional dossiers per day to foster genuine presence</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-secondary text-base mt-0.5">check</span>
+                            <span>Zero pressure, pre-reserved quiet tables, and verified singles</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Interactive Chemistry & Courtship Calculator -->
+    <section class="max-w-[1360px] mx-auto w-full px-4 sm:px-8 lg:px-margin-desktop py-20 lg:py-28">
+        <div class="p-8 sm:p-12 lg:p-16 rounded-3xl bg-surface-container-low shadow-sm">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-center">
+                <div class="lg:col-span-5 flex flex-col gap-4">
+                    <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Interactive Chemistry Meter</span>
+                    <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">
+                        Calculate your courtship circle.
+                    </h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant">
+                        Select your preferred dating atmosphere and relationship horizon to see active verified singles seeking romance right now.
+                    </p>
+                    <div class="mt-4 p-6 rounded-2xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+                        <div>
+                            <span class="font-body-sm text-body-sm text-on-surface-variant">Compatible Singles Nearby</span>
+                            <div class="font-headline-lg text-headline-lg text-primary font-bold" id="match-calc-counter">142</div>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center text-[#E87A88]">
+                            <span class="material-symbols-outlined">favorite</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 flex flex-col gap-6">
+                    <!-- Parameter 1: Preferred Date Style -->
+                    <div>
+                        <label class="font-label-md text-label-md text-primary font-semibold block mb-2">Ideal Date Window</label>
+                        <div class="grid grid-cols-3 gap-2" id="time-window-selector">
+                            <button type="button" data-val="morning" class="calc-btn active p-3 rounded-2xl bg-primary text-on-primary font-label-md text-label-md text-center transition-all cursor-pointer">
+                                Morning Cortado<br/><span class="text-xs opacity-70 font-normal">9:00 – 10:30 AM</span>
+                            </button>
+                            <button type="button" data-val="midday" class="calc-btn p-3 rounded-2xl bg-surface-container text-on-surface font-label-md text-label-md text-center transition-all cursor-pointer">
+                                Noon Rendezvous<br/><span class="text-xs opacity-70 font-normal">12:30 – 2:00 PM</span>
+                            </button>
+                            <button type="button" data-val="late" class="calc-btn p-3 rounded-2xl bg-surface-container text-on-surface font-label-md text-label-md text-center transition-all cursor-pointer">
+                                Golden Hour Affogato<br/><span class="text-xs opacity-70 font-normal">4:30 – 6:00 PM</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Parameter 2: Relationship Intention -->
+                    <div>
+                        <label class="font-label-md text-label-md text-primary font-semibold block mb-2">Relationship Intention</label>
+                        <div class="grid grid-cols-3 gap-2" id="music-vibe-selector">
+                            <button type="button" data-val="ambient" class="calc-btn p-3 rounded-2xl bg-surface-container text-on-surface font-label-md text-label-md text-center transition-all cursor-pointer">
+                                Slow Dating<br/><span class="text-xs opacity-70 font-normal">Intentional exploration</span>
+                            </button>
+                            <button type="button" data-val="bossa" class="calc-btn active p-3 rounded-2xl bg-primary text-on-primary font-label-md text-label-md text-center transition-all cursor-pointer">
+                                Lifelong Courtship<br/><span class="text-xs opacity-70 font-normal">Devoted partnership</span>
+                            </button>
+                            <button type="button" data-val="indie" class="calc-btn p-3 rounded-2xl bg-surface-container text-on-surface font-label-md text-label-md text-center transition-all cursor-pointer">
+                                Soul Connection<br/><span class="text-xs opacity-70 font-normal">Deep emotional bond</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Resonance Feedback Bar -->
+                    <div class="pt-2">
+                        <div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm mb-1.5">
+                            <span>Vetting Authenticity: Strict Singles Quality</span>
+                            <span id="resonance-percent-label">92% Match Probability</span>
+                        </div>
+                        <div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+                            <div class="h-full bg-[#E87A88] transition-all duration-500" id="resonance-progress-bar" style="width: 92%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Join Singles Atelier / Membership Application -->
+    <section class="w-full bg-primary text-on-primary py-20 lg:py-28" id="join-house">
+        <div class="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-margin-desktop">
+            <div class="max-w-3xl mx-auto text-center flex flex-col items-center gap-6">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high/20 text-tertiary-fixed font-label-sm text-label-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#E87A88] animate-pulse"></span>
+                    Accepting Applications for Cohort #12
+                </div>
+                <h2 class="font-headline-xl text-headline-xl text-on-primary tracking-tight text-balance">
+                    Begin your slow courtship today.
+                </h2>
+                <p class="font-body-lg text-body-lg text-on-primary/80 max-w-xl leading-relaxed">
+                    Membership is application-only to cultivate authentic intention, emotional presence, and zero ghosting. New invitations released each Friday.
                 </p>
 
-                <!-- CTAs -->
-                <div class="mt-space-lg flex flex-wrap items-center gap-space-md">
-                    @guest
-                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-full bg-on-tertiary-container text-on-tertiary font-label-lg text-label-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-                            <span>Find Your Coffee Match</span>
-                            <span class="material-symbols-outlined text-base">arrow_forward</span>
-                        </a>
-                        <a href="{{ route('dates') }}" class="inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-full bg-surface-container-high text-on-surface font-label-lg text-label-lg hover:bg-surface-container-highest hover:-translate-y-0.5 transition-all duration-200">
-                            <span class="material-symbols-outlined text-base">storefront</span>
-                            <span>Explore Partner Cafés</span>
-                        </a>
-                    @else
-                        <a href="{{ route('swipes') }}" class="inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-full bg-on-tertiary-container text-on-tertiary font-label-lg text-label-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-                            <span class="material-symbols-outlined text-base">style</span>
-                            <span>Enter Discover Deck</span>
-                        </a>
-                        <a href="{{ route('dates') }}" class="inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-full bg-surface-container-high text-on-surface font-label-lg text-label-lg hover:bg-surface-container-highest hover:-translate-y-0.5 transition-all duration-200">
-                            <span class="material-symbols-outlined text-base">storefront</span>
-                            <span>Explore Partner Cafés</span>
-                        </a>
-                    @endguest
+                <!-- Subscription Form -->
+                <form class="w-full max-w-md flex flex-col sm:flex-row gap-3 pt-4" onsubmit="event.preventDefault(); document.getElementById('apply-success').classList.remove('hidden');">
+                    <input class="flex-1 px-5 py-3.5 rounded-full bg-surface-container-high/20 border-0 focus:ring-2 focus:ring-[#E87A88] text-on-primary placeholder:text-on-primary/50 text-body-md font-body-md outline-none" placeholder="Enter your personal email" required="" type="email"/>
+                    <button class="px-8 py-3.5 rounded-full bg-[#E87A88] text-white font-label-lg text-label-lg shadow-lg hover:brightness-110 active:scale-95 transition-all whitespace-nowrap cursor-pointer" type="submit">
+                        Join Singles Atelier
+                    </button>
+                </form>
+                <div class="hidden font-body-sm text-body-sm text-secondary-fixed pt-2 animate-fade-in" id="apply-success">
+                    ✓ Application dispatched. Our match curators review submissions within 48 hours.
                 </div>
 
-                <!-- Stat Pill Strip -->
-                <div class="mt-space-lg sm:mt-space-xl grid grid-cols-3 gap-2 sm:gap-space-md w-full pt-space-md">
-                    <div class="flex flex-col p-2 sm:p-space-md rounded-xl sm:rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
-                        <span class="font-headline-sm text-base sm:text-headline-sm text-on-surface font-bold sm:font-semibold">42,000+</span>
-                        <span class="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant mt-0.5">Dates Brewed</span>
-                    </div>
-                    <div class="flex flex-col p-2 sm:p-space-md rounded-xl sm:rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
-                        <span class="font-headline-sm text-base sm:text-headline-sm text-on-surface font-bold sm:font-semibold">850+</span>
-                        <span class="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant mt-0.5">Partner Cafés</span>
-                    </div>
-                    <div class="flex flex-col p-2 sm:p-space-md rounded-xl sm:rounded-lg bg-surface-container-low shadow-sm hover:shadow transition-shadow">
-                        <span class="font-headline-sm text-base sm:text-headline-sm text-on-tertiary-container font-bold sm:font-semibold">74%</span>
-                        <span class="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant mt-0.5">Second Date Rate</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Editorial Visual Composition -->
-            <div class="flex-1 relative w-full flex justify-center lg:justify-end mt-space-lg lg:mt-0">
-                <div class="relative w-full max-w-[480px]">
-                    <!-- Main Hero Image Frame -->
-                    <div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-xl bg-surface-container group">
-                        <img class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" alt="Two intentional singles sharing warm artisanal ceramic cups in a sunlit boutique cafe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2_00iTh7n55h8sH7jDv7RGReRT1bjTLNn_MmB0-pLC2HGF9gy12dAghWEs9PZNFA1JjNVDS7697U3J9st2Os1kALsZXm2Iu-7L0r0Z5V-qKJ3PBqv7OtlfpU-B2ZD-M3ibp39D4k2LNoN7zB51U5aDpElAVWBJjSWYvducpRaJFOqohik9saK-Mnzcvf7zVqbZumvK2cySmTtgO5kpQyUw75j1ckyptEP-D-ZS0f4PiMZUa6Urp6hwQ"/>
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 via-transparent to-transparent"></div>
-                        <div class="absolute bottom-6 left-6 right-6 flex items-center justify-between text-on-primary">
-                            <div class="flex flex-col">
-                                <span class="font-label-sm text-label-sm uppercase tracking-widest text-primary-fixed">Morning Ritual</span>
-                                <span class="font-headline-sm text-headline-sm italic">"Espresso &amp; First Editions"</span>
-                            </div>
-                            <div class="w-10 h-10 rounded-full bg-surface/20 backdrop-blur-md flex items-center justify-center transition-transform hover:scale-110">
-                                <span class="material-symbols-outlined text-on-primary text-xl">favorite</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Overlapping Floating Card with Micro-Animation -->
-                    <div class="absolute -bottom-6 -left-6 max-w-[240px] p-space-md rounded-lg bg-surface-container-lowest/95 backdrop-blur-md shadow-lg items-center gap-space-sm hidden sm:flex animate-float ring-1 ring-black/5 cursor-default">
-                        <div class="w-11 h-11 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
-                            <span class="material-symbols-outlined text-xl">check_circle</span>
-                        </div>
-                        <div class="flex flex-col min-w-0">
-                            <span class="font-label-md text-label-md text-on-surface truncate">Coffee Invite Accepted</span>
-                            <span class="font-body-sm text-body-sm text-on-surface-variant">Today at Devoción • 3pm</span>
-                        </div>
-                    </div>
-
-                    <!-- Micro Badge Floating Right with breathing glow -->
-                    <div class="absolute -top-3 -right-3 px-space-md py-1.5 rounded-full bg-surface-container-high shadow-md flex items-center gap-1.5 border border-surface-container-highest/60">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 pulse-glow-dot"></span>
-                        <span class="font-label-sm text-label-sm text-on-surface font-medium">1,280 sips right now</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive City Selector & Trending Hubs -->
-    <section class="w-full py-space-xl bg-surface-container-low/50">
-        <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop flex flex-col gap-space-lg">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
-                <div class="flex flex-col gap-space-xs max-w-xl">
-                    <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Local Chapters</span>
-                    <h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Curated City Coffee Scenes</h2>
-                    <p class="font-body-md text-body-md text-on-surface-variant">Discover vetted corners where intentional conversations happen effortlessly over exceptional roast profiles.</p>
-                </div>
-                
-                <!-- City Navigation Tabs -->
-                <div class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container-high overflow-x-auto max-w-full" id="cityTabList">
-                    <button class="city-tab px-space-md py-1.5 rounded-full font-label-md text-label-md bg-on-surface text-surface shadow-xs transition-all whitespace-nowrap active:scale-95" data-city="nyc">New York</button>
-                    <button class="city-tab px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap active:scale-95" data-city="london">London</button>
-                    <button class="city-tab px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap active:scale-95" data-city="paris">Paris</button>
-                    <button class="city-tab px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-city="tokyo">Tokyo</button>
-                    <button class="city-tab px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-city="melbourne">Melbourne</button>
-                    <button class="city-tab px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-city="milan">Milan</button>
-                </div>
-            </div>
-
-            <!-- 3 Curated City Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter-lg mt-space-sm" id="cityCardsContainer">
-                
-                <!-- Card 1 (New York Scene) -->
-                <article class="scroll-reveal city-card flex flex-col rounded-lg bg-surface-container-lowest overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer" onclick="window.location.href='{{ route('city.show', 'new-york') }}'">
-                    <div class="relative w-full aspect-[16/10] overflow-hidden bg-surface-container">
-                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" alt="Intimate sun-drenched cafe in Greenwich Village" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx-eV2uFVmFf9BmUODB82Pqfq3a3E353awr12jdNKlwDtWTU4RTILN53iyMroFw3cyoyVXeUdsG1WabdqwaziDxTpQhKCxwDtk_54Ujy7qtYD54eha8QMiszX1Is7S-7mrJ9HNZWPQabMNLbm2oHk-mX7374uxQdlGXdv-JaZlvO4IrIBXtdyvfdxRJlyN9hDzwytDlOz9xR-grqHFIOu0EdEkds1gMafQ9MimuuT0LvUXs43u9Kb_fw"/>
-                        <div class="absolute top-3 left-3 px-space-sm py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md font-label-sm text-label-sm text-on-surface shadow-xs">
-                            West Village • SoHo
-                        </div>
-                        <div class="absolute bottom-3 right-3 px-space-sm py-0.5 rounded-full bg-primary-container/85 text-on-primary font-label-sm text-label-sm backdrop-blur-sm">
-                            34 partner cafés
-                        </div>
-                    </div>
-                    <div class="p-space-lg flex flex-col justify-between flex-1">
-                        <div class="flex flex-col gap-space-xs">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-secondary transition-colors">The Downtown Brew Club</h3>
-                                <span class="material-symbols-outlined text-secondary text-lg city-arrow-icon transition-transform duration-200">arrow_outward</span>
-                            </div>
-                            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-                                Cozy leather armchairs, single-origin natural Ethiopians, and effortless post-gallery walking loops through cobblestone alleys.
-                            </p>
-                        </div>
-                        <div class="pt-space-md mt-space-md flex items-center justify-between border-t border-surface-container-low">
-                            <div class="flex items-center gap-space-xs">
-                                <span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
-                                <span class="font-label-md text-label-md text-on-surface font-medium">3,420 members</span>
-                                <span class="font-body-sm text-body-sm text-on-surface-variant">active today</span>
-                            </div>
-                            <span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold group-hover:underline">View Hub</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Card 2 (London Scene) -->
-                <article class="scroll-reveal delay-100 city-card flex flex-col rounded-lg bg-surface-container-lowest overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer" onclick="window.location.href='{{ route('city.show', 'london') }}'">
-                    <div class="relative w-full aspect-[16/10] overflow-hidden bg-surface-container">
-                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" alt="Chic modern industrial roastery in Shoreditch London" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI00sDnJgZUnyHWg3FWOe3p6hMv7pLdMkVE5fjs4NyPlldF_QEb5DdKzZ4qC9-VDU5O0XSWIQU4drx_n4JG8Gh2uzPYrwBzr56gybOAEY4cAIghEj79ihvbgFsSaWH_6A6tTq4usq_XlNjjhx3P7d7GqtCIRKRMF3M8DI3DIkE3PN0mafcBClLVOLQjbpqvVUviXNcSmdoTbYOe5ANxsK-Ujoq-DZkWfqMPa_aCSS28zZVwZ43mO7bXw"/>
-                        <div class="absolute top-3 left-3 px-space-sm py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md font-label-sm text-label-sm text-on-surface shadow-xs">
-                            Shoreditch • Hackney
-                        </div>
-                        <div class="absolute bottom-3 right-3 px-space-sm py-0.5 rounded-full bg-primary-container/85 text-on-primary font-label-sm text-label-sm backdrop-blur-sm">
-                            28 partner cafés
-                        </div>
-                    </div>
-                    <div class="p-space-lg flex flex-col justify-between flex-1">
-                        <div class="flex flex-col gap-space-xs">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-secondary transition-colors">East London Writers &amp; Roasters</h3>
-                                <span class="material-symbols-outlined text-secondary text-lg city-arrow-icon transition-transform duration-200">arrow_outward</span>
-                            </div>
-                            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-                                Aeropress rituals, cinnamon brioche buns, and creative dialogs designed for architects, designers, and late-morning thinkers.
-                            </p>
-                        </div>
-                        <div class="pt-space-md mt-space-md flex items-center justify-between border-t border-surface-container-low">
-                            <div class="flex items-center gap-space-xs">
-                                <span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
-                                <span class="font-label-md text-label-md text-on-surface font-medium">2,890 members</span>
-                                <span class="font-body-sm text-body-sm text-on-surface-variant">active today</span>
-                            </div>
-                            <span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold group-hover:underline">View Hub</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Card 3 (Paris Scene) -->
-                <article class="scroll-reveal delay-200 city-card flex flex-col rounded-lg bg-surface-container-lowest overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer" onclick="window.location.href='{{ route('city.show', 'paris') }}'">
-                    <div class="relative w-full aspect-[16/10] overflow-hidden bg-surface-container">
-                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" alt="Classic Parisian cafe terrace in Le Marais" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsQFJJkHjGfBufuaZ6nur3gJ5jEifKzWbT4eYm9qHnrXqscr3KBWfy5AI8m1KGvK7o8RnqcwaxMXdSoWmlFc7KeXQsDae3GC-KpjVqYzkfhwqTjNcQQfuma5OJdzVzrIJyq4MkOVELnyp5hblwI3oXK8p7ufcYzX2X7dtmyXPVgQFfZZjK2nGF_W7AchMRgf5ZF9wTRCVCR40nU-cWyyz9gUmGgAbLC-C16VyUgc8SA2dSf6cQ8RjAZg"/>
-                        <div class="absolute top-3 left-3 px-space-sm py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md font-label-sm text-label-sm text-on-surface shadow-xs">
-                            Le Marais • Saint-Germain
-                        </div>
-                        <div class="absolute bottom-3 right-3 px-space-sm py-0.5 rounded-full bg-primary-container/85 text-on-primary font-label-sm text-label-sm backdrop-blur-sm">
-                            41 partner cafés
-                        </div>
-                    </div>
-                    <div class="p-space-lg flex flex-col justify-between flex-1">
-                        <div class="flex flex-col gap-space-xs">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-secondary transition-colors">The Rive Droite Chapter</h3>
-                                <span class="material-symbols-outlined text-secondary text-lg city-arrow-icon transition-transform duration-200">arrow_outward</span>
-                            </div>
-                            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-                                Slow filter roasts on zinc bistro tops, quiet courtyard retreats, and effortless transitions from warm macchiatos to natural wine.
-                            </p>
-                        </div>
-                        <div class="pt-space-md mt-space-md flex items-center justify-between border-t border-surface-container-low">
-                            <div class="flex items-center gap-space-xs">
-                                <span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
-                                <span class="font-label-md text-label-md text-on-surface font-medium">1,960 members</span>
-                                <span class="font-body-sm text-body-sm text-on-surface-variant">active today</span>
-                            </div>
-                            <span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold group-hover:underline">View Hub</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- How CupDate Works 3-step Editorial Section -->
-    <section class="w-full py-space-xl" id="how-it-works">
-        <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop flex flex-col gap-space-xl">
-            <div class="flex flex-col items-center text-center max-w-2xl mx-auto gap-space-xs scroll-reveal">
-                <span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">The Method</span>
-                <h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">How CupDate Works</h2>
-                <p class="font-body-md text-body-md text-on-surface-variant">
-                    We removed the game and kept the spark. From your signature roast to your first real-life table in three mindful movements.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
-                <!-- Step 01 -->
-                <div class="scroll-reveal flex flex-col p-space-lg rounded-lg bg-surface-container-low relative shadow-xs hover:shadow-md transition-all">
-                    <div class="flex items-center justify-between mb-space-md">
-                        <span class="font-headline-lg text-headline-lg text-secondary font-light">01</span>
-                        <div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-secondary shadow-sm">
-                            <span class="material-symbols-outlined text-xl">coffee_maker</span>
-                        </div>
-                    </div>
-                    <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold mb-space-xs">Share Your Brew &amp; Vibe</h3>
-                    <p class="font-body-md text-body-md text-on-surface-variant mb-space-md leading-relaxed">
-                        Pick your exact daily order: oat flat white, balanced cortado, or anaerobic natural pour-over. Define your preferred hours and neighborhood rhythm.
-                    </p>
-                    <!-- Interactive Micro Brew Picker -->
-                    <div class="mt-auto pt-space-md flex flex-wrap gap-1.5" id="brew-pill-container">
-                        <button class="brew-tag px-space-sm py-1 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-medium hover:bg-surface-container-high transition-all active:scale-95" type="button">Flat White</button>
-                        <button class="brew-tag px-space-sm py-1 rounded-full bg-on-tertiary-container text-on-tertiary font-label-sm text-label-sm font-medium shadow-xs transition-all active:scale-95" data-active="true" type="button">Cortado • Selected</button>
-                        <button class="brew-tag px-space-sm py-1 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-medium hover:bg-surface-container-high transition-all active:scale-95" type="button">Cold Brew</button>
-                        <button class="brew-tag px-space-sm py-1 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-medium hover:bg-surface-container-high transition-all active:scale-95" type="button">V60 Pour-over</button>
-                    </div>
-                </div>
-
-                <!-- Step 02 -->
-                <div class="scroll-reveal delay-100 flex flex-col p-space-lg rounded-lg bg-surface-container-low relative shadow-xs hover:shadow-md transition-all">
-                    <div class="flex items-center justify-between mb-space-md">
-                        <span class="font-headline-lg text-headline-lg text-secondary font-light">02</span>
-                        <div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-secondary shadow-sm">
-                            <span class="material-symbols-outlined text-xl">partner_exchange</span>
-                        </div>
-                    </div>
-                    <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold mb-space-xs">Match Over Local Spots</h3>
-                    <p class="font-body-md text-body-md text-on-surface-variant mb-space-md leading-relaxed">
-                        Get paired with thoughtful singles who share your taste in neighborhood haunts, quiet conversation corners, and genuine aesthetic energy.
-                    </p>
-                    <div class="mt-auto pt-space-md flex items-center gap-space-xs p-space-xs rounded-full bg-surface-container-highest/60 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-base text-secondary ml-1">favorite</span>
-                        <span class="font-label-md text-label-md text-on-surface truncate">Mutual spot: Sey Coffee, Brooklyn</span>
-                    </div>
-                </div>
-
-                <!-- Step 03 -->
-                <div class="scroll-reveal delay-200 flex flex-col p-space-lg rounded-lg bg-surface-container-low relative shadow-xs hover:shadow-md transition-all">
-                    <div class="flex items-center justify-between mb-space-md">
-                        <span class="font-headline-lg text-headline-lg text-secondary font-light">03</span>
-                        <div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-secondary shadow-sm">
-                            <span class="material-symbols-outlined text-xl">event_available</span>
-                        </div>
-                    </div>
-                    <h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold mb-space-xs">Send a Coffee Invite</h3>
-                    <p class="font-body-md text-body-md text-on-surface-variant mb-space-md leading-relaxed">
-                        No weeks of texting paralysis. One-tap seamless date scheduling at verified partner cafés with reserved acoustic tables and exclusive perks.
-                    </p>
-                    <div class="mt-auto pt-space-md flex items-center justify-between p-space-xs pl-space-md rounded-full bg-surface shadow-xs">
-                        <span class="font-label-sm text-label-sm text-on-surface font-medium">Saturday • 11:30 AM</span>
-                        <span class="px-space-md py-1 rounded-full bg-on-tertiary-container text-on-tertiary font-label-sm text-label-sm font-semibold">Confirmed</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Member Testimonial Quote -->
-    <section class="w-full py-space-lg">
-        <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop">
-            <div class="scroll-reveal relative w-full rounded-xl bg-surface-container-high p-space-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <div class="absolute -right-12 -bottom-12 w-64 h-64 rounded-full bg-secondary-fixed/40 blur-2xl pointer-events-none animate-aroma"></div>
-                <div class="relative z-10 flex flex-col md:flex-row items-center gap-space-xl">
-                    <!-- Portrait Frame -->
-                    <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden shrink-0 shadow-md ring-4 ring-surface transition-transform duration-500 hover:scale-105">
-                        <img class="w-full h-full object-cover" loading="lazy" alt="Camille & Julian laughing warmly over coffee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHSu_C5FG4kvqmZapM6qPJ3FRBc0luPq-m6PL94gngmnxKwHunMcQ4WiaKMc3QaorUOpsgadxP02C1Z0ZbIvsgTeH8Jk6euvFTY97cTREgMJqMOnWK5RDrCg8yEOyV5ipEYjvkIY7f4BkXAnfpLuVjfHVDxwNT1IvQS09OaYacxio4NocTPFrziv992M-GIKvf76t11xqdjDotYql3IwJ4VN9om36wbeWGFnptjp9zHRWTiPAARZPnw"/>
-                    </div>
-                    <!-- Quote Block -->
-                    <div class="flex flex-col gap-space-sm flex-1 text-center md:text-left">
-                        <div class="flex items-center justify-center md:justify-start gap-1 text-on-tertiary-container">
-                            <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
-                        </div>
-                        <blockquote class="font-headline-md text-headline-md text-on-surface italic leading-snug">
-                            "We both matched because of our mutual obsession with the single-origin Geisha at Abraço. We met on a rainy Tuesday morning for thirty minutes—and ended up staying until closing time."
-                        </blockquote>
-                        <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-space-sm text-on-surface-variant font-body-sm text-body-sm pt-space-xs">
-                            <span class="font-semibold text-on-surface font-label-md text-label-md">Camille &amp; Julian</span>
-                            <span class="hidden md:inline text-secondary">•</span>
-                            <span>Matched over Cortados in East Village</span>
-                            <span class="hidden md:inline text-secondary">•</span>
-                            <span class="text-secondary font-medium">Together 14 months</span>
-                        </div>
-                    </div>
+                <!-- Trust Badges -->
+                <div class="flex flex-wrap items-center justify-center gap-6 pt-6 text-on-primary/60 font-body-sm text-body-sm">
+                    <span class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">verified_user</span> Human Vetted Profiles
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">schedule</span> Unhurried 45-Min Dates
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">favorite</span> Zero Casual Ghosting
+                    </span>
                 </div>
             </div>
         </div>
@@ -958,5 +1352,177 @@
             arrow.classList.add('rotate-180');
         }
     }
+
+    // 6. Fast Zero-Reload Hero Switcher & Audio Micro-Interactions
+    (function() {
+        const tabBtns = document.querySelectorAll('#hero-dating-tab-group .hero-toggle-btn');
+        const daterImg = document.getElementById('hero-dater-img');
+        const daterSpark = document.getElementById('hero-dater-spark');
+        const daterName = document.getElementById('hero-dater-name');
+        const daterVibe = document.getElementById('hero-dater-vibe');
+        const promptQuote = document.getElementById('hero-prompt-quote');
+        const tagList = document.getElementById('hero-tag-list');
+
+        const datingProfiles = [
+            {
+                name: "Elena Vance, 28",
+                spark: "98% Romantic Synergy",
+                vibe: "Looking for: Lifelong romance, shared architecture walks & quiet mornings",
+                quote: "“A slow pour-over at Devoción on an unhurried Saturday morning, talking about the books that shaped us before wandering through the galleries.”",
+                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDftoqQPlGJ6nQft-w9OKRyLRqE5d-gXtON0maE6JdAfBUkZdJgdtwKGtGMEgzUqyLCPVqbXE-SoLNH0Dki87vnj3mvU2m9m9T5qclbaoB4iXhrCd-RWJKYmiLfnbA7Du9tDskAm_VUoZ3bpSO6Wkb-vYB5VZ0v9Iq13ilRqJ6ZVXkLAP2DqiSsZkHYAA6YoVQOV4jQO4yFECplYeG4_UZhz08agWIs52Ubru4H-eIoAq0ms3zlqw_2Xg",
+                tags: ["💍 Marriage & Partnership", "☕ Slow Morning Rituals", "🌿 Deep Listeners"]
+            },
+            {
+                name: "Julian Mercier, 31",
+                spark: "95% Romantic Synergy",
+                vibe: "Looking for: Warmhearted devotion, culinary experiments & weekend escapes",
+                quote: "“Finding someone who values presence above status. Let us share an espresso tonic, listen to vinyl, and see if our conversation flows effortlessly.”",
+                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCJlQ7L_OwIsb-Qt99pYUGj61g_UWKt_ZllS0CEsU0_P_mt74pFu2I5usX2N8sZcymWmKYjzTOVKjxXy5dIE0Bga3vd1jQo2kZea22IZ_MRmPgIuUE7mjY3WZWHVsXEC1QxPl-8zawByw6O5_0OAcSwLUcORhF9sf8o7wnPwgfmJSwvetn67MtGRF13BWMadiqKnMQpQfY8f6MThopdowPO3uneLqkSFj2f3WmJISknS6Ey9CWQwcboww",
+                tags: ["✨ Intentional Courtship", "🎨 Gallery Strolls", "🕯️ Daylight Dates"]
+            },
+            {
+                name: "Siobhan Kelly, 29",
+                spark: "96% Romantic Synergy",
+                vibe: "Looking for: A tender life partner, quiet Sunday jazz & mutual humor",
+                quote: "“I believe the most profound connections happen over warm cups without screens. If we click in 45 minutes, the rest of life unfolds naturally.”",
+                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAYW8QfGUtNDKiJMOsp-E6tixTmwp9d3Sf_ZjWAENethisLxVeFIPSSjgysGBjRTmIrTqo96DGk4_HQ5qNzkII6Aar07Uqm8KDYfAoJvffYhp04QvQBS2AYjVIuPX3OPAU5bs-67Y100YKq6RP78YqBl1TvhOI1Wdu-kOPW9wIqOvIrTDpUsd6j2FXFX5IkG4I1uHRbZElBzfmeOTvALHT_IgZrjtctGlix_zglWQjK5KawyKkRjTEgnQ",
+                tags: ["📖 Avid Readers", "🎻 Jazz Lovers", "🏡 Building a Home"]
+            }
+        ];
+
+        function applyProfile(idx) {
+            if (!datingProfiles[idx]) return;
+            const p = datingProfiles[idx];
+            if (daterName) daterName.textContent = p.name;
+            if (daterSpark) daterSpark.textContent = p.spark;
+            if (daterVibe) daterVibe.textContent = p.vibe;
+            if (promptQuote) promptQuote.textContent = p.quote;
+            if (daterImg) daterImg.src = p.img;
+            
+            if (tagList) {
+                tagList.innerHTML = p.tags.map(t => `<span class="px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-primary font-medium">${t}</span>`).join('');
+            }
+        }
+
+        // Profile buttons in hero
+        const quickBtns = document.querySelectorAll('.quick-profile-btn');
+        quickBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                quickBtns.forEach(b => {
+                    b.classList.remove('bg-surface-container', 'text-on-surface');
+                    b.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+                });
+                btn.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+                btn.classList.add('bg-surface-container', 'text-on-surface');
+                const idx = parseInt(btn.getAttribute('data-profile') || '0', 10);
+                applyProfile(idx);
+            });
+        });
+
+        // Tab switcher micro-interaction
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-primary', 'text-on-primary');
+                    b.classList.add('text-on-surface-variant');
+                });
+                btn.classList.add('active', 'bg-primary', 'text-on-primary');
+                btn.classList.remove('text-on-surface-variant');
+
+                const tab = btn.getAttribute('data-tab');
+                if (tab === 'curated') applyProfile(0);
+                if (tab === 'today') applyProfile(1);
+                if (tab === 'verified') applyProfile(2);
+            });
+        });
+
+        // Audio prompt snippet micro-interaction
+        const audioBtn = document.getElementById('audio-play-demo');
+        let isPlaying = false;
+        if (audioBtn) {
+            audioBtn.addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                const icon = audioBtn.querySelector('span');
+                if (icon) icon.textContent = isPlaying ? 'pause' : 'play_arrow';
+            });
+        }
+
+        // City filter for date sanctuaries
+        const cityButtons = document.querySelectorAll('#city-tabs .city-btn');
+        const cafeCards = document.querySelectorAll('#cafe-cards-grid .cafe-card');
+
+        cityButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                cityButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-primary', 'text-on-primary');
+                    b.classList.add('text-on-surface-variant');
+                });
+                btn.classList.add('active', 'bg-primary', 'text-on-primary');
+                btn.classList.remove('text-on-surface-variant');
+
+                const selectedCity = btn.getAttribute('data-city');
+                cafeCards.forEach(card => {
+                    const cardCity = card.getAttribute('data-city-tag');
+                    if (selectedCity === 'all' || cardCity === selectedCity) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Compatibility Calculator
+        const timeBtns = document.querySelectorAll('#time-window-selector .calc-btn');
+        const musicBtns = document.querySelectorAll('#music-vibe-selector .calc-btn');
+        const counterEl = document.getElementById('match-calc-counter');
+        const progressLabel = document.getElementById('resonance-percent-label');
+        const progressBar = document.getElementById('resonance-progress-bar');
+
+        function recalculate() {
+            let baseCount = 120;
+            let baseProb = 86;
+
+            const activeTime = document.querySelector('#time-window-selector .calc-btn.active');
+            const activeMusic = document.querySelector('#music-vibe-selector .calc-btn.active');
+
+            if (activeTime) {
+                const t = activeTime.getAttribute('data-val');
+                if (t === 'morning') { baseCount += 38; baseProb += 6; }
+                if (t === 'midday') { baseCount += 46; baseProb += 5; }
+                if (t === 'late') { baseCount += 22; baseProb += 3; }
+            }
+
+            if (activeMusic) {
+                const m = activeMusic.getAttribute('data-val');
+                if (m === 'bossa') { baseCount += 30; baseProb += 5; }
+                if (m === 'ambient') { baseCount += 18; baseProb += 3; }
+                if (m === 'indie') { baseCount += 25; baseProb += 4; }
+            }
+
+            if (baseProb > 99) baseProb = 99;
+
+            if (counterEl) counterEl.textContent = baseCount;
+            if (progressLabel) progressLabel.textContent = baseProb + '% Match Probability';
+            if (progressBar) progressBar.style.width = baseProb + '%';
+        }
+
+        function setupToggleGroup(btns) {
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btns.forEach(b => {
+                        b.classList.remove('active', 'bg-primary', 'text-on-primary');
+                        b.classList.add('bg-surface-container', 'text-on-surface');
+                    });
+                    btn.classList.add('active', 'bg-primary', 'text-on-primary');
+                    btn.classList.remove('bg-surface-container', 'text-on-surface');
+                    recalculate();
+                });
+            });
+        }
+
+        setupToggleGroup(timeBtns);
+        setupToggleGroup(musicBtns);
+    })();
 </script>
 @endsection

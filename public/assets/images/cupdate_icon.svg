@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="cupGradSquare" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d2314"/>
+      <stop offset="50%" stop-color="#22140D"/>
+      <stop offset="100%" stop-color="#140a06"/>
+    </linearGradient>
+
+    <linearGradient id="roseGradSquare" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff94a2"/>
+      <stop offset="50%" stop-color="#E87A88"/>
+      <stop offset="100%" stop-color="#d65b6c"/>
+    </linearGradient>
+
+    <linearGradient id="caramelGradSquare" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#febe9e"/>
+      <stop offset="50%" stop-color="#c8894f"/>
+      <stop offset="100%" stop-color="#835339"/>
+    </linearGradient>
+
+    <filter id="roseGlowSquare" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softShadowSquare" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#22140D" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Circular Outer Disc in Surface Cream -->
+  <circle cx="32" cy="32" r="30" fill="#fff8f6" stroke="#f1dfd8" stroke-width="1.5"/>
+  <circle cx="32" cy="32" r="28" fill="#fdeae3" opacity="0.4"/>
+
+  <!-- Logo Group -->
+  <g filter="url(#softShadowSquare)">
+    <!-- Saucer -->
+    <ellipse cx="32" cy="49" rx="20" ry="3.5" fill="#fdeae3" stroke="#835339" stroke-width="1.2" stroke-opacity="0.4"/>
+    <ellipse cx="32" cy="48.5" rx="14" ry="2" fill="#fff8f6" opacity="0.8"/>
+
+    <!-- Cup Body -->
+    <path d="M 19 28 C 19 42, 25 48, 32 48 C 39 48, 45 42, 45 28 Z" fill="url(#cupGradSquare)" stroke="#835339" stroke-width="1.2"/>
+    
+    <!-- Cup Rim & Crema -->
+    <ellipse cx="32" cy="28" rx="13" ry="4" fill="#1b0e09" stroke="url(#caramelGradSquare)" stroke-width="1.2"/>
+    <ellipse cx="32" cy="28.2" rx="10.5" ry="2.8" fill="#2d1710"/>
+    <path d="M 25 28.5 Q 32 30.5 39 28.5" fill="none" stroke="#febe9e" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- Handle -->
+    <path d="M 44 31 C 51 31, 51 41, 43 43" fill="none" stroke="#835339" stroke-width="2.2" stroke-linecap="round"/>
+
+    <!-- Rising Steam Heart (Blush Rose Glow) -->
+    <g filter="url(#roseGlowSquare)">
+      <path d="M 28 24 C 27 19, 23 17, 26 12 C 28 9, 32 8, 32 8" fill="none" stroke="#E87A88" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+      <path d="M 36 24 C 37 19, 41 17, 38 12 C 36 9, 32 8, 32 8" fill="none" stroke="#E87A88" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+      
+      <!-- Center Heart -->
+      <path d="M 32 11.5 C 32 11.5, 28.5 7, 25 9.5 C 22 11.6, 23.5 16, 32 21 C 40.5 16, 42 11.6, 39 9.5 C 35.5 7, 32 11.5, 32 11.5 Z" 
+            fill="url(#roseGradSquare)"/>
+      <circle cx="32" cy="14" r="1" fill="#ffffff" opacity="0.9"/>
+    </g>
+  </g>
+</svg>

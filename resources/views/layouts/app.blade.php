@@ -61,7 +61,7 @@
             "surface-container-highest": "#f1dfd8",
             "primary-fixed": "#f9ddd1",
             "on-tertiary-fixed": "#40000f",
-            "primary": "#000000",
+            "primary": "#22140D",
             "inverse-on-surface": "#ffede6",
             "surface-container-high": "#f7e4dd",
             "surface-container": "#fdeae3",
@@ -91,7 +91,8 @@
             "surface": "#fff8f6",
             "inverse-primary": "#dcc1b5",
             "on-surface": "#231a15",
-            "on-tertiary": "#ffffff"
+            "on-tertiary": "#ffffff",
+            "blush-rose": "#E87A88"
           },
           "borderRadius": {
             "DEFAULT": "1rem",
@@ -284,21 +285,9 @@
             <!-- Brand Logo & Atelier Moniker -->
             <div class="flex items-center gap-3">
                 <a href="{{ route('home') }}" class="flex items-center gap-2.5 group text-decoration-none">
-                    <div class="w-10 h-10 rounded-full overflow-hidden shadow-[0_0_16px_rgba(255,0,127,0.45)] border-2 border-[#ff007f]/60 p-0.5 bg-[#180e0c] group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shrink-0">
-                        <img alt="CupDate Logo" class="w-full h-full object-contain" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-black leading-none flex items-center gap-1">
-                            Cup<span class="neon-pink-text">Date</span>
-                            <span class="text-xs">☕</span>
-                        </span>
-                        <span class="text-[10px] text-secondary font-bold tracking-wider uppercase leading-none mt-0.5">Coffee &amp; Dates</span>
-                    </div>
+                    <img alt="CupDate Logo" class="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
                 </a>
-                <span class="hidden xl:inline-flex items-center gap-1 text-[#ff007f] font-bold text-[11px] tracking-wide px-2.5 py-1 rounded-full bg-[#ff007f]/10 border border-[#ff007f]/25 shadow-2xs">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#ff007f] animate-ping"></span>
-                    Verified Dating
-                </span>
+                <span class="hidden xl:inline-block text-secondary font-headline-sm italic text-label-sm tracking-normal px-space-xs">· Atelier des Rencontres</span>
             </div>
 
             <!-- Desktop Navigation Links -->

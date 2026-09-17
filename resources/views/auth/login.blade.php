@@ -258,6 +258,9 @@
                   <span class="material-symbols-outlined text-sm text-[#8b5a2b]">bolt</span> Quick Test:
                 </span>
                 <div class="flex items-center gap-1.5 flex-wrap">
+                  <button type="button" onclick="quickFillCredentials('admin', 'admin123')" class="px-2.5 py-1 rounded-full bg-[#22140D] text-white hover:bg-black text-[11px] font-bold cursor-pointer shadow-xs transition-colors flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs text-[#E87A88]">shield_person</span> Admin
+                  </button>
                   <button type="button" onclick="quickFillCredentials('priya.mehta.cupdate@gmail.com', 'password123')" class="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-[#78350f] text-[11px] font-semibold border border-amber-200 cursor-pointer shadow-xs transition-colors">
                     Priya (Shimla)
                   </button>
