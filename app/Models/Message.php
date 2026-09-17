@@ -13,7 +13,9 @@ class Message extends Model
         'sender_id',
         'receiver_id',
         'message',
+        'body',
         'attachment',
+        'image_path',
         'is_read',
         'is_call_request',
         'call_status',
@@ -27,12 +29,23 @@ class Message extends Model
 
     protected $appends = ['attachment_url'];
 
+    public function getMessageAttribute($value)
+    {
+        return $value ?? ($this->attributes['body'] ?? '');
+    }
+
+    public function getAttachmentAttribute($value)
+    {
+        return $value ?? ($this->attributes['image_path'] ?? null);
+    }
+
     public function getAttachmentUrlAttribute()
     {
-        if (empty($this->attachment)) {
+        $path = $this->attachment ?: ($this->attributes['image_path'] ?? null);
+        if (empty($path)) {
             return null;
         }
-        return asset($this->attachment);
+        return asset($path);
     }
 
     public function sender()

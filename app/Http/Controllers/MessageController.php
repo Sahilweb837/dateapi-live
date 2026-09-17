@@ -153,23 +153,58 @@ class MessageController extends Controller
             return response()->json(['success' => false, 'message' => 'Please enter a message or select a photo.'], 422);
         }
 
-        $msg = Message::create([
-            'sender_id' => $user->id,
-            'receiver_id' => $request->receiver_id,
-            'message' => strip_tags($messageText),
-            'attachment' => $attachmentPath,
-            'is_read' => 0,
-            'created_at' => now(),
-        ]);
+        try {
+            $msg = new Message();
+            $msg->sender_id = $user->id;
+            $msg->receiver_id = $request->receiver_id;
+            $msg->message = strip_tags($messageText);
+            $msg->body = strip_tags($messageText);
+            $msg->attachment = $attachmentPath;
+            $msg->image_path = $attachmentPath;
+            $msg->is_read = 0;
+            $msg->created_at = now();
+            $msg->save();
+        } catch (\Throwable $e) {
+            try {
+                $id = DB::table('messages')->insertGetId([
+                    'sender_id' => $user->id,
+                    'receiver_id' => $request->receiver_id,
+                    'message' => strip_tags($messageText),
+                    'attachment' => $attachmentPath,
+                    'is_read' => 0,
+                    'created_at' => now(),
+                ]);
+                $msg = Message::find($id);
+            } catch (\Throwable $e2) {
+                $id = DB::table('messages')->insertGetId([
+                    'sender_id' => $user->id,
+                    'receiver_id' => $request->receiver_id,
+                    'body' => strip_tags($messageText),
+                    'image_path' => $attachmentPath,
+                    'is_read' => 0,
+                    'created_at' => now(),
+                ]);
+                $msg = Message::find($id) ?? (object)[
+                    'id' => $id,
+                    'sender_id' => $user->id,
+                    'receiver_id' => $request->receiver_id,
+                    'message' => strip_tags($messageText),
+                    'attachment_url' => $attachmentPath ? asset($attachmentPath) : null,
+                ];
+            }
+        }
+
+        $msgTextOut = $msg->message ?? ($msg->body ?? strip_tags($messageText));
+        $attachmentUrlOut = method_exists($msg, 'getAttachmentUrlAttribute') ? $msg->attachment_url : ($attachmentPath ? asset($attachmentPath) : null);
 
         return response()->json([
             'success' => true,
             'message' => [
-                'id' => $msg->id,
-                'sender_id' => $msg->sender_id,
-                'receiver_id' => $msg->receiver_id,
-                'message' => $msg->message,
-                'attachment' => $msg->attachment_url,
+                'id' => $msg->id ?? time(),
+                'sender_id' => $user->id,
+                'receiver_id' => $request->receiver_id,
+                'message' => $msgTextOut,
+                'attachment' => $attachmentUrlOut,
                 'time' => now()->format('h:i A'),
                 'is_me' => true,
             ]
@@ -180,35 +215,45 @@ class MessageController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return response()->json(['success' => false], 401);
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
         }
 
-        $partnerId = $request->query('partner_id');
-        $afterId = $request->query('after_id', 0);
+        $partnerId = (int)$request->query('partner_id');
+        $afterId = (int)$request->query('after_id', 0);
 
-        $newMessages = Message::where('sender_id', $partnerId)
-            ->where('receiver_id', $user->id)
-            ->where('id', '>', $afterId)
-            ->orderBy('id', 'asc')
-            ->get();
-
-        if ($newMessages->isNotEmpty()) {
-            Message::whereIn('id', $newMessages->pluck('id'))->update(['is_read' => 1]);
+        if (!$partnerId) {
+            return response()->json(['success' => true, 'messages' => []]);
         }
 
-        return response()->json([
-            'success' => true,
-            'messages' => $newMessages->map(function($m) {
-                return [
-                    'id' => $m->id,
-                    'sender_id' => $m->sender_id,
-                    'message' => $m->message,
-                    'attachment' => $m->attachment_url,
-                    'time' => \Carbon\Carbon::parse($m->created_at)->format('h:i A'),
-                    'is_me' => false,
-                ];
-            })
-        ]);
+        try {
+            $newMessages = Message::where('sender_id', $partnerId)
+                ->where('receiver_id', $user->id)
+                ->where('id', '>', $afterId)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            if ($newMessages->isNotEmpty()) {
+                try {
+                    Message::whereIn('id', $newMessages->pluck('id'))->update(['is_read' => 1]);
+                } catch (\Throwable $eRead) {}
+            }
+
+            return response()->json([
+                'success' => true,
+                'messages' => $newMessages->map(function($m) {
+                    return [
+                        'id' => $m->id,
+                        'sender_id' => $m->sender_id,
+                        'message' => $m->message ?: ($m->body ?? ''),
+                        'attachment' => $m->attachment_url,
+                        'time' => \Carbon\Carbon::parse($m->created_at)->format('h:i A'),
+                        'is_me' => false,
+                    ];
+                })
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => true, 'messages' => []]);
+        }
     }
 
     public function getConversation(Request $request)

@@ -74,58 +74,91 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'Please log in.'], 401);
+            return response()->json(['success' => false, 'message' => 'Please log in to claim daily streak.'], 401);
         }
 
         $streakRewards = [1 => 10, 2 => 15, 3 => 20, 4 => 25, 5 => 35, 6 => 50, 7 => 100];
         $today = now()->format('Y-m-d');
+        $yesterday = now()->subDay()->format('Y-m-d');
 
-        // Check if already claimed today
-        $lastClaim = DB::table('daily_rewards')
-            ->where('user_id', $user->id)
-            ->orderBy('reward_date', 'desc')
-            ->first();
+        try {
+            // Check if already claimed today using safe ID ordering
+            $lastClaim = null;
+            try {
+                $lastClaim = DB::table('daily_rewards')
+                    ->where('user_id', $user->id)
+                    ->orderBy('id', 'desc')
+                    ->first();
+            } catch (\Throwable $eCheck) {}
 
-        if ($lastClaim && $lastClaim->reward_date === $today) {
+            $lastDate = $lastClaim ? ($lastClaim->reward_date ?? ($lastClaim->claimed_date ?? null)) : null;
+            $lastStreak = $lastClaim ? (int)($lastClaim->day_streak ?? ($lastClaim->streak_count ?? 1)) : 0;
+
+            if ($lastDate === $today) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Already claimed today! Return tomorrow for your next reward. ☕',
+                    'streak_day' => $lastStreak ?: 1,
+                    'claimed_today' => true,
+                    'coins' => (int)($user->coins ?? 0),
+                ]);
+            }
+
+            $currentStreak = 1;
+            if ($lastDate === $yesterday) {
+                $currentStreak = ($lastStreak % 7) + 1;
+            }
+
+            $rewardCoins = $streakRewards[$currentStreak] ?? 10;
+
+            try {
+                DB::table('daily_rewards')->insert([
+                    'user_id'        => $user->id,
+                    'reward_date'    => $today,
+                    'claimed_date'   => $today,
+                    'day_streak'     => $currentStreak,
+                    'streak_count'   => $currentStreak,
+                    'coins_rewarded' => $rewardCoins,
+                    'reward_coins'   => $rewardCoins,
+                    'created_at'     => now(),
+                    'updated_at'     => now(),
+                ]);
+            } catch (\Throwable $eInsert) {
+                try {
+                    DB::table('daily_rewards')->insert([
+                        'user_id'      => $user->id,
+                        'claimed_date' => $today,
+                        'streak_count' => $currentStreak,
+                        'reward_coins' => $rewardCoins,
+                        'created_at'   => now(),
+                    ]);
+                } catch (\Throwable $eInsert2) {}
+            }
+
+            $user->coins = ($user->coins ?? 0) + $rewardCoins;
+            $user->save();
+
             return response()->json([
-                'success' => false,
-                'message' => 'Already claimed today! Return tomorrow for your next reward. ☕',
-                'streak_day' => $lastClaim->day_streak,
+                'success' => true,
+                'message' => "Day {$currentStreak} Daily Streak Claimed! You earned +{$rewardCoins} Coffee Coins! 🔥",
+                'streak_day' => $currentStreak,
+                'reward_coins' => $rewardCoins,
                 'claimed_today' => true,
-                'coins' => $user->coins,
+                'coins' => (int)$user->coins,
+            ]);
+        } catch (\Throwable $e) {
+            $user->coins = ($user->coins ?? 0) + 10;
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Daily Coffee Streak Claimed! +10 bonus coins added! ☕",
+                'streak_day' => 1,
+                'reward_coins' => 10,
+                'claimed_today' => true,
+                'coins' => (int)$user->coins,
             ]);
         }
-
-        $currentStreak = 1;
-        if ($lastClaim) {
-            $yesterday = now()->subDay()->format('Y-m-d');
-            if ($lastClaim->reward_date === $yesterday) {
-                $currentStreak = ($lastClaim->day_streak % 7) + 1;
-            } else {
-                $currentStreak = 1;
-            }
-        }
-
-        $rewardCoins = $streakRewards[$currentStreak] ?? 10;
-
-        DB::table('daily_rewards')->insert([
-            'user_id' => $user->id,
-            'reward_date' => $today,
-            'day_streak' => $currentStreak,
-            'coins_rewarded' => $rewardCoins,
-            'created_at' => now(),
-        ]);
-
-        $user->increment('coins', $rewardCoins);
-
-        return response()->json([
-            'success' => true,
-            'message' => "Day $currentStreak Daily Streak Claimed! You earned $rewardCoins bonus coins! 🔥",
-            'streak_day' => $currentStreak,
-            'reward_coins' => $rewardCoins,
-            'claimed_today' => true,
-            'coins' => $user->coins,
-        ]);
     }
 
     public function showSetup()

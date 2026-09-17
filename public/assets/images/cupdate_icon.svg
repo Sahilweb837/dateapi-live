@@ -1,66 +1,101 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
   <defs>
-    <linearGradient id="cupGradSquare" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3d2314"/>
-      <stop offset="50%" stop-color="#22140D"/>
-      <stop offset="100%" stop-color="#140a06"/>
-    </linearGradient>
-
-    <linearGradient id="roseGradSquare" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Background Disc Gradients -->
+    <radialGradient id="iconBgGrad" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#341e15"/>
+      <stop offset="60%" stop-color="#22140D"/>
+      <stop offset="100%" stop-color="#120906"/>
+    </radialGradient>
+    <linearGradient id="discRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ff94a2"/>
       <stop offset="50%" stop-color="#E87A88"/>
-      <stop offset="100%" stop-color="#d65b6c"/>
-    </linearGradient>
-
-    <linearGradient id="caramelGradSquare" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#febe9e"/>
-      <stop offset="50%" stop-color="#c8894f"/>
       <stop offset="100%" stop-color="#835339"/>
     </linearGradient>
 
-    <filter id="roseGlowSquare" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+    <!-- Cup Ceramic & Crema Gradients -->
+    <linearGradient id="cupCeramic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f5e8e2"/>
+      <stop offset="100%" stop-color="#ebdcd7"/>
+    </linearGradient>
+    <linearGradient id="cremaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#835339"/>
+      <stop offset="35%" stop-color="#d98a53"/>
+      <stop offset="70%" stop-color="#febe9e"/>
+      <stop offset="100%" stop-color="#835339"/>
+    </linearGradient>
+
+    <!-- Cupid Heart Rose Radiant Gradient -->
+    <linearGradient id="cupidHeartGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#d65b6c"/>
+      <stop offset="50%" stop-color="#E87A88"/>
+      <stop offset="100%" stop-color="#ff94a2"/>
+    </linearGradient>
+    <linearGradient id="steamRibbonGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#E87A88" stop-opacity="0.1"/>
+      <stop offset="40%" stop-color="#E87A88" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#ffb3bc" stop-opacity="1"/>
+    </linearGradient>
+
+    <!-- Glow & Soft Shadow Filters -->
+    <filter id="heartGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-
-    <filter id="softShadowSquare" x="-15%" y="-15%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#22140D" flood-opacity="0.18"/>
+    <filter id="cupShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.35"/>
     </filter>
   </defs>
 
-  <!-- Circular Outer Disc in Surface Cream -->
-  <circle cx="32" cy="32" r="30" fill="#fff8f6" stroke="#f1dfd8" stroke-width="1.5"/>
-  <circle cx="32" cy="32" r="28" fill="#fdeae3" opacity="0.4"/>
+  <!-- Circular Outer Foundation Disc (Deep Espresso & Warm Rose Border) -->
+  <circle cx="64" cy="64" r="60" fill="url(#iconBgGrad)" stroke="url(#discRingGrad)" stroke-width="2.5"/>
+  <circle cx="64" cy="64" r="56" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1" fill="none"/>
 
-  <!-- Logo Group -->
-  <g filter="url(#softShadowSquare)">
-    <!-- Saucer -->
-    <ellipse cx="32" cy="49" rx="20" ry="3.5" fill="#fdeae3" stroke="#835339" stroke-width="1.2" stroke-opacity="0.4"/>
-    <ellipse cx="32" cy="48.5" rx="14" ry="2" fill="#fff8f6" opacity="0.8"/>
+  <!-- Saucer Underplate -->
+  <ellipse cx="64" cy="99" rx="36" ry="6.5" fill="#f5e8e2" opacity="0.9" filter="url(#cupShadow)"/>
+  <ellipse cx="64" cy="98.5" rx="33" ry="5.5" fill="#ffffff"/>
+  <ellipse cx="64" cy="98" rx="24" ry="3.5" fill="#ebdcd7" opacity="0.6"/>
 
+  <!-- Artisan Ceramic Cup -->
+  <g filter="url(#cupShadow)">
     <!-- Cup Body -->
-    <path d="M 19 28 C 19 42, 25 48, 32 48 C 39 48, 45 42, 45 28 Z" fill="url(#cupGradSquare)" stroke="#835339" stroke-width="1.2"/>
+    <path d="M 38 60 C 38 85, 48 95, 64 95 C 80 95, 90 85, 90 60 Z" fill="url(#cupCeramic)" stroke="#835339" stroke-width="1.2"/>
     
-    <!-- Cup Rim & Crema -->
-    <ellipse cx="32" cy="28" rx="13" ry="4" fill="#1b0e09" stroke="url(#caramelGradSquare)" stroke-width="1.2"/>
-    <ellipse cx="32" cy="28.2" rx="10.5" ry="2.8" fill="#2d1710"/>
-    <path d="M 25 28.5 Q 32 30.5 39 28.5" fill="none" stroke="#febe9e" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
-
-    <!-- Handle -->
-    <path d="M 44 31 C 51 31, 51 41, 43 43" fill="none" stroke="#835339" stroke-width="2.2" stroke-linecap="round"/>
-
-    <!-- Rising Steam Heart (Blush Rose Glow) -->
-    <g filter="url(#roseGlowSquare)">
-      <path d="M 28 24 C 27 19, 23 17, 26 12 C 28 9, 32 8, 32 8" fill="none" stroke="#E87A88" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
-      <path d="M 36 24 C 37 19, 41 17, 38 12 C 36 9, 32 8, 32 8" fill="none" stroke="#E87A88" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
-      
-      <!-- Center Heart -->
-      <path d="M 32 11.5 C 32 11.5, 28.5 7, 25 9.5 C 22 11.6, 23.5 16, 32 21 C 40.5 16, 42 11.6, 39 9.5 C 35.5 7, 32 11.5, 32 11.5 Z" 
-            fill="url(#roseGradSquare)"/>
-      <circle cx="32" cy="14" r="1" fill="#ffffff" opacity="0.9"/>
-    </g>
+    <!-- Cup Rim Top Outer -->
+    <ellipse cx="64" cy="60" rx="26" ry="7.5" fill="#1b0e09" stroke="#ebdcd7" stroke-width="1.5"/>
+    
+    <!-- Golden Crema & Latte Heart Swirl -->
+    <ellipse cx="64" cy="60.5" rx="22" ry="5.8" fill="url(#cremaGrad)"/>
+    <path d="M 52 61 Q 64 64.5 76 61" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.9"/>
+    
+    <!-- Elegant Cup Handle -->
+    <path d="M 88 65 C 102 65, 102 83, 87 87" fill="none" stroke="url(#cupCeramic)" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M 88 65 C 102 65, 102 83, 87 87" fill="none" stroke="#835339" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
   </g>
+
+  <!-- Luminous Rising Steam & Cupid Heart Steam -->
+  <g filter="url(#heartGlow)">
+    <!-- Left Steam Swirl -->
+    <path d="M 54 53 C 51 44, 46 39, 52 30 C 56 24, 64 21, 64 21" 
+          fill="none" stroke="url(#steamRibbonGrad)" stroke-width="2.5" stroke-linecap="round"/>
+    
+    <!-- Right Steam Swirl -->
+    <path d="M 74 53 C 77 44, 82 39, 76 30 C 72 24, 64 21, 64 21" 
+          fill="none" stroke="url(#steamRibbonGrad)" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Radiant Cupid Heart Center -->
+    <path d="M 64 24 C 64 24, 57 16, 50 20 C 44 24, 47 32, 64 42 C 81 32, 84 24, 78 20 C 71 16, 64 24, 64 24 Z" 
+          fill="url(#cupidHeartGrad)"/>
+    
+    <!-- Cupid Heart Inner Gloss Sparkle -->
+    <ellipse cx="56" cy="23" rx="2.5" ry="1.5" transform="rotate(-30 56 23)" fill="#ffffff" opacity="0.8"/>
+  </g>
+
+  <!-- Subtle Micro Star Sparkles (CupDate Magic) -->
+  <path d="M 94 28 Q 96 32 100 32 Q 96 32 94 36 Q 94 32 90 32 Q 94 32 94 28 Z" fill="#ff94a2" opacity="0.85"/>
+  <path d="M 32 38 Q 33.5 41 36 41 Q 33.5 41 32 44 Q 32 41 29.5 41 Q 32 41 32 38 Z" fill="#febe9e" opacity="0.8"/>
+  <circle cx="64" cy="30" r="1.2" fill="#ffffff" opacity="0.9"/>
 </svg>

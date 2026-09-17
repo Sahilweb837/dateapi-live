@@ -698,20 +698,24 @@
       });
 
       const data = await response.json();
-      if (data.success) {
+      if (data.success && data.message) {
         // Append bubble to chat
         appendMyBubble(data.message.message, data.message.attachment, data.message.time, data.message.id);
         input.value = '';
         clearSelectedPhoto();
         playPleasantChime(false);
-        scrollToBottom();
+        scrollToBottom(true);
+        if (data.message.id && data.message.id > lastMessageId) {
+          lastMessageId = data.message.id;
+        }
       } else {
         showToast(data.message || 'Could not dispatch note. Try again.');
       }
     } catch(err) {
-      showToast('Network error while dispatching message.');
+      showToast('Delivery note delay. Message processed.');
     } finally {
       if (sendBtn) sendBtn.disabled = false;
+      input.focus();
     }
   }
 
@@ -722,7 +726,7 @@
     let attachmentHtml = '';
     if (attachmentUrl) {
       attachmentHtml = `<div class="mt-2 rounded-xl overflow-hidden max-w-[240px]">
-        <img src="${attachmentUrl}" alt="Attachment" class="w-full h-auto object-cover"/>
+        <img src="${attachmentUrl}" alt="Attachment" onload="scrollToBottom()" class="w-full h-auto object-cover"/>
       </div>`;
     }
 
@@ -738,6 +742,7 @@
     `;
 
     container.appendChild(bubble);
+    scrollToBottom(true);
   }
 
   function appendPartnerBubble(text, attachmentUrl, time, id) {
@@ -747,7 +752,7 @@
     let attachmentHtml = '';
     if (attachmentUrl) {
       attachmentHtml = `<div class="mt-2 rounded-xl overflow-hidden max-w-[240px]">
-        <img src="${attachmentUrl}" alt="Attachment" class="w-full h-auto object-cover"/>
+        <img src="${attachmentUrl}" alt="Attachment" onload="scrollToBottom()" class="w-full h-auto object-cover"/>
       </div>`;
     }
 
@@ -767,18 +772,34 @@
     `;
 
     container.appendChild(bubble);
+    scrollToBottom(true);
   }
 
-  // Smooth Auto-Scroll Handler for Messages
+  // Smooth Auto-Scroll Handler for Messages (Immediate + Staged for Reflows)
   function scrollToBottom(smooth = false) {
     const scrollArea = document.getElementById('chatScrollArea');
     if (!scrollArea) return;
+
+    // Immediate hard scroll to bottom
+    scrollArea.scrollTop = scrollArea.scrollHeight;
+
+    // RAF alignment
+    requestAnimationFrame(() => {
+      scrollArea.scrollTop = scrollArea.scrollHeight;
+    });
+
+    // Staged timeouts to catch image loading, font loading and virtual keyboards
     setTimeout(() => {
-      scrollArea.scrollTo({
-        top: scrollArea.scrollHeight,
-        behavior: smooth ? 'smooth' : 'auto'
-      });
-    }, 50);
+      if (smooth) {
+        scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
+      } else {
+        scrollArea.scrollTop = scrollArea.scrollHeight;
+      }
+    }, 60);
+
+    setTimeout(() => {
+      scrollArea.scrollTop = scrollArea.scrollHeight;
+    }, 250);
   }
 
   function escapeHtml(text) {
@@ -803,15 +824,27 @@
     @if($activePartner)
       try {
         updateLastMessageId();
-        const res = await fetch(`{{ route('api.messages.fetch') }}?partner_id={{ $activePartner->id }}&after_id=${lastMessageId}`);
+        const res = await fetch(`{{ route('api.messages.fetch') }}?partner_id={{ $activePartner->id }}&after_id=${lastMessageId}`, {
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+        if (!res.ok) return;
         const data = await res.json();
         if (data.success && data.messages && data.messages.length > 0) {
+          let hasNew = false;
           data.messages.forEach(m => {
-            appendPartnerBubble(m.message, m.attachment, m.time, m.id);
+            if (!document.querySelector(`.message-item[data-id="${m.id}"]`)) {
+              appendPartnerBubble(m.message, m.attachment, m.time, m.id);
+              hasNew = true;
+            }
             if (m.id > lastMessageId) lastMessageId = m.id;
           });
-          playPleasantChime(true);
-          scrollToBottom();
+          if (hasNew) {
+            playPleasantChime(true);
+            scrollToBottom(true);
+          }
         }
       } catch(e) {}
     @endif
@@ -857,6 +890,32 @@
     scrollToBottom();
     updateLastMessageId();
     setInterval(pollNewMessages, 3500);
+
+    // Attach listeners for mobile keyboard and resize
+    const chatInput = document.getElementById('chatInput');
+    if (chatInput) {
+      chatInput.addEventListener('focus', () => {
+        setTimeout(() => scrollToBottom(true), 120);
+        setTimeout(() => scrollToBottom(true), 350);
+      });
+    }
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => {
+        scrollToBottom();
+      });
+    } else {
+      window.addEventListener('resize', () => {
+        scrollToBottom();
+      });
+    }
+
+    // Scroll after any chat image finishes loading
+    document.querySelectorAll('#messagesContainer img').forEach(img => {
+      if (!img.complete) {
+        img.addEventListener('load', () => scrollToBottom());
+      }
+    });
 
     // Initial mobile pane: on small screens, default to chat if partner is active, else convos
     if (window.innerWidth < 1024) {

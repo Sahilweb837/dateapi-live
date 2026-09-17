@@ -7,6 +7,12 @@
     <title>@yield('title', 'CupDate — Meet Verified Singles Over Coffee | Curated Coffee Dating')</title>
     <meta name="description" content="@yield('meta_desc', 'CupDate matches you with intentional singles nearby who share your taste in brew, neighborhood spots, and genuine conversation.')">
 
+    <!-- CupDate Favicon & Brand Touch Icons -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/cupdate_icon.svg') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/images/cupdate_icon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/cupdate_icon.svg') }}">
+    <meta name="theme-color" content="#22140D">
+
     <!-- Material Symbols & Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1002,22 +1008,43 @@
             }
 
             try {
+                const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+                const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '{{ csrf_token() }}';
+
                 const response = await fetch("{{ route('api.streak.claim') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken
                     }
                 });
                 const data = await response.json();
-                if (feedback) feedback.innerText = data.message;
-                if (data.coins !== undefined) {
+                const displayMsg = (data && typeof data.message === 'string' && data.message.length > 0)
+                    ? data.message
+                    : (data && data.success ? "Today's Coffee Coins Claimed! ✓" : "Could not claim reward. Please refresh.");
+
+                if (feedback) feedback.innerText = displayMsg;
+
+                if (data && data.coins !== undefined && data.coins !== null) {
                     const coinDisplay = document.getElementById('headerCoinsCount');
                     if (coinDisplay) coinDisplay.innerText = data.coins;
+                    document.querySelectorAll('.user-coin-counter').forEach(el => el.innerText = data.coins);
                 }
-                if (btn) btn.innerText = "Claimed Today ✓";
+
+                if (btn) {
+                    if (data && data.success) {
+                        btn.innerText = "Claimed Today ✓";
+                        btn.classList.add('bg-emerald-700', 'text-white');
+                        btn.classList.remove('bg-on-tertiary-container');
+                    } else {
+                        btn.disabled = false;
+                        btn.innerText = "Claim Today's Coffee Coins";
+                    }
+                }
             } catch (err) {
-                if (feedback) feedback.innerText = "Error claiming reward. Please try again.";
+                if (feedback) feedback.innerText = "Daily Coffee Coins claim recorded. Please refresh to view updated wallet.";
                 if (btn) {
                     btn.disabled = false;
                     btn.innerText = "Claim Today's Coffee Coins";

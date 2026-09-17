@@ -159,28 +159,51 @@ class AppServiceProvider extends ServiceProvider
                 updated_at TEXT
             )");
 
-            // Messages table
+            // Messages table (supports both message/body and attachment/image_path)
             $db->exec("CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 sender_id INTEGER,
                 receiver_id INTEGER,
+                message TEXT,
                 body TEXT,
+                attachment TEXT,
                 image_path TEXT,
                 is_read INTEGER DEFAULT 0,
+                is_call_request INTEGER DEFAULT 0,
+                call_status TEXT,
                 created_at TEXT,
                 updated_at TEXT
             )");
 
-            // Daily rewards table
+            // Ensure columns exist if table was previously created
+            try { $db->exec("ALTER TABLE messages ADD COLUMN message TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE messages ADD COLUMN attachment TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE messages ADD COLUMN body TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE messages ADD COLUMN image_path TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE messages ADD COLUMN is_call_request INTEGER DEFAULT 0"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE messages ADD COLUMN call_status TEXT"); } catch (\Throwable $e) {}
+
+            // Daily rewards table (supports both reward_date/claimed_date and day_streak/streak_count)
             $db->exec("CREATE TABLE IF NOT EXISTS daily_rewards (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
+                reward_date TEXT,
                 claimed_date TEXT,
-                reward_coins INTEGER DEFAULT 10,
+                day_streak INTEGER DEFAULT 1,
                 streak_count INTEGER DEFAULT 1,
+                coins_rewarded INTEGER DEFAULT 10,
+                reward_coins INTEGER DEFAULT 10,
                 created_at TEXT,
                 updated_at TEXT
             )");
+
+            // Ensure columns exist if table was previously created
+            try { $db->exec("ALTER TABLE daily_rewards ADD COLUMN reward_date TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE daily_rewards ADD COLUMN claimed_date TEXT"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE daily_rewards ADD COLUMN day_streak INTEGER DEFAULT 1"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE daily_rewards ADD COLUMN streak_count INTEGER DEFAULT 1"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE daily_rewards ADD COLUMN coins_rewarded INTEGER DEFAULT 10"); } catch (\Throwable $e) {}
+            try { $db->exec("ALTER TABLE daily_rewards ADD COLUMN reward_coins INTEGER DEFAULT 10"); } catch (\Throwable $e) {}
 
             // Sessions table
             $db->exec("CREATE TABLE IF NOT EXISTS sessions (
