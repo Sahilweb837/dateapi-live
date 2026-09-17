@@ -36,28 +36,29 @@
             </div>
         @endif
 
-        <!-- Quick Credentials Autofill Card -->
+        <!-- Secure One-Click Admin Access (Authorized Admins Only) -->
         <div class="mb-5 p-3 rounded-2xl bg-[#160a08] border border-amber-500/30 text-xs flex items-center justify-between">
-            <div class="text-[11px] text-stone-300">
-                <span class="text-amber-400 font-bold block">Preset Admin Credentials:</span>
-                <span>ID: <code class="text-white font-bold">admin</code> • Pass: <code class="text-white font-bold">admin123</code></span>
+            <div class="text-[11px] text-stone-300 flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-400 text-sm">shield_person</span>
+                <span>Authorized Admin Console Login</span>
             </div>
-            <button type="button" onclick="autofillAdmin()" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[10px] font-bold cursor-pointer transition">
-                Autofill
+            <button type="button" onclick="autofillAdmin()" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[10px] font-bold cursor-pointer transition flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">key</span>
+                <span>Fill ID</span>
             </button>
         </div>
 
         <!-- Admin Login Form -->
-        <form action="{{ route('admin.login') }}" method="POST" class="flex flex-col gap-4">
+        <form action="{{ route('admin.login') }}" method="POST" class="flex flex-col gap-4" autocomplete="off">
             @csrf
 
             <div>
                 <label class="block text-xs font-bold text-stone-300 mb-1" for="admin-email">Admin ID / Email</label>
                 <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3 text-stone-500 text-lg">admin_panel_settings</span>
-                    <input type="text" name="email" id="admin-email" value="{{ old('email', 'admin') }}" required
+                    <input type="text" name="email" id="admin-email" value="{{ old('email') }}" required
                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#160a08] border border-stone-700 focus:border-[#ff007f] focus:outline-none text-white text-xs font-semibold placeholder:text-stone-600 transition"
-                           placeholder="admin or admin@cupdate.in">
+                           placeholder="Enter Admin ID">
                 </div>
             </div>
 
@@ -65,7 +66,7 @@
                 <label class="block text-xs font-bold text-stone-300 mb-1" for="admin-password">Password</label>
                 <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3 text-stone-500 text-lg">key</span>
-                    <input type="password" name="password" id="admin-password" value="admin123" required
+                    <input type="password" name="password" id="admin-password" value="" required
                            class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#160a08] border border-stone-700 focus:border-[#ff007f] focus:outline-none text-white text-xs font-semibold placeholder:text-stone-600 transition"
                            placeholder="••••••••">
                     <button type="button" onclick="toggleAdminPass()" class="absolute right-3 text-stone-400 hover:text-white text-sm">
@@ -90,8 +91,10 @@
 
 <script>
 function autofillAdmin() {
-    document.getElementById('admin-email').value = 'admin';
-    document.getElementById('admin-password').value = 'admin123';
+    const emailField = document.getElementById('admin-email');
+    if (emailField) emailField.value = 'admin';
+    const passField = document.getElementById('admin-password');
+    if (passField) passField.focus();
 }
 function toggleAdminPass() {
     const input = document.getElementById('admin-password');
