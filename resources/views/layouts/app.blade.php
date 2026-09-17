@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -152,11 +152,37 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-      @layer base {
-        html, body { margin: 0; padding: 0; overflow-x: hidden; width: 100%; max-width: 100vw; -webkit-overflow-scrolling: touch; }
-        body { overscroll-behavior: none; }
+      /* Natural, fluid smooth scrolling across all browsers & devices */
+      html {
+        scroll-behavior: smooth;
+        overflow-x: clip;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
-      ::-webkit-scrollbar { display: none; }
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: clip;
+        overflow-y: visible;
+        min-height: 100vh;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Luxury custom scrollbar for seamless flowing scroll */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fff8f6;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d2c3bd;
+        border-radius: 999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #835339;
+      }
 
       /* Smooth Scroll-Driven Reveal Styles */
       .scroll-reveal {
@@ -268,7 +294,7 @@
     </style>
     @yield('extra_css')
 </head>
-<body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col pb-24 md:pb-0 overflow-x-hidden w-full">
+<body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col pb-24 md:pb-0 w-full">
 
     @php
         $headerUnreadCount = 0;
