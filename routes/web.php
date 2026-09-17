@@ -93,6 +93,8 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Admin Command Center & Real-time Visitor Analytics
+Route::match(['get', 'post'], '/admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 Route::post('/admin/user/verify/{id}', [AdminController::class, 'toggleVerify'])->name('admin.user.verify');
 Route::post('/admin/user/coins/{id}', [AdminController::class, 'addCoins'])->name('admin.user.coins');

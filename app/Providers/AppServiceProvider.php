@@ -88,6 +88,7 @@ class AppServiceProvider extends ServiceProvider
                 mbti TEXT,
                 coffee_style TEXT,
                 is_verified INTEGER DEFAULT 1,
+                is_admin INTEGER DEFAULT 0,
                 coins INTEGER DEFAULT 100,
                 xp INTEGER DEFAULT 10,
                 status TEXT DEFAULT 'active',
@@ -215,17 +216,21 @@ class AppServiceProvider extends ServiceProvider
             $stmtUsers = $db->query("SELECT COUNT(*) FROM users");
             if ($stmtUsers && $stmtUsers->fetchColumn() == 0) {
                 $pwHash = Hash::make('password123');
+                $adminPwHash = Hash::make('admin123');
                 $now = date('Y-m-d H:i:s');
 
-                $insUser = $db->prepare("INSERT INTO users (member_code, email, password, full_name, dob, gender, bio, country, avatar, is_verified, coins, xp, status, created_at, last_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $insUser = $db->prepare("INSERT INTO users (member_code, email, password, full_name, dob, gender, bio, country, avatar, is_verified, is_admin, coins, xp, status, created_at, last_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 
-                $insUser->execute(['CD-10001', 'priya.mehta.cupdate@gmail.com', $pwHash, 'Priya Mehta', '1999-05-14', 'female', 'Bookworm & pour-over addict. Let us explore hidden roasteries in Shimla! ☕📚', 'Shimla, Himachal Pradesh', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 1, 150, 80, 'active', $now, $now]);
+                // Super Admin account (admin / admin123)
+                $insUser->execute(['CD-00001', 'admin@cupdate.in', $adminPwHash, 'CupDate Administrator', '1995-01-01', 'other', 'System Administrator & Moderation Lead.', 'Kangra / Delhi, India', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop', 1, 1, 9999, 9999, 'active', $now, $now]);
+
+                $insUser->execute(['CD-10001', 'priya.mehta.cupdate@gmail.com', $pwHash, 'Priya Mehta', '1999-05-14', 'female', 'Bookworm & pour-over addict. Let us explore hidden roasteries in Shimla! ☕📚', 'Shimla, Himachal Pradesh', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 1, 0, 150, 80, 'active', $now, $now]);
                 
-                $insUser->execute(['CD-10002', 'arjun.kapoor.cupdate@gmail.com', $pwHash, 'Arjun Kapoor', '1997-11-20', 'male', 'Architect by day, espresso aficionado by night. Always looking for cozy cafes. ☕', 'Pune, Maharashtra', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 1, 100, 45, 'active', $now, $now]);
+                $insUser->execute(['CD-10002', 'arjun.kapoor.cupdate@gmail.com', $pwHash, 'Arjun Kapoor', '1997-11-20', 'male', 'Architect by day, espresso aficionado by night. Always looking for cozy cafes. ☕', 'Pune, Maharashtra', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 1, 0, 100, 45, 'active', $now, $now]);
 
-                $insUser->execute(['CD-10003', 'tanya.sharma.cupdate@gmail.com', $pwHash, 'Tanya Sharma', '1998-08-22', 'female', 'Born in Shimla, lover of cedar trails and hot cappuccinos at Cafe Simla Times. ☕🏔️', 'Shimla, Himachal Pradesh', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 1, 200, 110, 'active', $now, $now]);
+                $insUser->execute(['CD-10003', 'tanya.sharma.cupdate@gmail.com', $pwHash, 'Tanya Sharma', '1998-08-22', 'female', 'Born in Shimla, lover of cedar trails and hot cappuccinos at Cafe Simla Times. ☕🏔️', 'Shimla, Himachal Pradesh', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 1, 0, 200, 110, 'active', $now, $now]);
 
-                $insUser->execute(['CD-10004', 'vikram.thakur.cupdate@gmail.com', $pwHash, 'Vikram Thakur', '1996-03-12', 'male', 'Old Manali local, snowboarder & French roast barista. Let us grab a table at Cafe 1947 by the river. ☕🏂', 'Manali, Himachal Pradesh', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face', 1, 120, 60, 'active', $now, $now]);
+                $insUser->execute(['CD-10004', 'vikram.thakur.cupdate@gmail.com', $pwHash, 'Vikram Thakur', '1996-03-12', 'male', 'Old Manali local, snowboarder & French roast barista. Let us grab a table at Cafe 1947 by the river. ☕🏂', 'Manali, Himachal Pradesh', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face', 1, 0, 120, 60, 'active', $now, $now]);
             }
 
             // Seed date places if empty

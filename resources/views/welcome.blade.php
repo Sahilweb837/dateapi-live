@@ -424,6 +424,195 @@
         </section>
     @endif
 
+    <!-- High-SEO Viral Content Rich FAQ Section -->
+    <section class="w-full py-space-xl bg-surface-container-low/60 border-t border-b border-[#ebdcd7]" id="homeFaqSection">
+        <div class="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white border border-[#ff007f]/30 text-[#ff007f] mb-3 shadow-2xs">
+                    <span class="material-symbols-outlined text-sm">help</span>
+                    <span>Frequently Asked Questions &amp; Knowledge Base</span>
+                </span>
+                <h2 class="font-headline-lg text-2xl sm:text-3xl md:text-4xl text-on-surface font-black tracking-tight">
+                    Everything You Need to Know About <span class="neon-pink-text">CupDate.in</span>
+                </h2>
+                <p class="font-body-md text-sm text-on-surface-variant mt-2 leading-relaxed">
+                    India's leading intentional coffee matchmaking platform. Learn how verified selfie profiles, landmark partner cafés, and respectful dates work across Himachal Pradesh and major metro hubs.
+                </p>
+            </div>
+
+            <!-- FAQ Accordion List -->
+            <div class="space-y-3.5" id="homeFaqAccordion">
+                
+                <!-- Q1 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            What makes CupDate.in different from Tinder, Bumble, or matrimonial sites?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        CupDate replaces endless, superficial swiping fatigue with intentional 45-minute coffee dates. Every single profile is 100% selfie-verified, eliminating bots, catfish, and ghosting. Instead of awkward dinner dates or endless pen-palling, CupDate partners with hand-picked specialty roasteries where you can meet safely in a relaxed, public environment.
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            Which cities in Himachal Pradesh and India are live on CupDate?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        CupDate is hyper-localized across Himachal Pradesh including <strong>Kangra, Dharamshala, McLeodGanj, Shimla, Solan, Manali, Mandi, Kullu, Palampur, and Hamirpur</strong>. We also support active metro chapters in <strong>Chandigarh Tri-City, Delhi NCR, Pune, Mumbai, Bangalore, Jaipur, and Goa</strong> with over 850+ partner cafés.
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            How does 100% selfie verification protect against catfishing and fake accounts?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        During signup, members submit a live 3D selfie test that checks for liveness and facial landmarks. Our verification engine ensures the photos in the user's gallery match the person holding the device. Only verified accounts receive the official CupDate Blue Checkmark and can initiate chats or send date invites.
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            Why are 45-minute coffee dates better than traditional dinner dates?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        Traditional dinner dates cost thousands of rupees and lock you into a 2-hour formal meal even if there is zero chemistry. A 45-minute coffee date is casual, daytime-safe, highly affordable, and allows a graceful exit if you don't click — or can easily be extended to an afternoon walk if sparks fly.
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            How is women's safety and location privacy handled on CupDate?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        We comply strictly with India's Digital Personal Data Protection (DPDP) Act 2023. We utilize <strong>Ghost Location Fuzzing</strong>, which shifts GPS coordinates by 1.5 to 2.5 kilometers so your precise home address or workplace is never exposed. Furthermore, our built-in chat allows full communication and image exchange without ever sharing your phone number or WhatsApp.
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            How do I get 15% to 20% off at partner cafés during my date?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        Simply explore our <a href="{{ route('dates') }}" class="text-[#ff007f] font-bold underline">Partner Cafés</a> directory, select a venue in your city, and invite your match. When requesting the bill, flash your verified CupDate digital Member Badge (#CD-XXXXX) from your mobile app to enjoy exclusive discounts, free drink upgrades, or priority quiet table reservations.
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            Can I use CupDate for serious matrimony, rishta, and long-term relationships?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        Yes! CupDate hosts a dedicated <a href="{{ route('rishta') }}" class="text-[#ff007f] font-bold underline">Traditional Rishta &amp; Matrimony Hub</a> specifically for singles and families who value values-aligned, intentional conversations over endless biodata exchanges. Over 74% of our coffee daters progress to a second date!
+                    </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="bg-white rounded-2xl border border-outline-variant/40 p-4 sm:p-5 shadow-xs transition-all duration-200">
+                    <button type="button" onclick="toggleHomeFaq(this)" class="w-full flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none">
+                        <span class="font-headline-sm text-sm sm:text-base font-bold text-on-surface">
+                            Is CupDate free to join and start dating?
+                        </span>
+                        <span class="material-symbols-outlined text-secondary text-xl transition-transform duration-200 shrink-0 faq-arrow">expand_more</span>
+                    </button>
+                    <div class="faq-ans hidden mt-3 pt-3 border-t border-gray-100 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                        Yes! CupDate is 100% free to join, verify, browse verified singles in your city, and exchange messages. Optional VIP perks and profile boosts can be redeemed with daily coffee bean streak coins earned by logging in daily.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="{{ route('faq') }}" class="inline-flex items-center gap-1 text-xs font-bold text-secondary hover:text-[#ff007f] transition">
+                    <span>View all 25+ Dating &amp; Safety Questions in Knowledge Base</span>
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schema.org FAQPage & DatingApp JSON-LD for Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://cupdate.in/#website",
+          "url": "https://cupdate.in",
+          "name": "CupDate",
+          "description": "India's 100% Selfie-Verified Coffee Dating and Intentional Matchmaking Platform",
+          "inLanguage": "en-IN"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://cupdate.in/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What makes CupDate.in different from other dating apps?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CupDate replaces endless swiping with intentional 45-minute coffee dates. All profiles are 100% selfie-verified, and members meet at vetted partner cafes across Himachal Pradesh and India."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which cities in Himachal Pradesh are live on CupDate?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Kangra, Dharamshala, McLeodGanj, Shimla, Solan, Manali, Mandi, Kullu, Palampur, and Hamirpur, plus Chandigarh, Delhi, Pune, and Mumbai."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does CupDate protect women's privacy and safety?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CupDate complies with India's DPDP Act 2023, employs Ghost Location Fuzzing (1.5-2km location shift), and enables in-app messaging without sharing personal phone numbers."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is CupDate free to join?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, CupDate is 100% free to join, selfie-verify, browse verified singles, and chat."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
     <!-- Bottom CTA Conversion Banner -->
     <section class="w-full py-space-xl mb-space-lg">
         <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-margin-desktop">
@@ -749,6 +938,24 @@
                 alert("Welcome to CupDate. Your invitation is brewing! We will reach out shortly.");
                 document.getElementById('inviteContactInput').value = '';
             }
+        }
+    }
+
+    // 5. Home FAQ Accordion Toggle
+    function toggleHomeFaq(btn) {
+        const card = btn.closest('div');
+        const ans = card.querySelector('.faq-ans');
+        const arrow = btn.querySelector('.faq-arrow');
+        
+        const isHidden = ans.classList.contains('hidden');
+        
+        // Close all others for single-open accordion feel
+        document.querySelectorAll('#homeFaqAccordion .faq-ans').forEach(a => a.classList.add('hidden'));
+        document.querySelectorAll('#homeFaqAccordion .faq-arrow').forEach(arr => arr.classList.remove('rotate-180'));
+        
+        if (isHidden) {
+            ans.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
         }
     }
 </script>

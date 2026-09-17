@@ -83,7 +83,101 @@
                 To safeguard members against stalking, CupDate never shares exact GPS coordinates. Your location is fuzz-shifted algorithmically by 1.5 to 2 kilometers, showing that you are in the same general neighborhood (e.g. Koregaon Park, Pune or The Mall, Shimla) without ever pinpointing your precise home address.
             </div>
         </div>
+
+        <!-- Q6 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    Is CupDate active in Himachal Pradesh (Kangra, Shimla, Dharamshala, Solan)?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                Yes! Himachal Pradesh is one of CupDate's primary founding hubs. We have active local chapters in Kangra, Dharamshala, McLeodGanj, Shimla, Solan, Manali, Mandi, Kullu, Palampur, and Hamirpur. Singles across HP can discover local verified daters and meet at famous hillside cafes like Wake &amp; Bake, Cafe Simla Times, Illiterati Books &amp; Cafe, and Cafe 1947.
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    How does the live 1-on-1 random coffee video lounge work?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                Our WebRTC Video Lounge connects you instantly to verified online daters for quick 1-on-1 video chats. You can use your camera, chat face-to-face, test your conversational chemistry, and send a 45-minute coffee date proposal in real time with a single click.
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    Can I use CupDate for serious matrimony and traditional rishta dating?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                Absolutely. CupDate features a dedicated Traditional Rishta &amp; Matrimony portal for singles seeking long-term intentional partnerships without awkward, high-pressure matrimonial meetings. A relaxed 45-minute coffee chat provides the perfect balance of modern respect and deep values alignment.
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+            <div class="flex items-center justify-between">
+                <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                    How do daily login streaks and coffee bean coins work?
+                </h3>
+                <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+            </div>
+            <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                Every consecutive day you log into CupDate, you earn bonus coffee bean coins (Day 1: 10 coins, up to Day 7: 100 coins). You can redeem your coins to activate 24-hour Profile Boosts (making your card appear 10x more frequently in Discover deck) and unlock priority concierge recommendations.
+            </div>
+        </div>
     </div>
+
+    <!-- Schema.org FAQPage JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does CupDate's selfie verification work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CupDate prompts you to capture a 3-second live selfie with head movement to confirm you are the true account owner. Verified users receive an official Blue Verified Badge."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why are 45-minute coffee dates better than dinner dates?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A daytime coffee date in a vibrant public cafe is casual, safe, affordable, and easily extended if you both feel an authentic spark."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is CupDate active in Himachal Pradesh?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, CupDate is active in Kangra, Dharamshala, McLeodGanj, Shimla, Solan, Manali, Mandi, Kullu, Palampur, and Hamirpur."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Ghost Location Fuzzing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CupDate never shares exact GPS coordinates; your location is fuzz-shifted by 1.5 to 2 kilometers to prevent stalking."
+          }
+        }
+      ]
+    }
+    </script>
 
     <!-- Still have questions? -->
     <div class="bg-[#fbf8f5] border border-[#e5d5ca] rounded-3xl p-8 text-center shadow-none">

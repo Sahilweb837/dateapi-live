@@ -200,7 +200,7 @@
       <!-- ========================================== -->
       <!-- PANE 2: ACTIVE CHAT THREAD (Cols 5-8 / 6) -->
       <!-- ========================================== -->
-      <section id="paneChat" class="pane-chat col-span-12 lg:col-span-8 xl:col-span-6 flex flex-col bg-surface-container-lowest rounded-xl h-[740px] border border-outline-variant/20 shadow-sm relative">
+      <section id="paneChat" class="pane-chat col-span-12 lg:col-span-8 xl:col-span-6 flex flex-col bg-surface-container-lowest rounded-xl h-[calc(100vh-140px)] sm:h-[740px] max-h-[85vh] border border-outline-variant/20 shadow-sm relative overflow-hidden">
         @if($activePartner)
           <!-- Chat Header -->
           <div class="px-space-md py-space-sm bg-surface-container-low/60 rounded-t-xl flex items-center justify-between border-b border-outline-variant/30">
@@ -241,7 +241,7 @@
           </div>
 
           <!-- Chat Body Scroll Area -->
-          <div class="flex-1 overflow-y-auto px- space-md py-space-md space-y-3 bg-gradient-to-b from-surface/20 to-transparent chat-scrollbar" id="chatScrollArea">
+          <div class="flex-1 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 bg-gradient-to-b from-surface/20 to-transparent chat-scrollbar scroll-smooth" id="chatScrollArea">
             
             <!-- Date Separator -->
             <div class="flex items-center justify-center my-2">
@@ -769,6 +769,18 @@
     container.appendChild(bubble);
   }
 
+  // Smooth Auto-Scroll Handler for Messages
+  function scrollToBottom(smooth = false) {
+    const scrollArea = document.getElementById('chatScrollArea');
+    if (!scrollArea) return;
+    setTimeout(() => {
+      scrollArea.scrollTo({
+        top: scrollArea.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto'
+      });
+    }, 50);
+  }
+
   function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
@@ -854,6 +866,10 @@
         switchMobilePane('convos');
       @endif
     }
+  });
+
+  window.addEventListener('load', () => {
+    scrollToBottom();
   });
 </script>
 @endsection

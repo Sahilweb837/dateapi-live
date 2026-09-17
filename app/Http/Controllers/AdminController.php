@@ -8,6 +8,8 @@ use App\Models\Blog;
 use App\Models\DatePlace;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -16,6 +18,10 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            return view('admin.login');
+        }
+
         $searchIp = $request->query('ip');
 
         // Analytics Metrics
@@ -135,4 +141,78 @@ class AdminController extends Controller
             return back()->with('error', 'Could not clear analytics: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Handle Admin Authentication (Supports ID: admin & Password: admin123)
+     */
+     public function login(Request $request)
+     {
+         if ($request->isMethod('get')) {
+             if (Auth::check() && Auth::user()->is_admin) {
+                 return redirect()->route('admin.dashboard');
+             }
+             return view('admin.login');
+         }
+ 
+         $input = strtolower(trim($request->input('email', $request->input('username', ''))));
+         $password = $request->input('password', '');
+ 
+         $isAdminEmail = in_array($input, ['admin', 'admin@cupdate.in', 'administrator']);
+         $isAdminPassword = in_array($password, ['admin123', 'Admin123', 'admin@123', 'Admin@123', 'admoin123', 'admoin 123']);
+ 
+         if ($isAdminEmail && $isAdminPassword) {
+             try {
+                 $admin = User::where('email', 'admin@cupdate.in')->orWhere('email', 'admin')->orWhere('is_admin', 1)->first();
+                 if (!$admin) {
+                     $admin = User::create([
+                         'member_code'   => 'CD-00001',
+                         'full_name'     => 'CupDate Administrator',
+                         'email'         => 'admin@cupdate.in',
+                         'password'      => Hash::make('admin123'),
+                         'dob'           => '1995-01-01',
+                         'gender'        => 'other',
+                         'preference'    => 'everyone',
+                         'interested_in' => 'everyone',
+                         'bio'           => 'CupDate System Administrator & Moderation Lead.',
+                         'country'       => 'Kangra / Delhi, India',
+                         'coins'         => 9999,
+                         'xp'            => 9999,
+                         'status'        => 'active',
+                         'is_verified'   => 1,
+                         'is_admin'      => 1,
+                         'created_at'    => now(),
+                         'last_active'   => now(),
+                     ]);
+                 } else {
+                     $admin->password = Hash::make('admin123');
+                     $admin->is_admin = 1;
+                     $admin->is_verified = 1;
+                     $admin->save();
+                 }
+ 
+                 Auth::login($admin, true);
+                 return redirect()->route('admin.dashboard')->with('success', 'Logged into Admin Command Center successfully.');
+             } catch (\Throwable $e) {
+                 // DB fallback
+             }
+         }
+ 
+         // Standard check
+         $user = User::where('email', $input)->first();
+         if ($user && Hash::check($password, $user->password) && $user->is_admin) {
+             Auth::login($user, true);
+             return redirect()->route('admin.dashboard');
+         }
+ 
+         return back()->withErrors(['email' => 'Invalid Admin credentials. Use ID: admin & Password: admin123'])->withInput();
+     }
+ 
+     /**
+      * Admin Logout
+      */
+     public function logout()
+     {
+         Auth::logout();
+         return redirect()->route('admin.login')->with('success', 'Admin session terminated.');
+     }
 }
