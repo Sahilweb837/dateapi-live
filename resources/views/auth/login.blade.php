@@ -262,6 +262,21 @@
                 </div>
               </div>
 
+              <!-- Fast Quick-Fill Test Credentials -->
+              <div class="p-2.5 rounded-2xl bg-[#fdf6f0] border border-[#ecd9cc] flex items-center justify-between text-xs">
+                <span class="text-[#78350f] font-bold flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm text-[#8b5a2b]">bolt</span> Quick Test:
+                </span>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <button type="button" onclick="quickFillCredentials('priya.mehta.cupdate@gmail.com', 'password123')" class="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-[#78350f] text-[11px] font-semibold border border-amber-200 cursor-pointer shadow-xs transition-colors">
+                    Priya (Shimla)
+                  </button>
+                  <button type="button" onclick="quickFillCredentials('arjun.kapoor.cupdate@gmail.com', 'password123')" class="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-[#78350f] text-[11px] font-semibold border border-amber-200 cursor-pointer shadow-xs transition-colors">
+                    Arjun (Pune)
+                  </button>
+                </div>
+              </div>
+
               <!-- Remember Device -->
               <div class="flex items-center justify-between pt-space-xs">
                 <label class="flex items-center gap-space-sm cursor-pointer select-none">
@@ -413,8 +428,12 @@
                   </div>
                   <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3.5 text-secondary text-lg">lock</span>
-                    <input class="w-full pl-11 pr-4 py-space-sm bg-surface-container-high rounded-full font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/40 transition-all" 
+                    <input class="w-full pl-11 pr-12 py-space-sm bg-surface-container-high rounded-full font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/40 transition-all" 
                            id="reg-password" name="password" required minlength="6" placeholder="Choose a safe password" type="password"/>
+                    <button class="absolute right-3.5 text-on-surface-variant hover:text-on-surface p-1 flex items-center cursor-pointer" 
+                            onclick="togglePasswordVisibility('reg-password', this)" type="button">
+                      <span class="material-symbols-outlined text-base">visibility</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -627,6 +646,15 @@
       input.type = 'password';
       icon.textContent = 'visibility';
     }
+  }
+
+  // Quick credentials filler for testing
+  function quickFillCredentials(email, pass) {
+    const emailInput = document.getElementById('signin-email');
+    const passInput = document.getElementById('signin-password');
+    if (emailInput) emailInput.value = email;
+    if (passInput) passInput.value = pass;
+    simulateToast('Credentials filled: ' + email);
   }
 
   // Toast Notification Simulation

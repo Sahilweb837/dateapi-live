@@ -1048,6 +1048,16 @@
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
             }
+            cancelGoogleSpinner();
+        }
+
+        function cancelGoogleSpinner() {
+            const spinner = document.getElementById('googleAuthSpinner');
+            const content = document.getElementById('googleModalBody');
+            if (spinner) spinner.classList.add('hidden');
+            if (content) {
+                content.classList.remove('opacity-30', 'pointer-events-none');
+            }
         }
 
         function openGooglePopupWindow() {
@@ -1157,10 +1167,20 @@
                 <p class="text-xs text-gray-500 mt-0.5">Choose an account to continue to <strong class="text-gray-800">CupDate</strong></p>
             </div>
 
-            <!-- Loading Spinner State -->
-            <div id="googleAuthSpinner" class="hidden absolute inset-0 bg-white/90 backdrop-blur-xs flex flex-col items-center justify-center z-20 gap-3">
-                <div class="w-10 h-10 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-xs font-semibold text-gray-700 animate-pulse">Connecting to Google Account...</p>
+            <!-- Loading Spinner State with Cancel, Timeout & Password Access -->
+            <div id="googleAuthSpinner" class="hidden absolute inset-0 bg-white/95 backdrop-blur-xs flex flex-col items-center justify-center z-30 p-6 text-center">
+                <button type="button" onclick="cancelGoogleSpinner()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center font-bold text-sm cursor-pointer transition-colors" title="Close Spinner">✕</button>
+                <div class="w-12 h-12 border-3 border-[#8b5a2b] border-t-transparent rounded-full animate-spin mb-4"></div>
+                <h4 class="text-sm font-bold text-gray-900 mb-1" id="googleSpinnerText">Connecting to Google Account...</h4>
+                <p class="text-xs text-gray-500 max-w-[280px] mb-4" id="googleSpinnerSubtext">Opening secure Google window. If it takes too long, you can switch to instant accounts or password.</p>
+                <div class="flex flex-col sm:flex-row gap-2 w-full max-w-[300px]">
+                    <button type="button" onclick="cancelGoogleSpinner()" class="flex-1 py-2 px-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition-all cursor-pointer border border-gray-200">
+                        Pick Account Below
+                    </button>
+                    <a href="{{ route('login') }}" class="flex-1 py-2 px-3 rounded-full bg-[#8b5a2b] hover:bg-[#724820] text-white text-xs font-bold transition-all text-center">
+                        Use Password
+                    </a>
+                </div>
             </div>
 
             <!-- Modal Content / Account List -->
@@ -1272,7 +1292,26 @@
                     </button>
                 </div>
 
-                <div class="pt-3 text-center">
+                <!-- Direct Password Login & Registration Shortcuts -->
+                <div class="pt-3 border-t border-gray-100 flex flex-col gap-2">
+                    <div class="flex items-center gap-2">
+                        <div class="flex-grow h-px bg-gray-200"></div>
+                        <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">or sign in with password</span>
+                        <div class="flex-grow h-px bg-gray-200"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="{{ route('login') }}" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition-all border border-amber-200 text-center">
+                            <span class="material-symbols-outlined text-sm text-amber-700">key</span>
+                            <span>Email Login</span>
+                        </a>
+                        <a href="{{ route('register') }}" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-900 text-xs font-bold transition-all border border-rose-200 text-center">
+                            <span class="material-symbols-outlined text-sm text-rose-600">person_add</span>
+                            <span>Create Account</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="pt-2 text-center">
                     <p class="text-[10px] text-gray-400">
                         🔒 Safe &amp; 256-Bit Encrypted. Your email is private and will never be shared with other singles.
                     </p>
@@ -1305,7 +1344,8 @@
         window.firebaseApp = app;
         window.firebaseAuth = auth;
 
-        // Global Firebase Google Sign-In Trigger
+        // Global Firebase Google Sign-In Trigger with 3.5s Safety Timeout
+        let googleSafetyTimer = null;
         window.triggerFirebaseGoogleSignIn = async function() {
             const spinner = document.getElementById('googleAuthSpinner');
             const modal = document.getElementById('googleAuthModal');
@@ -1315,8 +1355,19 @@
             }
             if (spinner) spinner.classList.remove('hidden');
 
+            // 3.5-second safety timer: if popup is blocked or waiting, auto-dismiss spinner
+            clearTimeout(googleSafetyTimer);
+            googleSafetyTimer = setTimeout(() => {
+                if (spinner && !spinner.classList.contains('hidden')) {
+                    cancelGoogleSpinner();
+                    const domainNotice = document.getElementById('firebaseDomainNotice');
+                    if (domainNotice) domainNotice.classList.remove('hidden');
+                }
+            }, 3500);
+
             try {
                 const result = await signInWithPopup(auth, provider);
+                clearTimeout(googleSafetyTimer);
                 const user = result.user;
                 if (user && user.email) {
                     selectGoogleAccount(
@@ -1329,10 +1380,11 @@
                     throw new Error('No user returned from Google');
                 }
             } catch (error) {
+                clearTimeout(googleSafetyTimer);
                 console.warn('Firebase Google Sign-In warning:', error);
-                if (spinner) spinner.classList.add('hidden');
+                cancelGoogleSpinner();
                 if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-                    closeGooglePopup();
+                    // Popup closed by user, leave modal open to allow picking account or password
                 } else if (error.code === 'auth/unauthorized-domain') {
                     // Show friendly domain authorization hint & open instant chooser
                     const domainNotice = document.getElementById('firebaseDomainNotice');
