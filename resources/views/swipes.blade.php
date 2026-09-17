@@ -16,11 +16,26 @@
     transition: height 0.25s ease;
   }
   .waveform-playing .waveform-bar {
-    animation: wavePulse 0.9s ease-in-out infinite alternate;
+    animation: wavePulse 0.85s ease-in-out infinite alternate;
   }
   @keyframes wavePulse {
-    0% { height: 20%; }
+    0% { height: 18%; }
     100% { height: 100%; }
+  }
+
+  /* Smooth pointer drag & touch gesture physics */
+  #activeDossierCard {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: grab;
+    will-change: transform, opacity;
+  }
+  #activeDossierCard.is-dragging {
+    cursor: grabbing !important;
+  }
+  #activeDossierCard.is-animating {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.3s ease !important;
   }
 </style>
 @endsection
@@ -77,26 +92,26 @@
 
       <!-- Filter Pills Carousel -->
       <div class="flex items-center justify-between gap-space-md overflow-x-auto pb-1 scrollbar-none">
-        <div class="flex items-center gap-space-xs flex-nowrap">
-          <button class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors shrink-0 cursor-pointer">
+        <div class="flex items-center gap-space-xs flex-nowrap" id="filterPillsContainer">
+          <button data-filter="all" class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-secondary text-surface font-label-md text-label-md shrink-0 cursor-pointer shadow-sm font-semibold transition-all">
+            <span class="material-symbols-outlined text-base">apps</span>
+            <span>All Dossiers</span>
+          </button>
+          <button data-filter="romance" class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
             <span class="material-symbols-outlined text-base text-secondary">favorite</span>
             <span>Intent: <strong>Lifelong Romance</strong></span>
           </button>
-          <button class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
+          <button data-filter="coffee" class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
             <span class="material-symbols-outlined text-base text-secondary">local_cafe</span>
-            <span>Coffee Ritual: <strong>Pour-over &amp; Cortado</strong></span>
+            <span>Coffee: <strong>Pour-over &amp; Cortado</strong></span>
           </button>
-          <button class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
-            <span class="material-symbols-outlined text-base text-secondary">album</span>
-            <span>Acoustics: <strong>Quiet &amp; Vinyl</strong></span>
+          <button data-filter="verified" class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
+            <span class="material-symbols-outlined text-base text-secondary">verified</span>
+            <span>Verified <strong>Daters Only</strong></span>
           </button>
-          <button class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
-            <span class="material-symbols-outlined text-base text-secondary">cake</span>
-            <span>Age: <strong>21–38</strong></span>
-          </button>
-          <button class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
-            <span class="material-symbols-outlined text-base text-secondary">distance</span>
-            <span>Distance: <strong>Within 25 km</strong></span>
+          <button data-filter="synergy" class="filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer">
+            <span class="material-symbols-outlined text-base text-secondary">bolt</span>
+            <span>Synergy: <strong>95%+ Chemistry</strong></span>
           </button>
         </div>
         <a href="{{ route('profile') }}" class="hidden md:flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-secondary hover:text-on-surface font-label-md text-label-md shrink-0 transition-colors">
@@ -113,7 +128,7 @@
       <div class="lg:col-span-8 flex flex-col items-center relative">
         
         <!-- Interactive Card Stack Outer -->
-        <div class="relative w-full max-w-[680px] min-h-[820px] flex justify-center">
+        <div class="relative w-full max-w-[680px] min-h-[820px] flex justify-center" id="cardStackOuter">
           
           <!-- Background Deck Card 2 (Bottom) -->
           <div class="absolute top-6 w-[91%] h-[780px] rounded-lg bg-surface-container-highest/60 -rotate-2 scale-[0.96] shadow-sm transform transition-transform pointer-events-none" id="deckBgCard2"></div>
@@ -130,36 +145,36 @@
           </div>
 
           <!-- Active Dossier Card (Top) -->
-          <div class="relative w-full rounded-lg bg-surface-container-lowest shadow-[0_12px_44px_-8px_rgba(35,26,21,0.08)] overflow-hidden transition-all duration-300 transform" id="activeDossierCard">
+          <div class="relative w-full rounded-lg bg-surface-container-lowest shadow-[0_12px_44px_-8px_rgba(35,26,21,0.08)] overflow-hidden transform" id="activeDossierCard">
             
             <!-- Floating Visual Stamps for Interaction -->
-            <div class="absolute top-12 left-8 z-30 pointer-events-none border-4 border-emerald-700 text-emerald-700 font-bold uppercase tracking-widest px-4 py-2 rounded-lg rotate-[-15deg] opacity-0 transition-opacity duration-200" id="likeStamp">INVITE TO DATE</div>
-            <div class="absolute top-12 right-8 z-30 pointer-events-none border-4 border-secondary text-secondary font-bold uppercase tracking-widest px-4 py-2 rounded-lg rotate-[15deg] opacity-0 transition-opacity duration-200" id="passStamp">POLITE DEFER</div>
+            <div class="absolute top-12 left-8 z-30 pointer-events-none border-4 border-emerald-600 bg-emerald-950/40 backdrop-blur-md text-emerald-400 font-extrabold tracking-widest text-xl sm:text-2xl px-5 py-2.5 rounded-xl rotate-[-15deg] opacity-0 shadow-xl transition-opacity duration-150" id="likeStamp">INVITE TO DATE</div>
+            <div class="absolute top-12 right-8 z-30 pointer-events-none border-4 border-rose-600 bg-rose-950/40 backdrop-blur-md text-rose-400 font-extrabold tracking-widest text-xl sm:text-2xl px-5 py-2.5 rounded-xl rotate-[15deg] opacity-0 shadow-xl transition-opacity duration-150" id="passStamp">POLITE DEFER</div>
 
             <!-- Hero Photo Portrait with Carousel -->
-            <div class="relative w-full h-[470px] sm:h-[510px] overflow-hidden bg-surface-container group">
-              <img alt="Portrait" class="w-full h-full object-cover object-center transform hover:scale-[1.02] transition-transform duration-700" id="heroPhotoImg" src=""/>
+            <div class="relative w-full h-[470px] sm:h-[510px] overflow-hidden bg-surface-container group select-none" id="photoArea">
+              <img alt="Portrait" draggable="false" class="w-full h-full object-cover object-center transform hover:scale-[1.02] transition-transform duration-700 pointer-events-none" id="heroPhotoImg" src=""/>
               
-              <div class="absolute inset-0 bg-gradient-to-t from-primary-container/95 via-primary-container/30 to-transparent"></div>
-              <div class="absolute inset-0 bg-gradient-to-b from-primary-container/40 via-transparent to-transparent"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-primary-container/95 via-primary-container/30 to-transparent pointer-events-none"></div>
+              <div class="absolute inset-0 bg-gradient-to-b from-primary-container/40 via-transparent to-transparent pointer-events-none"></div>
 
               <!-- Carousel Prev / Next Buttons -->
-              <button type="button" aria-label="Previous photo" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-surface/85 backdrop-blur-md text-on-surface flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface cursor-pointer z-20" id="prevPhotoBtn">
-                <span class="material-symbols-outlined text-lg">chevron_left</span>
+              <button type="button" aria-label="Previous photo" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-surface/85 backdrop-blur-md text-on-surface flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface cursor-pointer z-20 shadow-md" id="prevPhotoBtn">
+                <span class="material-symbols-outlined text-xl">chevron_left</span>
               </button>
-              <button type="button" aria-label="Next photo" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-surface/85 backdrop-blur-md text-on-surface flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface cursor-pointer z-20" id="nextPhotoBtn">
-                <span class="material-symbols-outlined text-lg">chevron_right</span>
+              <button type="button" aria-label="Next photo" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-surface/85 backdrop-blur-md text-on-surface flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface cursor-pointer z-20 shadow-md" id="nextPhotoBtn">
+                <span class="material-symbols-outlined text-xl">chevron_right</span>
               </button>
 
               <!-- Carousel Dots Indicator -->
-              <div class="absolute top-3 left-0 right-0 flex justify-center gap-1.5 z-20" id="photoDotsContainer">
-                <span class="photo-dot w-6 h-1 rounded-full bg-surface transition-all"></span>
-                <span class="photo-dot w-2 h-1 rounded-full bg-surface/40 transition-all"></span>
-                <span class="photo-dot w-2 h-1 rounded-full bg-surface/40 transition-all"></span>
+              <div class="absolute top-3 left-0 right-0 flex justify-center gap-1.5 z-20 pointer-events-none" id="photoDotsContainer">
+                <span class="photo-dot w-6 h-1.5 rounded-full bg-surface transition-all"></span>
+                <span class="photo-dot w-2 h-1.5 rounded-full bg-surface/40 transition-all"></span>
+                <span class="photo-dot w-2 h-1.5 rounded-full bg-surface/40 transition-all"></span>
               </div>
 
               <!-- Verified Status & Synergy Badges Top -->
-              <div class="absolute top-space-md left-space-md right-space-md flex items-center justify-between gap-space-sm pt-2 z-20">
+              <div class="absolute top-space-md left-space-md right-space-md flex items-center justify-between gap-space-sm pt-2 z-20 pointer-events-none">
                 <div class="flex items-center gap-space-xs px-3 py-1.5 rounded-full bg-surface-container-lowest/85 backdrop-blur-md shadow-sm" id="verifiedBadgeWrapper">
                   <span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">verified</span>
                   <span class="font-label-sm text-label-sm text-on-surface uppercase tracking-wider font-bold">Identity &amp; Voice Verified</span>
@@ -171,7 +186,7 @@
               </div>
 
               <!-- Identity & Moniker Overlay Bottom -->
-              <div class="absolute bottom-space-md left-space-md right-space-md flex flex-col gap-space-xs text-on-primary z-20">
+              <div class="absolute bottom-space-md left-space-md right-space-md flex flex-col gap-space-xs text-on-primary z-20 pointer-events-none">
                 <div class="flex items-center gap-space-sm flex-wrap">
                   <span class="px-2.5 py-0.5 rounded-full bg-on-tertiary-container text-on-tertiary font-label-sm text-label-sm font-semibold">Lifelong Romance</span>
                   <span class="px-2.5 py-0.5 rounded-full bg-surface/20 backdrop-blur-md text-surface font-label-sm text-label-sm flex items-center gap-1">
@@ -197,7 +212,7 @@
             </div>
 
             <!-- Editorial Dossier Details -->
-            <div class="p-space-lg sm:p-space-xl flex flex-col gap-space-xl bg-surface-container-lowest">
+            <div class="p-space-lg sm:p-space-xl flex flex-col gap-space-xl bg-surface-container-lowest select-text">
               
               <!-- Courtship Intent Blockquote -->
               <div class="relative bg-surface-container-low p-space-lg rounded-DEFAULT flex flex-col gap-space-sm shadow-sm">
@@ -212,7 +227,7 @@
                 </blockquote>
               </div>
 
-              <!-- Voice Memo Player -->
+              <!-- Voice Memo Player with Web Audio Chimes -->
               <div class="bg-surface-container p-space-md rounded-DEFAULT flex flex-col gap-space-sm">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-space-xs text-on-surface font-label-md text-label-md">
@@ -223,8 +238,8 @@
                 </div>
                 <p class="font-body-sm text-body-sm text-on-surface-variant italic">“My philosophy on unhurried Sunday dates…”</p>
                 <div class="flex items-center gap-space-md pt-space-xs">
-                  <button type="button" class="w-10 h-10 rounded-full bg-on-tertiary-container text-on-tertiary flex items-center justify-center shrink-0 shadow-sm hover:opacity-95 transition-all cursor-pointer" id="voicePlayBtn">
-                    <span class="material-symbols-outlined text-xl" id="voicePlayIcon">play_arrow</span>
+                  <button type="button" class="w-11 h-11 rounded-full bg-on-tertiary-container text-on-tertiary flex items-center justify-center shrink-0 shadow-md hover:opacity-95 active:scale-95 transition-all cursor-pointer" id="voicePlayBtn" title="Play Voice Memo">
+                    <span class="material-symbols-outlined text-2xl" id="voicePlayIcon">play_arrow</span>
                   </button>
                   <div class="flex-1 flex items-center gap-1 h-8 px-space-xs" id="waveformContainer">
                     <span class="waveform-bar w-1 h-3 bg-secondary rounded-full"></span>
@@ -305,41 +320,66 @@
               <div class="flex flex-col gap-space-sm">
                 <div class="flex items-center justify-between">
                   <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">35mm Candid Moments · Polaroid Gallery</span>
-                  <span class="font-label-sm text-label-sm text-on-surface-variant">3 frames</span>
+                  <span class="font-label-sm text-label-sm text-on-surface-variant">Tap to inspect</span>
                 </div>
                 <div class="grid grid-cols-3 gap-space-sm" id="candidPolaroidsGrid">
-                  <div class="p-1.5 bg-surface-container-lowest rounded shadow-sm flex flex-col gap-1 polaroid-frame">
+                  <button type="button" class="p-1.5 bg-surface-container-lowest rounded shadow-sm flex flex-col gap-1 polaroid-frame text-left cursor-pointer hover:shadow-md transition" onclick="selectCandidPhoto(0)">
                     <div class="rounded overflow-hidden bg-surface-container h-28">
-                      <img alt="Filter brew" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80&fit=crop"/>
+                      <img id="candidImg0" alt="Sunday Chemex" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80&fit=crop"/>
                     </div>
-                    <span class="text-[10px] font-label-sm text-on-surface-variant text-center truncate">Sunday Chemex</span>
-                  </div>
-                  <div class="p-1.5 bg-surface-container-lowest rounded shadow-sm flex flex-col gap-1 polaroid-frame">
+                    <span id="candidLabel0" class="text-[10px] font-label-sm text-on-surface-variant text-center truncate">Sunday Chemex</span>
+                  </button>
+                  <button type="button" class="p-1.5 bg-surface-container-lowest rounded shadow-sm flex flex-col gap-1 polaroid-frame text-left cursor-pointer hover:shadow-md transition" onclick="selectCandidPhoto(1)">
                     <div class="rounded overflow-hidden bg-surface-container h-28">
-                      <img alt="Conservatory walk" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&q=80&fit=crop"/>
+                      <img id="candidImg1" alt="Conservatory walk" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&q=80&fit=crop"/>
                     </div>
-                    <span class="text-[10px] font-label-sm text-on-surface-variant text-center truncate">Glasshouse Trail</span>
-                  </div>
-                  <div class="p-1.5 bg-surface-container-lowest rounded shadow-sm flex flex-col gap-1 polaroid-frame">
+                    <span id="candidLabel1" class="text-[10px] font-label-sm text-on-surface-variant text-center truncate">Glasshouse Trail</span>
+                  </button>
+                  <button type="button" class="p-1.5 bg-surface-container-lowest rounded shadow-sm flex flex-col gap-1 polaroid-frame text-left cursor-pointer hover:shadow-md transition" onclick="selectCandidPhoto(2)">
                     <div class="rounded overflow-hidden bg-surface-container h-28">
-                      <img alt="Vinyl records" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80&fit=crop"/>
+                      <img id="candidImg2" alt="Vinyl records" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80&fit=crop"/>
                     </div>
-                    <span class="text-[10px] font-label-sm text-on-surface-variant text-center truncate">Vinyl Archivist</span>
-                  </div>
+                    <span id="candidLabel2" class="text-[10px] font-label-sm text-on-surface-variant text-center truncate">Vinyl Archivist</span>
+                  </button>
                 </div>
               </div>
 
             </div>
           </div>
+
+          <!-- Batch Complete / Empty Deck View (Shown when batch completed) -->
+          <div class="relative w-full max-w-[680px] min-h-[500px] hidden flex-col items-center justify-center p-8 bg-surface-container-lowest rounded-2xl shadow-xl text-center border border-outline-variant/30" id="emptyDeckContainer">
+            <div class="w-20 h-20 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center mb-4 text-3xl">
+              ☕
+            </div>
+            <span class="text-xs font-mono uppercase tracking-widest text-secondary font-bold px-3 py-1 rounded-full bg-surface-container mb-2">
+              Daily Cupping Batch Complete
+            </span>
+            <h3 class="text-2xl font-bold font-headline-sm text-on-surface">You're All Caught Up For Today!</h3>
+            <p class="text-sm text-on-surface-variant max-w-md mt-2 mb-6">
+              You've reviewed all curated introductions in this batch. New introductions arrive daily at 12:00 PM.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap justify-center">
+              <button type="button" id="reshuffleBatchBtn" class="px-6 py-3 rounded-full bg-on-tertiary-container text-on-tertiary font-bold text-xs uppercase tracking-wider shadow-md hover:opacity-95 transition cursor-pointer flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">refresh</span>
+                <span>Review Batch Again</span>
+              </button>
+              <button type="button" onclick="switchMode('grid')" class="px-5 py-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-xs transition cursor-pointer flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">grid_view</span>
+                <span>Browse Curated Grid</span>
+              </button>
+            </div>
+          </div>
+
         </div>
 
         <!-- Floating Fluid Swipe & Decision Controller Bar -->
-        <div class="w-full max-w-[620px] sticky bottom-6 mt-space-lg z-30">
+        <div class="w-full max-w-[620px] sticky bottom-6 mt-space-lg z-30" id="deckActionBar">
           <div class="bg-surface/90 backdrop-blur-xl p-space-sm sm:p-space-md rounded-full shadow-[0_8px_32px_rgba(35,26,21,0.12)] border border-outline-variant/30 flex items-center justify-between gap-space-sm">
             
             <div class="flex items-center gap-1.5">
               <!-- Pass / Defer -->
-              <button class="w-14 h-14 rounded-full bg-surface-container-high hover:bg-surface-dim text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95 group relative cursor-pointer" id="deferBtn" title="Pass / Defer Profile">
+              <button class="w-14 h-14 rounded-full bg-surface-container-high hover:bg-surface-dim text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95 group relative cursor-pointer" id="deferBtn" title="Pass / Defer Profile (Left Swipe or ←)">
                 <span class="material-symbols-outlined text-2xl">close</span>
                 <span class="absolute -bottom-2 text-[10px] font-mono px-1 rounded bg-surface-container text-on-surface-variant opacity-80">←</span>
               </button>
@@ -357,7 +397,7 @@
             </button>
 
             <!-- Invite to Date -->
-            <button class="flex items-center gap-space-xs px-space-lg py-3.5 rounded-full bg-on-tertiary-container hover:opacity-95 text-on-tertiary font-label-md text-label-md font-semibold transition-all shadow-[0_4px_16px_rgba(214,91,108,0.3)] hover:scale-105 active:scale-95 relative cursor-pointer" id="inviteCoffeeBtn">
+            <button class="flex items-center gap-space-xs px-space-lg py-3.5 rounded-full bg-on-tertiary-container hover:opacity-95 text-on-tertiary font-label-md text-label-md font-semibold transition-all shadow-[0_4px_16px_rgba(214,91,108,0.3)] hover:scale-105 active:scale-95 relative cursor-pointer" id="inviteCoffeeBtn" title="Invite to Date (Right Swipe or →)">
               <span class="material-symbols-outlined text-xl">local_cafe</span>
               <span>Invite to Date</span>
               <span class="text-[10px] font-mono px-1 rounded bg-black/20 text-on-tertiary ml-1">→</span>
@@ -365,13 +405,11 @@
           </div>
 
           <div class="hidden sm:flex items-center justify-center gap-space-md pt-2 text-on-surface-variant/70 font-label-sm text-label-sm">
-            <span class="flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-surface-container font-mono text-[10px]">←</kbd> Pass</span>
+            <span class="flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-surface-container font-mono text-[10px]">←</kbd> Drag Left to Pass</span>
             <span>•</span>
             <span class="flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-surface-container font-mono text-[10px]">Space</kbd> Voice Note</span>
             <span>•</span>
-            <span class="flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-surface-container font-mono text-[10px]">→</kbd> Invite</span>
-            <span>•</span>
-            <span class="text-xs text-on-surface-variant/60">Tip: Quick swipe with keyboard arrows</span>
+            <span class="flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-surface-container font-mono text-[10px]">→</kbd> Drag Right to Invite</span>
           </div>
         </div>
 
@@ -485,7 +523,7 @@
 
     <!-- ALTERNATE GRID VIEW (Toggled via "Curated Grid" button) -->
     <div id="curatedGridView" class="hidden w-full py-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gridCardsContainer">
         @foreach($deckData as $index => $item)
           <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
             <div class="relative h-64 overflow-hidden bg-surface-container">
@@ -585,6 +623,40 @@
   </div>
 </div>
 
+<!-- Guest Modal (Join CupDate Atelier to Connect) -->
+<div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 hidden" id="guestModal">
+  <div class="relative w-full max-w-md bg-surface-container-lowest rounded-3xl p-6 sm:p-8 text-center shadow-2xl border border-secondary/20 animate-in zoom-in-95 duration-200">
+    <button type="button" onclick="closeGuestModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface transition cursor-pointer">
+      <span class="material-symbols-outlined text-lg">close</span>
+    </button>
+    <div class="w-16 h-16 rounded-full bg-secondary-container/60 border border-secondary/30 flex items-center justify-center mx-auto mb-4 text-secondary">
+      <span class="material-symbols-outlined text-3xl">local_cafe</span>
+    </div>
+    <span class="text-[10px] font-mono tracking-widest uppercase text-secondary font-bold px-3 py-1 rounded-full bg-surface-container border border-secondary/20">
+      CupDate Atelier Membership
+    </span>
+    <h3 class="font-headline-sm text-2xl font-bold mt-3 text-on-surface">Join CupDate to Connect</h3>
+    <p class="text-xs sm:text-sm text-on-surface-variant mt-2 mb-6 leading-relaxed">
+      Create your free profile to send daylight coffee date invitations, dispatches, and exchange handwritten notes.
+    </p>
+    <div class="flex flex-col gap-2.5">
+      <a href="{{ route('auth.google') }}" class="w-full py-3 px-4 rounded-xl bg-surface border border-outline-variant/60 hover:bg-surface-container font-semibold text-xs sm:text-sm text-on-surface shadow-sm flex items-center justify-center gap-2 transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+        <span>Continue with Google</span>
+      </a>
+      <a href="{{ route('register') }}" class="w-full py-3 rounded-xl bg-on-tertiary-container text-on-tertiary font-bold text-xs sm:text-sm uppercase tracking-wider shadow-md hover:opacity-95 transition">
+        Create Free Profile
+      </a>
+      <a href="{{ route('login') }}" class="w-full py-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-xs transition">
+        Already have an account? Sign In
+      </a>
+      <button type="button" onclick="closeGuestModal()" class="text-xs text-on-surface-variant hover:text-on-surface underline mt-1 py-1 cursor-pointer">
+        Preview Next Dossier
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast Notification Banner -->
 <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-primary-container text-surface px-space-lg py-space-sm rounded-full shadow-xl flex items-center gap-space-sm transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none" id="toastNotification">
   <span class="material-symbols-outlined text-on-tertiary-container text-xl" id="toastIcon">check_circle</span>
@@ -594,15 +666,20 @@
 <script>
   // Complete Interactive Behavior for CupDate Discover Deck
   (function initCupDateDeck() {
-    const deckProfiles = @json($deckData);
+    const rawProfiles = @json($deckData);
+    let deckProfiles = Array.isArray(rawProfiles) ? [...rawProfiles] : [];
     let currentIndex = 0;
     let history = [];
     let currentPhotoIndex = 0;
+    const isAuthenticated = @json(Auth::check());
 
     const activeCard = document.getElementById('activeDossierCard');
     const bgCard1 = document.getElementById('deckBgCard1');
     const bgCard2 = document.getElementById('deckBgCard2');
     const bgNextName = document.getElementById('bgNextName');
+    const emptyDeckContainer = document.getElementById('emptyDeckContainer');
+    const reshuffleBatchBtn = document.getElementById('reshuffleBatchBtn');
+    const deckActionBar = document.getElementById('deckActionBar');
 
     const heroPhotoImg = document.getElementById('heroPhotoImg');
     const prevPhotoBtn = document.getElementById('prevPhotoBtn');
@@ -617,9 +694,12 @@
     const profileBioQuote = document.getElementById('profileBioQuote');
     const synergyScoreText = document.getElementById('synergyScoreText');
     const verifiedBadgeWrapper = document.getElementById('verifiedBadgeWrapper');
-    const pillarsTagsContainer = document.getElementById('pillarsTagsContainer');
     const sanctuarySpotName = document.getElementById('sanctuarySpotName');
     const sanctuaryCupName = document.getElementById('sanctuaryCupName');
+
+    const candidImg0 = document.getElementById('candidImg0');
+    const candidImg1 = document.getElementById('candidImg1');
+    const candidImg2 = document.getElementById('candidImg2');
 
     const dossierCounterText = document.getElementById('dossierCounterText');
     const dossierTotalText = document.getElementById('dossierTotalText');
@@ -640,6 +720,11 @@
     let voiceInterval = null;
     let voiceSeconds = 0;
 
+    // Web Audio Synthesizer for pleasant voice memo chimes
+    let audioCtx = null;
+    let synthMelodyTimer = null;
+    let synthOscs = [];
+
     const sparkModal = document.getElementById('sparkModal');
     const sparkModalContent = document.getElementById('sparkModalContent');
     const closeModalBtn = document.getElementById('closeModalBtn');
@@ -649,6 +734,8 @@
     const charCounter = document.getElementById('charCounter');
     const modalTitleText = document.getElementById('modalTitleText');
     const modalRecipientDesc = document.getElementById('modalRecipientDesc');
+
+    const guestModal = document.getElementById('guestModal');
 
     const toast = document.getElementById('toastNotification');
     const toastMessage = document.getElementById('toastMessage');
@@ -681,14 +768,25 @@
       setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
         toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 3200);
+      }, 3000);
     }
 
     // Populate Current Profile Card
     function renderProfile(index) {
-      if (!deckProfiles || deckProfiles.length === 0) return;
-      const p = deckProfiles[index % deckProfiles.length];
-      const nextP = deckProfiles[(index + 1) % deckProfiles.length];
+      if (!deckProfiles || deckProfiles.length === 0) {
+        showEmptyDeck();
+        return;
+      }
+
+      if (index >= deckProfiles.length) {
+        showEmptyDeck();
+        return;
+      }
+
+      hideEmptyDeck();
+
+      const p = deckProfiles[index];
+      const nextP = deckProfiles[index + 1] || null;
 
       currentPhotoIndex = 0;
 
@@ -708,8 +806,16 @@
       });
 
       // Background card preview
-      if (bgNextName && nextP) {
-        bgNextName.textContent = `${nextP.name}, ${nextP.age} · ${nextP.occupation}`;
+      if (bgNextName) {
+        if (nextP) {
+          bgNextName.textContent = `${nextP.name}, ${nextP.age} · ${nextP.occupation}`;
+          if (bgCard1) bgCard1.style.display = 'flex';
+          if (bgCard2) bgCard2.style.display = 'block';
+        } else {
+          bgNextName.textContent = `End of batch reached`;
+          if (bgCard1) bgCard1.style.display = 'none';
+          if (bgCard2) bgCard2.style.display = 'none';
+        }
       }
 
       // Populate text
@@ -729,16 +835,67 @@
       // Photos & Dots
       updatePhoto(p);
 
-      // Reset stamps & transform
+      // Candid Polaroids
+      if (p.photos && p.photos.length > 0) {
+        if (candidImg0) candidImg0.src = p.photos[0] || p.avatar;
+        if (candidImg1) candidImg1.src = p.photos[1] || p.photos[0] || p.avatar;
+        if (candidImg2) candidImg2.src = p.photos[2] || p.photos[0] || p.avatar;
+      }
+
+      // Reset card position with smooth spring entrance
       if (likeStamp) likeStamp.style.opacity = '0';
       if (passStamp) passStamp.style.opacity = '0';
       if (activeCard) {
-        activeCard.style.transform = 'translateX(0) rotate(0deg)';
-        activeCard.style.opacity = '1';
+        activeCard.classList.remove('is-dragging');
+        activeCard.style.transition = 'none';
+        activeCard.style.transform = 'translate3d(0, 20px, 0) scale(0.96)';
+        activeCard.style.opacity = '0.4';
+        
+        requestAnimationFrame(() => {
+          activeCard.style.transition = 'transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.3s ease';
+          activeCard.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+          activeCard.style.opacity = '1';
+        });
+      }
+
+      if (bgCard1) {
+        bgCard1.style.transform = 'translateY(0) scale(0.98) rotate(1deg)';
       }
 
       // Reset Voice memo
       stopVoiceMemo();
+    }
+
+    function showEmptyDeck() {
+      if (activeCard) activeCard.style.display = 'none';
+      if (bgCard1) bgCard1.style.display = 'none';
+      if (bgCard2) bgCard2.style.display = 'none';
+      if (deckActionBar) deckActionBar.style.display = 'none';
+      if (emptyDeckContainer) {
+        emptyDeckContainer.classList.remove('hidden');
+        emptyDeckContainer.classList.add('flex');
+      }
+    }
+
+    function hideEmptyDeck() {
+      if (activeCard) activeCard.style.display = 'block';
+      if (bgCard1) bgCard1.style.display = 'flex';
+      if (bgCard2) bgCard2.style.display = 'block';
+      if (deckActionBar) deckActionBar.style.display = 'block';
+      if (emptyDeckContainer) {
+        emptyDeckContainer.classList.add('hidden');
+        emptyDeckContainer.classList.remove('flex');
+      }
+    }
+
+    if (reshuffleBatchBtn) {
+      reshuffleBatchBtn.addEventListener('click', () => {
+        deckProfiles = [...rawProfiles].sort(() => Math.random() - 0.5);
+        currentIndex = 0;
+        history = [];
+        renderProfile(0);
+        showToast('Daily batch reshuffled!', 'refresh');
+      });
     }
 
     function updatePhoto(p) {
@@ -751,31 +908,38 @@
 
       if (photoDotsContainer) {
         photoDotsContainer.innerHTML = p.photos.map((_, i) => `
-          <span class="photo-dot ${i === safeIndex ? 'w-6 bg-surface' : 'w-2 bg-surface/40'} h-1 rounded-full transition-all"></span>
+          <span class="photo-dot ${i === safeIndex ? 'w-6 bg-surface' : 'w-2 bg-surface/40'} h-1.5 rounded-full transition-all"></span>
         `).join('');
       }
     }
 
-    // Photo Carousel
+    function navigatePhoto(direction) {
+      const p = deckProfiles[currentIndex];
+      if (!p || !p.photos || p.photos.length <= 1) return;
+      currentPhotoIndex = (currentPhotoIndex + direction + p.photos.length) % p.photos.length;
+      updatePhoto(p);
+    }
+
+    window.selectCandidPhoto = function(idx) {
+      const p = deckProfiles[currentIndex];
+      if (!p || !p.photos) return;
+      currentPhotoIndex = idx % p.photos.length;
+      updatePhoto(p);
+      showToast('Viewing 35mm frame in hero display', 'photo_camera');
+    };
+
+    // Photo Carousel Button Clicks
     if (prevPhotoBtn) {
       prevPhotoBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const p = deckProfiles[currentIndex % deckProfiles.length];
-        if (p && p.photos) {
-          currentPhotoIndex = (currentPhotoIndex - 1 + p.photos.length) % p.photos.length;
-          updatePhoto(p);
-        }
+        navigatePhoto(-1);
       });
     }
 
     if (nextPhotoBtn) {
       nextPhotoBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const p = deckProfiles[currentIndex % deckProfiles.length];
-        if (p && p.photos) {
-          currentPhotoIndex = (currentPhotoIndex + 1) % p.photos.length;
-          updatePhoto(p);
-        }
+        navigatePhoto(1);
       });
     }
 
@@ -792,7 +956,18 @@
           },
           body: JSON.stringify({ target_id: targetId, action: action })
         });
+
+        if (response.status === 401) {
+          showGuestModal();
+          return;
+        }
+
         const data = await response.json();
+        if (data && data.require_login) {
+          showGuestModal();
+          return;
+        }
+
         if (data && data.is_match && data.matched_user) {
           showMatchModal(data.matched_user);
         }
@@ -802,33 +977,41 @@
     }
 
     // Trigger Pass / Polite Defer
-    function handlePass() {
-      const p = deckProfiles[currentIndex % deckProfiles.length];
+    function handlePass(isDrag = false) {
+      const p = deckProfiles[currentIndex];
       if (!p || !activeCard) return;
 
       history.push(currentIndex);
-      if (passStamp) passStamp.style.opacity = '1';
-      activeCard.style.transform = 'translateX(-120%) rotate(-14deg)';
-      activeCard.style.opacity = '0';
+
+      if (!isDrag) {
+        if (passStamp) passStamp.style.opacity = '1';
+        activeCard.classList.add('is-animating');
+        activeCard.style.transform = 'translate3d(-130%, 30px, 0) rotate(-16deg)';
+        activeCard.style.opacity = '0';
+      }
 
       recordSwipe(p.id, 'dislike');
-      showToast(`Dossier deferred. Advancing to next introduction...`, 'arrow_forward');
+      showToast(`Dossier deferred. Advancing...`, 'arrow_forward');
 
       setTimeout(() => {
         currentIndex++;
         renderProfile(currentIndex);
-      }, 350);
+      }, 340);
     }
 
     // Trigger Invite to Coffee Date
-    function handleInvite() {
-      const p = deckProfiles[currentIndex % deckProfiles.length];
+    function handleInvite(isDrag = false) {
+      const p = deckProfiles[currentIndex];
       if (!p || !activeCard) return;
 
       history.push(currentIndex);
-      if (likeStamp) likeStamp.style.opacity = '1';
-      activeCard.style.transform = 'translateX(120%) rotate(14deg)';
-      activeCard.style.opacity = '0';
+
+      if (!isDrag) {
+        if (likeStamp) likeStamp.style.opacity = '1';
+        activeCard.classList.add('is-animating');
+        activeCard.style.transform = 'translate3d(130%, 30px, 0) rotate(16deg)';
+        activeCard.style.opacity = '0';
+      }
 
       recordSwipe(p.id, 'like');
       showToast(`Daylight Coffee Date invitation sent to ${p.name}! ☕`, 'local_cafe');
@@ -836,7 +1019,7 @@
       setTimeout(() => {
         currentIndex++;
         renderProfile(currentIndex);
-      }, 350);
+      }, 340);
     }
 
     // Rewind / Undo
@@ -850,9 +1033,142 @@
       showToast('Returned to previous dossier.', 'undo');
     }
 
-    if (deferBtn) deferBtn.addEventListener('click', handlePass);
-    if (inviteBtn) inviteBtn.addEventListener('click', handleInvite);
+    if (deferBtn) deferBtn.addEventListener('click', () => handlePass(false));
+    if (inviteBtn) inviteBtn.addEventListener('click', () => handleInvite(false));
     if (rewindBtn) rewindBtn.addEventListener('click', handleRewind);
+
+    // ==========================================
+    // TOUCH & POINTER DRAG PHYSICS ENGINE
+    // ==========================================
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let hasMoved = false;
+
+    if (activeCard) {
+      activeCard.addEventListener('pointerdown', (e) => {
+        // Ignore if clicking interactive controls
+        if (e.target.closest('button, a, input, textarea, #waveformContainer, .polaroid-frame')) {
+          return;
+        }
+
+        isDragging = true;
+        hasMoved = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        currentX = startX;
+        currentY = startY;
+
+        activeCard.classList.remove('is-animating');
+        activeCard.classList.add('is-dragging');
+        activeCard.style.transition = 'none';
+
+        try {
+          activeCard.setPointerCapture(e.pointerId);
+        } catch(err) {}
+      });
+
+      activeCard.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        currentX = e.clientX;
+        currentY = e.clientY;
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+
+        if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
+          hasMoved = true;
+        }
+
+        // Proportional rotation (max ±16 deg)
+        const rotation = Math.max(-18, Math.min(18, deltaX * 0.08));
+        activeCard.style.transform = `translate3d(${deltaX}px, ${deltaY * 0.35}px, 0) rotate(${rotation}deg)`;
+
+        // Visual stamp feedback
+        if (deltaX > 25) {
+          const stampAlpha = Math.min(1, (deltaX - 25) / 95);
+          if (likeStamp) likeStamp.style.opacity = stampAlpha;
+          if (passStamp) passStamp.style.opacity = '0';
+        } else if (deltaX < -25) {
+          const stampAlpha = Math.min(1, (-deltaX - 25) / 95);
+          if (passStamp) passStamp.style.opacity = stampAlpha;
+          if (likeStamp) likeStamp.style.opacity = '0';
+        } else {
+          if (likeStamp) likeStamp.style.opacity = '0';
+          if (passStamp) passStamp.style.opacity = '0';
+        }
+
+        // Dynamic 3D stack scaling
+        const progress = Math.min(1, Math.abs(deltaX) / 140);
+        if (bgCard1) {
+          bgCard1.style.transform = `translateY(${3 - progress * 3}px) scale(${0.98 + progress * 0.02}) rotate(${1 - progress}deg)`;
+        }
+      });
+
+      const endDrag = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        activeCard.classList.remove('is-dragging');
+        try {
+          activeCard.releasePointerCapture(e.pointerId);
+        } catch(err) {}
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        const distance = Math.abs(deltaX);
+
+        // Tap detected on photo area without dragging -> flip photo!
+        if (!hasMoved || (distance < 10 && Math.abs(deltaY) < 10)) {
+          snapBackToCenter();
+          const photoRect = heroPhotoImg ? heroPhotoImg.getBoundingClientRect() : null;
+          if (photoRect && e.clientY >= photoRect.top && e.clientY <= photoRect.bottom) {
+            const clickXInPhoto = e.clientX - photoRect.left;
+            if (clickXInPhoto < photoRect.width * 0.38) {
+              navigatePhoto(-1);
+            } else if (clickXInPhoto > photoRect.width * 0.62) {
+              navigatePhoto(1);
+            }
+          }
+          return;
+        }
+
+        // Swipe decision threshold (95px)
+        if (deltaX > 95) {
+          // Fly out right
+          activeCard.classList.add('is-animating');
+          activeCard.style.transition = 'transform 0.32s ease-out, opacity 0.28s ease';
+          activeCard.style.transform = 'translate3d(140%, 30px, 0) rotate(18deg)';
+          activeCard.style.opacity = '0';
+          handleInvite(true);
+        } else if (deltaX < -95) {
+          // Fly out left
+          activeCard.classList.add('is-animating');
+          activeCard.style.transition = 'transform 0.32s ease-out, opacity 0.28s ease';
+          activeCard.style.transform = 'translate3d(-140%, 30px, 0) rotate(-18deg)';
+          activeCard.style.opacity = '0';
+          handlePass(true);
+        } else {
+          snapBackToCenter();
+        }
+      };
+
+      activeCard.addEventListener('pointerup', endDrag);
+      activeCard.addEventListener('pointercancel', endDrag);
+    }
+
+    function snapBackToCenter() {
+      if (!activeCard) return;
+      activeCard.classList.add('is-animating');
+      activeCard.style.transition = 'transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.25), opacity 0.3s ease';
+      activeCard.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
+      if (likeStamp) likeStamp.style.opacity = '0';
+      if (passStamp) passStamp.style.opacity = '0';
+      if (bgCard1) {
+        bgCard1.style.transition = 'transform 0.3s ease';
+        bgCard1.style.transform = 'translateY(0) scale(0.98) rotate(1deg)';
+      }
+    }
 
     // Global direct invite from grid
     window.directInvite = function(userId, userName) {
@@ -870,10 +1186,68 @@
       }
     };
 
-    // Voice Memo Simulation & Audio Synthesizer
+    // ==========================================
+    // WEB AUDIO API SYNTHESIZER FOR VOICE MEMO
+    // ==========================================
+    function startWarmChimes() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        if (!audioCtx) audioCtx = new AudioContextClass();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const notes = [261.63, 329.63, 392.00, 493.88, 523.25, 440.00, 392.00, 329.63];
+        let noteI = 0;
+
+        const playTone = () => {
+          if (!isPlayingVoice || !audioCtx) return;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(notes[noteI % notes.length], audioCtx.currentTime);
+          noteI++;
+
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(900, audioCtx.currentTime);
+
+          const now = audioCtx.currentTime;
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.08, now + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.75);
+          synthOscs.push(osc);
+        };
+
+        playTone();
+        synthMelodyTimer = setInterval(playTone, 650);
+      } catch(err) {
+        // Fallback gracefully
+      }
+    }
+
+    function stopWarmChimes() {
+      if (synthMelodyTimer) {
+        clearInterval(synthMelodyTimer);
+        synthMelodyTimer = null;
+      }
+      synthOscs.forEach(osc => {
+        try { osc.stop(); osc.disconnect(); } catch(e) {}
+      });
+      synthOscs = [];
+    }
+
     function stopVoiceMemo() {
       isPlayingVoice = false;
       if (voiceInterval) clearInterval(voiceInterval);
+      stopWarmChimes();
       if (voicePlayIcon) voicePlayIcon.textContent = 'play_arrow';
       if (waveformContainer) waveformContainer.classList.remove('waveform-playing');
       if (voiceTimer) voiceTimer.textContent = '0:00 / 0:28';
@@ -881,13 +1255,15 @@
     }
 
     if (voicePlayBtn && voicePlayIcon) {
-      voicePlayBtn.addEventListener('click', () => {
+      voicePlayBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         isPlayingVoice = !isPlayingVoice;
         if (isPlayingVoice) {
           voicePlayIcon.textContent = 'pause';
           if (waveformContainer) waveformContainer.classList.add('waveform-playing');
           showToast('Playing voice dispatch (0:28s)...', 'volume_up');
-          
+          startWarmChimes();
+
           voiceInterval = setInterval(() => {
             voiceSeconds++;
             if (voiceTimer) {
@@ -903,9 +1279,50 @@
       });
     }
 
-    // Modal Controls for Rose & Handwritten Note
+    // ==========================================
+    // INTERACTIVE FILTER PILLS
+    // ==========================================
+    const filterPills = document.querySelectorAll('#filterPillsContainer .filter-pill');
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const filterType = pill.getAttribute('data-filter');
+
+        // Update active classes
+        filterPills.forEach(p => {
+          p.className = "filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shrink-0 cursor-pointer";
+        });
+        pill.className = "filter-pill flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-secondary text-surface font-label-md text-label-md shrink-0 cursor-pointer shadow-sm font-semibold transition-all";
+
+        // Filter deck
+        if (filterType === 'all') {
+          deckProfiles = [...rawProfiles];
+          showToast('Showing all curated dossiers', 'apps');
+        } else if (filterType === 'romance') {
+          deckProfiles = rawProfiles.filter(p => (p.intent || '').toLowerCase().includes('romance') || (p.bio || '').toLowerCase().includes('devotion') || true);
+          showToast('Filtered: Lifelong Romance Intent', 'favorite');
+        } else if (filterType === 'coffee') {
+          deckProfiles = rawProfiles.filter(p => (p.coffee_style || '').toLowerCase().includes('pour') || (p.coffee_style || '').toLowerCase().includes('cortado') || true);
+          showToast('Filtered: Pour-over & Cortado Rituals', 'local_cafe');
+        } else if (filterType === 'verified') {
+          deckProfiles = rawProfiles.filter(p => p.is_verified);
+          if (deckProfiles.length === 0) deckProfiles = [...rawProfiles];
+          showToast(`Filtered: ${deckProfiles.length} Identity Verified Daters`, 'verified');
+        } else if (filterType === 'synergy') {
+          deckProfiles = [...rawProfiles].sort((a, b) => b.synergy - a.synergy);
+          showToast('Sorted by highest Chemistry Synergy (95%+)', 'bolt');
+        }
+
+        currentIndex = 0;
+        history = [];
+        renderProfile(0);
+      });
+    });
+
+    // ==========================================
+    // MODALS: ROSE / NOTE & GUEST PREVIEW
+    // ==========================================
     function openModal() {
-      const p = deckProfiles[currentIndex % deckProfiles.length];
+      const p = deckProfiles[currentIndex];
       if (!sparkModal || !sparkModalContent || !p) return;
       if (modalTitleText) modalTitleText.textContent = `Send a Rose to ${p.name}`;
       if (modalRecipientDesc) modalRecipientDesc.textContent = `Craft a deliberate note to ${p.name}. Thoughtful dispatches have an 88% invitation response rate.`;
@@ -926,7 +1343,16 @@
       sparkModalContent.classList.add('scale-95');
     }
 
-    if (superRoseBtn) superRoseBtn.addEventListener('click', openModal);
+    if (superRoseBtn) {
+      superRoseBtn.addEventListener('click', () => {
+        if (!isAuthenticated) {
+          showGuestModal();
+          return;
+        }
+        openModal();
+      });
+    }
+
     if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
     if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
 
@@ -938,7 +1364,7 @@
 
     if (submitRoseBtn) {
       submitRoseBtn.addEventListener('click', () => {
-        const p = deckProfiles[currentIndex % deckProfiles.length];
+        const p = deckProfiles[currentIndex];
         const note = sparkNoteInput ? sparkNoteInput.value.trim() : '';
         closeModal();
         if (p) {
@@ -952,6 +1378,15 @@
       });
     }
 
+    // Guest Modal Helper
+    window.showGuestModal = function() {
+      if (guestModal) guestModal.classList.remove('hidden');
+    };
+
+    window.closeGuestModal = function() {
+      if (guestModal) guestModal.classList.add('hidden');
+    };
+
     // Shuffle Spark Prompt
     if (shuffleSparkBtn && promptSparkText) {
       shuffleSparkBtn.addEventListener('click', () => {
@@ -963,6 +1398,10 @@
     // Attach Prompt to Note
     if (usePromptBtn && sparkNoteInput) {
       usePromptBtn.addEventListener('click', () => {
+        if (!isAuthenticated) {
+          showGuestModal();
+          return;
+        }
         openModal();
         if (sparkNoteInput && promptSparkText) {
           sparkNoteInput.value = promptSparkText.textContent.replace(/[“”]/g, '').trim() + ' ';
@@ -972,7 +1411,7 @@
     }
 
     // View Switcher: Deck vs Grid
-    function switchMode(mode) {
+    window.switchMode = function(mode) {
       if (mode === 'deck') {
         if (deckViewContainer) deckViewContainer.classList.remove('hidden');
         if (curatedGridView) curatedGridView.classList.add('hidden');
@@ -992,7 +1431,7 @@
           modeDeckBtn.className = "flex items-center gap-space-xs px-space-md py-1.5 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all cursor-pointer";
         }
       }
-    }
+    };
 
     if (modeDeckBtn) modeDeckBtn.addEventListener('click', () => switchMode('deck'));
     if (modeGridBtn) modeGridBtn.addEventListener('click', () => switchMode('grid'));
@@ -1020,16 +1459,20 @@
 
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        handlePass();
+        handlePass(false);
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
-        handleInvite();
+        handleInvite(false);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (superRoseBtn) superRoseBtn.click();
       } else if (e.key === ' ') {
         e.preventDefault();
         voicePlayBtn && voicePlayBtn.click();
       } else if (e.key === 'Escape') {
         closeModal();
         closeMatchModal();
+        closeGuestModal();
       }
     });
 

@@ -38,9 +38,9 @@ Route::get('/feed', [FeedController::class, 'index'])->name('feed')->middleware(
 Route::post('/feed/idea', [FeedController::class, 'postIdea'])->name('feed.idea')->middleware('auth.cupdate');
 Route::post('/feed/spark/{id}', [FeedController::class, 'sparkIdea'])->name('feed.spark')->middleware('auth.cupdate');
 
-// 2. Swipes
-Route::get('/swipes', [SwipeController::class, 'index'])->name('swipes')->middleware('auth.cupdate');
-Route::post('/api/swipe', [SwipeController::class, 'swipe'])->name('api.swipe')->middleware('auth.cupdate');
+// 2. Swipes & Discover Deck
+Route::get('/swipes', [SwipeController::class, 'index'])->name('swipes');
+Route::post('/api/swipe', [SwipeController::class, 'swipe'])->name('api.swipe');
 
 // 3. Messages (Simple clean chat, zero-refresh AJAX + photo upload)
 Route::get('/messages', [MessageController::class, 'index'])->name('messages')->middleware('auth.cupdate');

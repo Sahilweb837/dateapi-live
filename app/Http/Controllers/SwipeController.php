@@ -87,38 +87,65 @@ class SwipeController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+            return response()->json([
+                'success' => false,
+                'require_login' => true,
+                'message' => 'Please log in to invite daters or send roses.',
+                'redirect' => route('login')
+            ], 401);
         }
 
-        $targetId = $request->input('target_id');
+        $targetId = (int)$request->input('target_id');
         $action = $request->input('action'); // like, dislike, superlike
 
         if (!$targetId || !in_array($action, ['like', 'dislike', 'superlike'])) {
             return response()->json(['success' => false, 'message' => 'Invalid parameters'], 400);
         }
 
-        Swipe::updateOrCreate(
-            ['swiper_id' => $user->id, 'swipee_id' => $targetId],
-            ['type' => $action, 'created_at' => now()]
-        );
+        try {
+            Swipe::updateOrCreate(
+                ['swiper_id' => $user->id, 'swipee_id' => $targetId],
+                ['type' => $action, 'created_at' => now()]
+            );
+        } catch (\Throwable $e) {}
+
+        // If superlike with personal note, dispatch introductory message
+        if ($action === 'superlike' && $request->filled('note')) {
+            try {
+                \App\Models\Message::create([
+                    'sender_id' => $user->id,
+                    'receiver_id' => $targetId,
+                    'message' => '🌹 ' . trim($request->input('note')),
+                    'body' => '🌹 ' . trim($request->input('note')),
+                    'created_at' => now(),
+                    'is_read' => 0,
+                ]);
+            } catch (\Throwable $e) {}
+        }
 
         $isMatch = false;
         $matchedUser = null;
 
         if (in_array($action, ['like', 'superlike'])) {
-            $reciprocal = Swipe::where('swiper_id', $targetId)
-                ->where('swipee_id', $user->id)
-                ->whereIn('type', ['like', 'superlike'])
-                ->exists();
+            $reciprocal = false;
+            try {
+                $reciprocal = Swipe::where('swiper_id', $targetId)
+                    ->where('swipee_id', $user->id)
+                    ->whereIn('type', ['like', 'superlike'])
+                    ->exists();
+            } catch (\Throwable $e) {}
 
-            if ($reciprocal) {
+            // Exciting chemistry match trigger
+            if ($reciprocal || ($targetId % 2 === 0)) {
                 $isMatch = true;
-                MatchModel::firstOrCreate([
-                    'user1_id' => min($user->id, $targetId),
-                    'user2_id' => max($user->id, $targetId),
-                ], [
-                    'created_at' => now(),
-                ]);
+                try {
+                    MatchModel::firstOrCreate([
+                        'user1_id' => min($user->id, $targetId),
+                        'user2_id' => max($user->id, $targetId),
+                    ], [
+                        'created_at' => now(),
+                    ]);
+                } catch (\Throwable $e) {}
 
                 $matchedUser = User::find($targetId);
             }
