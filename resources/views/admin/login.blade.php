@@ -61,9 +61,9 @@
                 <label class="block text-xs font-bold text-stone-300 mb-1" for="admin-email">Admin ID / Email</label>
                 <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3 text-stone-500 text-lg">admin_panel_settings</span>
-                    <input type="text" name="email" id="admin-email" value="{{ old('email', 'admin') }}" required
+                    <input type="text" name="email" id="admin-email" value="{{ old('email', '') }}" required autocomplete="off"
                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#160a08] border border-stone-700 focus:border-[#ff007f] focus:outline-none text-white text-xs font-semibold placeholder:text-stone-600 transition"
-                           placeholder="Enter Admin ID">
+                           placeholder="Enter Admin ID (e.g. admin)">
                 </div>
             </div>
 
@@ -71,10 +71,10 @@
                 <label class="block text-xs font-bold text-stone-300 mb-1" for="admin-password">Password</label>
                 <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3 text-stone-500 text-lg">key</span>
-                    <input type="password" name="password" id="admin-password" value="admin123" required
+                    <input type="password" name="password" id="admin-password" value="" required autocomplete="new-password"
                            class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#160a08] border border-stone-700 focus:border-[#ff007f] focus:outline-none text-white text-xs font-semibold placeholder:text-stone-600 transition"
-                           placeholder="••••••••">
-                    <button type="button" onclick="toggleAdminPass()" class="absolute right-3 text-stone-400 hover:text-white text-sm">
+                           placeholder="Enter Admin Password">
+                    <button type="button" onclick="toggleAdminPass()" class="absolute right-3 text-stone-400 hover:text-white text-sm cursor-pointer" title="Toggle password visibility">
                         <span class="material-symbols-outlined text-base" id="adminEyeIcon">visibility</span>
                     </button>
                 </div>

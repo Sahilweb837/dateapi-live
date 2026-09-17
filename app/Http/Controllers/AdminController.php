@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Blog;
 use App\Models\DatePlace;
+use App\Models\Message;
+use App\Models\Idea;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Auth;
@@ -80,11 +82,21 @@ class AdminController extends Controller
         $users = collect();
         $totalBlogs = 0;
         $totalPlaces = 0;
+        $messages = collect();
+        $ideas = collect();
 
         try {
             $totalUsers = User::count();
             $verifiedUsers = User::where('is_verified', 1)->count();
-            $users = User::orderBy('created_at', 'desc')->take(15)->get();
+            $users = User::orderBy('id', 'desc')->take(30)->get();
+        } catch (\Throwable $e) {}
+
+        try {
+            $messages = Message::with(['sender', 'receiver'])->orderBy('id', 'desc')->take(40)->get();
+        } catch (\Throwable $e) {}
+
+        try {
+            $ideas = Idea::with('user')->orderBy('id', 'desc')->take(30)->get();
         } catch (\Throwable $e) {}
 
         try {
@@ -102,6 +114,8 @@ class AdminController extends Controller
             'totalUsers',
             'verifiedUsers',
             'users',
+            'messages',
+            'ideas',
             'totalBlogs',
             'totalPlaces',
             'searchIp'
@@ -126,6 +140,61 @@ class AdminController extends Controller
             return back()->with('success', "User '{$user->full_name}' is now marked as {$statusText}.");
         } catch (\Throwable $e) {
             return back()->with('error', 'Could not update user verification: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Toggle User Block / Active Status
+     */
+    public function toggleBlock($id)
+    {
+        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
+            return redirect()->route('admin.login');
+        }
+
+        try {
+            $user = User::findOrFail($id);
+            $user->status = ($user->status === 'blocked') ? 'active' : 'blocked';
+            $user->save();
+
+            $statusText = $user->status === 'blocked' ? 'BLOCKED 🚫' : 'UNBLOCKED & ACTIVE ✅';
+            return back()->with('success', "User '{$user->full_name}' is now {$statusText}.");
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Could not update user block status: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete Inappropriate Message
+     */
+    public function deleteMessage($id)
+    {
+        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
+            return redirect()->route('admin.login');
+        }
+
+        try {
+            Message::where('id', $id)->delete();
+            return back()->with('success', 'Message deleted by administrator.');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Could not delete message: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete Date Idea from Feed
+     */
+    public function deleteIdea($id)
+    {
+        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
+            return redirect()->route('admin.login');
+        }
+
+        try {
+            Idea::where('id', $id)->delete();
+            return back()->with('success', 'Date idea removed from community feed.');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Could not delete date idea: ' . $e->getMessage());
         }
     }
 

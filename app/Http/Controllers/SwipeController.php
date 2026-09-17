@@ -28,7 +28,8 @@ class SwipeController extends Controller
                 ->orderByRaw('COALESCE(is_boosted, 0) DESC')
                 ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
                 ->orderBy('is_verified', 'desc')
-                ->take(25)
+                ->orderBy('id', 'desc')
+                ->take(30)
                 ->get();
 
             // Fallback so the deck never feels empty
@@ -37,7 +38,8 @@ class SwipeController extends Controller
                     ->where('status', 'active')
                     ->orderByRaw('COALESCE(is_boosted, 0) DESC')
                     ->orderBy('is_verified', 'desc')
-                    ->take(15)
+                    ->orderBy('id', 'desc')
+                    ->take(20)
                     ->get();
             }
         } catch (\Throwable $e) {

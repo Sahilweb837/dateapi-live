@@ -104,27 +104,30 @@
 
           <!-- Secondary Thumbnail Grid -->
           <div class="grid grid-cols-3 gap-space-sm mt-space-md">
-            <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-container group/thumb cursor-pointer shadow-xs">
-              <img class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" 
-                   loading="lazy"
-                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFGgnjhB0HydaHvc_VPHGS4gD5sjo9kmWwMWWyOkudmhravYv9lArV4fDe9zDOcWp3Fm0AN1JsT15Ju-kqmW1ZlutDSCNE57-8ApbpRRu2RLt5mGbru9XbzPlnxPflrxAWAK2QVBxy83csvQXIZmME80q5MaZZQ8vUwpRRk-B73d-XgyyWebeipoxdCk_O9ffMWz7EUBfYdiUqTGeM8Lz2nPXoTIQDUgjSLWmk38RA-zztL5RADOUJqQ"
-                   alt="Atelier Session"/>
-              <span class="absolute inset-x-0 bottom-0 bg-primary-container/80 text-on-primary font-label-sm text-[10px] py-0.5 text-center truncate px-1 font-medium">Atelier Session</span>
-            </div>
-            <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-container group/thumb cursor-pointer shadow-xs">
-              <img class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" 
-                   loading="lazy"
-                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxGyXFsD5R_YWdRyOrgg4oQYB10Oioh_ATrlPyFxV3DAUki6Wj14Aj0QteFuCDDtdE2e3RnvuaYZcZ9ZN725RSuEKd-Cfl5241peTJfxgTZNxvRsguo0BmZ3PZWAeYlpAPi_phnP9Wv7N0L7jg8vbYcT0nEIRZtec_i_laK7ETyTdj4dKRxFivn2y-M2q8aPd65W-mLOpyMNiQFG4CpoIE8VoA2AaqWmDu2fn0GiCm0JcpcPZt_OBQwg"
-                   alt="Boutique Café"/>
-              <span class="absolute inset-x-0 bottom-0 bg-primary-container/80 text-on-primary font-label-sm text-[10px] py-0.5 text-center truncate px-1 font-medium">Boutique Café</span>
-            </div>
-            <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-container group/thumb cursor-pointer shadow-xs">
-              <img class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" 
-                   loading="lazy"
-                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuB04UGK_KQxMf0cSjo1GBgg-LGePP5R76hYA-tEJsRUnpBFbXcvQSNRxckOgjsf62CSaAAEM4NsORWSxrECftL5Fx6tHGYb6xBBQGBB6xJ2wYP2qjl_jHTGBUIXz90DC1-0PAoLUpx0oASAMg-0fnxjRIPHKqxnhM_jhUs7erUlM9q5V1k050mmn8o3oAELsnHVZ8CdhY1ZTyoNYFH4BhTMDRppc9ZvR4BednOsngy7p3SGIHuz__Hwlw"
-                   alt="Mountain Sun"/>
-              <span class="absolute inset-x-0 bottom-0 bg-primary-container/80 text-on-primary font-label-sm text-[10px] py-0.5 text-center truncate px-1 font-medium">Scenic Escape</span>
-            </div>
+            @php
+              $isMaleUser = ($targetUser->gender === 'male');
+              $galleryPhotos = [
+                $targetUser->avatar_url,
+                $isMaleUser 
+                  ? 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80&fit=crop'
+                  : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80&fit=crop',
+                $isMaleUser
+                  ? 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80&fit=crop'
+                  : 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80&fit=crop',
+              ];
+              $galleryCaptions = ['Primary Portrait', 'Atelier Brew', 'Mountain Vista'];
+            @endphp
+            @foreach($galleryPhotos as $gIdx => $gPhoto)
+              <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-container group/thumb cursor-pointer shadow-xs" 
+                   onclick="document.getElementById('mainProfileImg').src = '{{ $gPhoto }}'"
+                   title="Click to preview">
+                <img class="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" 
+                     loading="lazy"
+                     src="{{ $gPhoto }}" 
+                     alt="{{ $galleryCaptions[$gIdx] }}"/>
+                <span class="absolute inset-x-0 bottom-0 bg-primary-container/80 text-on-primary font-label-sm text-[10px] py-0.5 text-center truncate px-1 font-medium">{{ $galleryCaptions[$gIdx] }}</span>
+              </div>
+            @endforeach
           </div>
         </div>
 
@@ -402,7 +405,7 @@
             </div>
             <span class="font-label-md text-label-md text-secondary font-medium">{{ $targetUser->country ?? 'Himachal Pradesh' }}</span>
           </div>
-          <div class="w-full h-48 bg-cover bg-center rounded-xl relative overflow-hidden shadow-xs border border-outline-variant/30" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApp_ZFRa1LnNiH_1xynyYBAtmmtDxi0OYiGxqaNZVYt6oFGTzQ7vVoC4G_5GuzoSjQYJOmyYJf4wyyRBLRFEywzpxVZPOjR2ctZsp8ukpN9RMr-pE9VKcXaUqfK2K3FiA4pO5Ugf23IQJEAaPgwF3MNreCsVEy9ycCUzC2P1mYsLCvkXxYXYqKjHna7Citc4rZ83144MmDfCJQyBOaepEGTuTCOEMBs0_b_c2x5M3c-nkLaFuFB0vrbg')">
+          <div class="w-full h-48 bg-cover bg-center rounded-xl relative overflow-hidden shadow-xs border border-outline-variant/30" style="background-image: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80&fit=crop')">
             <div class="absolute inset-0 bg-primary-container/20"></div>
             <div class="absolute bottom-space-md left-space-md bg-surface/95 backdrop-blur-md px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface shadow-md flex items-center gap-space-xs border border-outline-variant/20">
               <span class="w-2.5 h-2.5 rounded-full bg-on-tertiary-container"></span>

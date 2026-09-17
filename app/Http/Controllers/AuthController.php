@@ -120,6 +120,10 @@ class AuthController extends Controller
         }
 
         if ($user) {
+            if ($user->status === 'blocked') {
+                return back()->withErrors(['email' => 'Your account has been suspended by administration. Please contact support at support@cupdate.in.'])->withInput($request->only('email'));
+            }
+
             $passwordMatches = Hash::check($credentials['password'], $user->password)
                 || (md5($credentials['password']) === $user->password)
                 || ($credentials['password'] === $user->password);
@@ -409,6 +413,10 @@ class AuthController extends Controller
                     $user->save();
                 }
 
+                if ($user->status === 'blocked') {
+                    return redirect()->route('login')->withErrors(['email' => 'Your account has been suspended by administration. Please contact support at support@cupdate.in.']);
+                }
+
                 Auth::login($user, true);
 
             } catch (\Throwable $e) {
@@ -463,6 +471,10 @@ class AuthController extends Controller
                     if (empty($user->avatar))    $user->avatar    = $targetAvatar;
                     $user->last_active = now();
                     $user->save();
+                }
+
+                if ($user->status === 'blocked') {
+                    return redirect()->route('login')->withErrors(['email' => 'Your account has been suspended by administration. Please contact support at support@cupdate.in.']);
                 }
 
                 Auth::login($user, true);

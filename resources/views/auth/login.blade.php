@@ -195,32 +195,25 @@
               </p>
             </div>
 
-            <!-- Social Auth: Google Sign-in -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-              <button type="button" onclick="handleGoogleSignIn(event)" id="google-signin-btn" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-white hover:bg-gray-50 transition-all text-gray-700 font-label-md text-label-md rounded-full shadow-sm border border-gray-200 group cursor-pointer hover:shadow hover:scale-[1.01] active:scale-[0.99]">
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+            <!-- Primary Fast 1-Click Google Sign-In -->
+            <div class="flex flex-col gap-2">
+              <button type="button" onclick="handleGoogleSignIn(event)" id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3.5 px-6 bg-white hover:bg-gray-50 text-gray-800 font-bold text-sm sm:text-base rounded-full shadow-sm border border-gray-300 hover:border-gray-400 hover:shadow-md transition-all cursor-pointer group active:scale-[0.99]">
+                <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
                   <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"></path>
                   <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"></path>
                   <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"></path>
                   <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"></path>
                 </svg>
-                <span class="font-bold text-xs sm:text-sm" id="google-btn-text">Sign in with Google</span>
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-auto" id="google-btn-dot" title="Popup Ready"></span>
-              </button>
-
-              <button type="button" onclick="simulateToast('Connecting to Apple ID...')" class="flex items-center justify-center gap-space-sm px-space-md py-space-sm bg-surface-container hover:bg-surface-container-high transition-all text-on-surface font-label-md text-label-md rounded-full shadow-sm border border-outline-variant/30">
-                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 170 170">
-                  <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.74 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.68-7.85-11.97-14.42-6.42-9.74-11.35-20.73-14.8-32.97-3.44-12.24-5.17-23.77-5.17-34.58 0-14.07 3.38-25.79 10.14-35.16 6.76-9.36 15.24-14.1 25.45-14.23 4.93 0 10.36 1.34 16.29 4.02 5.92 2.68 9.69 4.09 11.3 4.23 1.95-.27 5.98-1.74 12.09-4.41 6.1-2.68 11.45-3.89 16.03-3.64 12.74.88 22.84 5.65 30.29 14.32-11.05 6.72-16.45 16.06-16.19 28.02.26 9.69 4.02 17.65 11.3 23.88 7.28 6.23 15.7 9.8 25.26 10.72-2.12 6.53-4.64 12.87-7.55 19.04zm-33.15-118.8c0 7.39-2.73 14.38-8.2 20.97-5.46 6.59-12.19 10.82-20.19 12.69-.13-1.19-.2-2.26-.2-3.21 0-7.38 3.03-14.7 9.09-21.95 6.06-7.25 13.06-11.23 21-11.94.13 1.15.2 2.19.2 3.12l-.7 8.32z"></path>
-                </svg>
-                <span class="font-bold">Continue with Apple</span>
+                <span id="google-btn-text" class="tracking-tight">Continue with Google</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse ml-auto" id="google-btn-dot" title="One-Tap Instant Sign-In"></span>
               </button>
             </div>
 
             <!-- Divider -->
-            <div class="flex items-center gap-space-md">
-              <div class="flex-grow h-px bg-outline-variant/50"></div>
-              <span class="font-label-sm text-label-sm text-on-surface-variant/80 uppercase tracking-widest">or email credentials</span>
-              <div class="flex-grow h-px bg-outline-variant/50"></div>
+            <div class="flex items-center gap-space-md my-1">
+              <div class="flex-grow h-px bg-outline-variant/40"></div>
+              <span class="font-label-sm text-xs text-on-surface-variant/70 uppercase tracking-wider font-semibold">or log in with email &amp; password</span>
+              <div class="flex-grow h-px bg-outline-variant/40"></div>
             </div>
 
             <!-- Laravel Sign In Form -->

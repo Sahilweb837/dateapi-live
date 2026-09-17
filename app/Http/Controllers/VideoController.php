@@ -20,7 +20,8 @@ class VideoController extends Controller
                 })
                 ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
                 ->orderBy('last_active', 'desc')
-                ->take(15)
+                ->orderBy('id', 'desc')
+                ->take(20)
                 ->get();
         } catch (\Throwable $e) {
             $partners = collect();

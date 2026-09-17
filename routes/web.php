@@ -97,7 +97,10 @@ Route::match(['get', 'post'], '/admin/login', [AdminController::class, 'login'])
 Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 Route::post('/admin/user/verify/{id}', [AdminController::class, 'toggleVerify'])->name('admin.user.verify');
+Route::post('/admin/user/block/{id}', [AdminController::class, 'toggleBlock'])->name('admin.user.block');
 Route::post('/admin/user/coins/{id}', [AdminController::class, 'addCoins'])->name('admin.user.coins');
+Route::post('/admin/message/delete/{id}', [AdminController::class, 'deleteMessage'])->name('admin.message.delete');
+Route::post('/admin/idea/delete/{id}', [AdminController::class, 'deleteIdea'])->name('admin.idea.delete');
 Route::post('/admin/analytics/clear', [AdminController::class, 'clearAnalytics'])->name('admin.analytics.clear');
 
 // Admin Automated Blogging Engine

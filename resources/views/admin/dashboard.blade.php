@@ -252,7 +252,7 @@
             <div class="flex items-center justify-between pb-3 border-b border-[#f0e3d9]">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-[#8b5a2b]">manage_accounts</span>
-                    <h2 class="text-base font-bold text-[#231713]">Latest Registered Singles &amp; Moderation</h2>
+                    <h2 class="text-base font-bold text-[#231713]">Member Management &amp; Access Control</h2>
                 </div>
                 <span class="text-xs text-gray-400 font-semibold">{{ $totalUsers }} total members</span>
             </div>
@@ -264,7 +264,7 @@
                             <th class="py-3 px-3 rounded-l-xl">User</th>
                             <th class="py-3 px-3">Email</th>
                             <th class="py-3 px-3">Location</th>
-                            <th class="py-3 px-3">Coins / XP</th>
+                            <th class="py-3 px-3">Status</th>
                             <th class="py-3 px-3">Verification</th>
                             <th class="py-3 px-3 text-right rounded-r-xl">Actions</th>
                         </tr>
@@ -273,7 +273,7 @@
                         @forelse($users as $u)
                             <tr class="hover:bg-[#fdfaf7] transition-colors">
                                 <td class="py-3 px-3 flex items-center gap-3">
-                                    <img src="{{ $u->avatar ?: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80&fit=crop' }}" class="w-9 h-9 rounded-full object-cover ring-1 ring-gray-200" alt="{{ $u->full_name }}"/>
+                                    <img src="{{ $u->avatar_url }}" class="w-9 h-9 rounded-full object-cover ring-1 ring-gray-200" alt="{{ $u->full_name }}"/>
                                     <div>
                                         <p class="font-bold text-gray-900">{{ $u->full_name }}</p>
                                         <p class="text-[10px] font-mono text-gray-400">{{ $u->member_code ?? 'CD-' . $u->id }}</p>
@@ -282,7 +282,15 @@
                                 <td class="py-3 px-3 font-mono text-gray-700">{{ $u->email }}</td>
                                 <td class="py-3 px-3 text-gray-600">{{ $u->country ?? 'India' }}</td>
                                 <td class="py-3 px-3">
-                                    <span class="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">☕ {{ $u->coins ?? 50 }} Coins</span>
+                                    @if($u->status === 'blocked')
+                                        <span class="inline-flex items-center gap-1 font-bold text-rose-800 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200 text-[10px]">
+                                            <span class="material-symbols-outlined text-xs">block</span> Blocked
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 text-[10px]">
+                                            <span class="material-symbols-outlined text-xs">check_circle</span> Active
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="py-3 px-3">
                                     @if($u->is_verified)
@@ -295,14 +303,24 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-3 px-3 text-right space-x-2 whitespace-nowrap">
+                                <td class="py-3 px-3 text-right space-x-1.5 whitespace-nowrap">
+                                    <!-- Toggle Verification -->
                                     <form action="{{ route('admin.user.verify', $u->id) }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" class="px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors cursor-pointer {{ $u->is_verified ? 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200' : 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700' }}">
-                                            {{ $u->is_verified ? 'Unverify' : 'Verify Badge' }}
+                                            {{ $u->is_verified ? 'Unverify' : 'Verify' }}
                                         </button>
                                     </form>
 
+                                    <!-- Toggle Block / Unblock User -->
+                                    <form action="{{ route('admin.user.block', $u->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to {{ $u->status === 'blocked' ? 'unblock' : 'block' }} this user?');">
+                                        @csrf
+                                        <button type="submit" class="px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors cursor-pointer {{ $u->status === 'blocked' ? 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100' }}">
+                                            {{ $u->status === 'blocked' ? 'Unblock' : 'Block' }}
+                                        </button>
+                                    </form>
+
+                                    <!-- Add Bonus Coins -->
                                     <form action="{{ route('admin.user.coins', $u->id) }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition-colors cursor-pointer" title="Add 100 bonus coins">
@@ -314,6 +332,129 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="py-8 text-center text-gray-400">No members registered yet.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Live Member Chat & Messages Oversight -->
+        <div class="bg-white rounded-3xl p-6 border border-[#e8d8cc] shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-[#f0e3d9]">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#ff007f]">forum</span>
+                    <h2 class="text-base font-bold text-[#231713]">Live Dating Chat &amp; Message Oversight</h2>
+                </div>
+                <span class="text-xs text-gray-400 font-semibold">{{ $messages->count() }} recent dispatches</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-[#faf5f0] text-gray-500 uppercase text-[10px] font-bold">
+                        <tr>
+                            <th class="py-3 px-3 rounded-l-xl">From (Sender)</th>
+                            <th class="py-3 px-3">To (Receiver)</th>
+                            <th class="py-3 px-3">Message Content</th>
+                            <th class="py-3 px-3">Timestamp</th>
+                            <th class="py-3 px-3 text-right rounded-r-xl">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($messages as $msg)
+                            <tr class="hover:bg-[#fdfaf7] transition-colors">
+                                <td class="py-3 px-3">
+                                    <div class="flex items-center gap-2">
+                                        <img src="{{ $msg->sender->avatar_url ?? asset('assets/images/default_avatar.png') }}" class="w-7 h-7 rounded-full object-cover border border-gray-200"/>
+                                        <span class="font-bold text-gray-900">{{ $msg->sender->full_name ?? 'User #' . $msg->sender_id }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-3">
+                                    <div class="flex items-center gap-2">
+                                        <img src="{{ $msg->receiver->avatar_url ?? asset('assets/images/default_avatar.png') }}" class="w-7 h-7 rounded-full object-cover border border-gray-200"/>
+                                        <span class="font-bold text-gray-900">{{ $msg->receiver->full_name ?? 'User #' . $msg->receiver_id }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-3 max-w-sm text-gray-700">
+                                    <p class="truncate">{{ $msg->body ?? $msg->message ?? '(Photo / Attachment)' }}</p>
+                                    @if($msg->image_path)
+                                        <a href="{{ asset($msg->image_path) }}" target="_blank" class="text-[10px] text-secondary font-bold hover:underline flex items-center gap-0.5 mt-0.5">
+                                            <span class="material-symbols-outlined text-xs">image</span> View Photo
+                                        </a>
+                                    @endif
+                                </td>
+                                <td class="py-3 px-3 text-gray-400 whitespace-nowrap">
+                                    {{ \Carbon\Carbon::parse($msg->created_at)->diffForHumans() }}
+                                </td>
+                                <td class="py-3 px-3 text-right whitespace-nowrap">
+                                    <form action="{{ route('admin.message.delete', $msg->id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this message?');">
+                                        @csrf
+                                        <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition cursor-pointer">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-8 text-center text-gray-400">No chat messages recorded yet.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Community Date Ideas Moderation -->
+        <div class="bg-white rounded-3xl p-6 border border-[#e8d8cc] shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-[#f0e3d9]">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#8b5a2b]">local_cafe</span>
+                    <h2 class="text-base font-bold text-[#231713]">Community Date Ideas Moderation</h2>
+                </div>
+                <span class="text-xs text-gray-400 font-semibold">{{ $ideas->count() }} active ideas</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-[#faf5f0] text-gray-500 uppercase text-[10px] font-bold">
+                        <tr>
+                            <th class="py-3 px-3 rounded-l-xl">Member</th>
+                            <th class="py-3 px-3">Cafe &amp; City</th>
+                            <th class="py-3 px-3">Idea Content</th>
+                            <th class="py-3 px-3">Sparks</th>
+                            <th class="py-3 px-3 text-right rounded-r-xl">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($ideas as $idea)
+                            <tr class="hover:bg-[#fdfaf7] transition-colors">
+                                <td class="py-3 px-3">
+                                    <span class="font-bold text-gray-900">{{ $idea->user->full_name ?? 'Member' }}</span>
+                                </td>
+                                <td class="py-3 px-3 font-semibold text-[#8b5a2b]">
+                                    {{ $idea->cafe_name }} • {{ $idea->city }}
+                                </td>
+                                <td class="py-3 px-3 max-w-md text-gray-700 truncate">
+                                    {{ $idea->content ?? $idea->idea_text }}
+                                </td>
+                                <td class="py-3 px-3">
+                                    <span class="font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
+                                        ❤️ {{ $idea->sparks_count ?? $idea->sparks ?? 0 }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-3 text-right whitespace-nowrap">
+                                    <form action="{{ route('admin.idea.delete', $idea->id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this date idea?');">
+                                        @csrf
+                                        <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition cursor-pointer">
+                                            Remove Idea
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-8 text-center text-gray-400">No community date ideas posted yet.</td>
                             </tr>
                         @endforelse
                     </tbody>
