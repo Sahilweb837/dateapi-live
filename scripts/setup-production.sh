@@ -9,19 +9,6 @@ if ! command -v php >/dev/null 2>&1; then
     exit 1
 fi
 
-if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
-    echo "Node.js/npm are missing. Installing the Ubuntu packages..."
-    if ! command -v sudo >/dev/null 2>&1; then
-        echo "sudo is required to install nodejs and npm, or install them as root." >&2
-        exit 1
-    fi
-    sudo apt-get update
-    sudo apt-get install -y nodejs npm
-fi
-
-echo "Node: $(node --version)"
-echo "npm:  $(npm --version)"
-
 if [ ! -f .env ]; then
     echo ".env is missing. Copy .env.example to .env and configure production values first." >&2
     exit 1
@@ -32,11 +19,22 @@ if grep -Eq '^ADMIN_PASSWORD=(replace-with-a-long-random-password)?$' .env; then
     exit 1
 fi
 
-npm ci
-npm run build
+if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
+    echo "Node: $(node --version)"
+    echo "npm:  $(npm --version)"
+    npm ci
+    npm run build
+else
+    echo "Node.js/npm are unavailable in this hosting container."
+    echo "Using the prebuilt public/build assets shipped with the release."
+fi
 
-if [ ! -f public/build/manifest.json ]; then
-    echo "Vite build completed without public/build/manifest.json." >&2
+if [ ! -s public/build/manifest.json ] ||
+   [ ! -f public/build/assets/$(php -r '
+       $manifest = json_decode(file_get_contents("public/build/manifest.json"), true);
+       echo basename($manifest["resources/css/app.css"]["file"] ?? "");
+   ') ]; then
+    echo "CSS assets are missing. Build on a machine with Node.js and upload public/build." >&2
     exit 1
 fi
 
