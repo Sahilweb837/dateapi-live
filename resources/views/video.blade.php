@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Live 1-on-1 Random Coffee Video Matching — CupDate')
-@section('meta_desc', 'Connect face-to-face with verified singles online right now. Instant randomized 45-second coffee intro calls with intentional singles across India.')
+@section('title', 'One-to-One Online Video Introductions in India — CupDate')
+@section('meta_desc', 'Meet active CupDate members one at a time through respectful online video introductions, with real profiles from Himachal Pradesh and cities across India.')
 
 @section('content')
 <div class="max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
@@ -18,11 +18,11 @@
                         Cup<span class="neon-pink-text">Date</span> Video Lounge
                     </h1>
                     <span class="text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping"></span> Live WebRTC
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> One-to-one preview
                     </span>
                 </div>
                 <p class="text-xs text-secondary mt-0.5">
-                    Fast, respectful 1-on-1 coffee date matching with verified active singles.
+                    Respectful one-to-one introductions with real active members. Move on whenever you are ready.
                 </p>
             </div>
         </div>
@@ -31,7 +31,7 @@
         <div class="flex items-center gap-3">
             <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#fdeae3] border border-[#ff007f]/30 text-xs font-bold text-[#835339]">
                 <span class="w-2 h-2 rounded-full bg-[#ff007f] animate-pulse"></span>
-                <span id="activeSinglesCounter">48 Singles Online</span>
+                <span id="activeSinglesCounter">{{ $partners->count() }} verified profiles available</span>
             </div>
             <button onclick="nextVideoPartner()" class="px-4 py-2 rounded-full bg-[#ff007f] hover:bg-[#d6006c] text-white text-xs font-bold shadow-[0_0_15px_rgba(255,0,127,0.35)] active:scale-95 transition flex items-center gap-1.5 cursor-pointer">
                 <span class="material-symbols-outlined text-sm">shuffle</span>
@@ -53,8 +53,8 @@
                     <span class="absolute inset-2 rounded-full border border-emerald-400/60 animate-pulse"></span>
                     <span class="material-symbols-outlined text-3xl text-[#ff007f]">radar</span>
                 </div>
-                <h4 class="text-sm font-bold text-white tracking-wide" id="radarStatusText">Scanning Himachal &amp; North India Channels...</h4>
-                <p class="text-xs text-stone-400 mt-1">Looking for available daters with matching roast preferences.</p>
+                <h4 class="text-sm font-bold text-white tracking-wide" id="radarStatusText">Finding an available member...</h4>
+                <p class="text-xs text-stone-400 mt-1">Only active profiles that have chosen to share a photo are shown.</p>
             </div>
 
             <!-- Remote Partner Profile & Simulated Stream -->
@@ -66,7 +66,7 @@
                         <span id="partnerStatusLabel">Online &amp; Connected</span>
                     </span>
                     <span class="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] text-stone-300 font-mono">
-                        HD 1080p
+                        Profile preview
                     </span>
                 </div>
 
@@ -74,7 +74,7 @@
                 <div class="relative my-auto flex flex-col items-center">
                     <div class="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden p-1 bg-gradient-to-tr from-[#ff007f] to-amber-500 shadow-[0_0_30px_rgba(255,0,127,0.4)]">
                         <img id="partnerAvatar" 
-                             src="{{ $partners->first()->avatar_url ?? asset('assets/images/default_avatar.png') }}" 
+                             src="{{ optional($partners->first())->avatar_url ?? asset('assets/images/default_avatar.png') }}" 
                              alt="Partner Avatar" 
                              class="w-full h-full object-cover rounded-full">
                         <span class="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-black"></span>
@@ -82,11 +82,11 @@
 
                     <div class="mt-3 text-center">
                         <div class="flex items-center justify-center gap-1.5">
-                            <h3 id="partnerName" class="font-headline-sm text-xl font-bold text-white">{{ $partners->first()->full_name ?? 'Priya Mehta' }}</h3>
+                            <h3 id="partnerName" class="font-headline-sm text-xl font-bold text-white">{{ optional($partners->first())->full_name ?? 'No member available' }}</h3>
                             <span class="material-symbols-outlined text-emerald-400 text-base" title="Selfie Verified">verified</span>
                         </div>
                         <p id="partnerCity" class="text-xs text-stone-300 mt-0.5">
-                            {{ $partners->first()->country ?? 'Shimla, Himachal Pradesh' }} • {{ $partners->first()->age ?? 24 }} yrs
+                            {{ optional($partners->first())->country ?? 'Location not shared' }} @if(optional($partners->first())->age) • {{ optional($partners->first())->age }} yrs @endif
                         </p>
                         <div class="mt-2 inline-flex items-center gap-1 text-[11px] bg-[#ff007f]/20 border border-[#ff007f]/40 text-[#ff80bf] px-3 py-0.5 rounded-full font-semibold">
                             <span class="material-symbols-outlined text-xs">local_cafe</span>
@@ -99,7 +99,7 @@
                 <div class="w-full flex items-center justify-between gap-2 pt-2">
                     <button onclick="sendQuickInviteFromVideo()" class="flex-1 py-2 px-3 rounded-full bg-[#ff007f]/90 hover:bg-[#ff007f] text-white text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95 shadow-md">
                         <span class="material-symbols-outlined text-sm">local_cafe</span>
-                        <span>Send 45-Min Coffee Invite</span>
+                        <span>Send a date invitation</span>
                     </button>
                     <button onclick="nextVideoPartner()" class="py-2 px-4 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold flex items-center gap-1 transition">
                         <span>Skip</span>
@@ -181,18 +181,6 @@ let micEnabled = true;
 const partnersList = @json($partners);
 let currentPartnerIdx = 0;
 
-// Cities to rotate during scanning simulation
-const scanningLocations = [
-    'Kangra Valley, HP',
-    'Shimla Mall Road, HP',
-    'Old Manali Riverfront, HP',
-    'Dharamshala & McLeodGanj, HP',
-    'Chandigarh Sector 9, PB',
-    'Koregaon Park, Pune',
-    'Hauz Khas, Delhi NCR',
-    'Indiranagar, Bangalore'
-];
-
 async function initLocalCamera() {
     try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -237,8 +225,7 @@ function nextVideoPartner() {
 
     // Show scanner radar for 700ms for realistic video matching experience
     const scanner = document.getElementById('radarScannerOverlay');
-    const randomLoc = scanningLocations[Math.floor(Math.random() * scanningLocations.length)];
-    document.getElementById('radarStatusText').innerText = `Connecting to ${randomLoc}...`;
+    document.getElementById('radarStatusText').innerText = 'Finding an available member...';
     scanner.classList.remove('hidden');
 
     setTimeout(() => {
@@ -246,7 +233,7 @@ function nextVideoPartner() {
         const partner = partnersList[currentPartnerIdx];
 
         document.getElementById('partnerName').innerText = partner.full_name;
-        document.getElementById('partnerCity').innerText = `${partner.country || 'Himachal Pradesh'} • ${partner.age || 23} yrs`;
+        document.getElementById('partnerCity').innerText = `${partner.country || 'Location not shared'}${partner.age ? ` • ${partner.age} yrs` : ''}`;
         if (partner.avatar_url) {
             document.getElementById('partnerAvatar').src = partner.avatar_url;
         }
@@ -275,12 +262,6 @@ function showVideoToast(msg) {
 
 document.addEventListener('DOMContentLoaded', () => {
     initLocalCamera();
-    // Periodically fluctuate online singles counter (45-65) for live feel
-    setInterval(() => {
-        const count = 45 + Math.floor(Math.random() * 20);
-        const el = document.getElementById('activeSinglesCounter');
-        if (el) el.innerText = `${count} Singles Online`;
-    }, 7000);
 });
 </script>
 @endsection

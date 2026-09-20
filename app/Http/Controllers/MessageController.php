@@ -8,6 +8,8 @@ use App\Models\Message;
 use App\Models\MatchModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class MessageController extends Controller
 {
@@ -131,7 +133,15 @@ class MessageController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
 
-        if ($request->receiver_id == $user->id) {
+        $receiver = User::whereKey($request->receiver_id)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$receiver) {
+            return response()->json(['success' => false, 'message' => 'This member is no longer available.'], 422);
+        }
+
+        if ($receiver->id == $user->id) {
             return response()->json(['success' => false, 'message' => 'Cannot send messages to yourself.'], 422);
         }
 
@@ -154,44 +164,51 @@ class MessageController extends Controller
         }
 
         try {
-            $msg = new Message();
-            $msg->sender_id = $user->id;
-            $msg->receiver_id = $request->receiver_id;
-            $msg->message = strip_tags($messageText);
-            $msg->body = strip_tags($messageText);
-            $msg->attachment = $attachmentPath;
-            $msg->image_path = $attachmentPath;
-            $msg->is_read = 0;
-            $msg->created_at = now();
-            $msg->save();
-        } catch (\Throwable $e) {
-            try {
-                $id = DB::table('messages')->insertGetId([
-                    'sender_id' => $user->id,
-                    'receiver_id' => $request->receiver_id,
-                    'message' => strip_tags($messageText),
-                    'attachment' => $attachmentPath,
-                    'is_read' => 0,
-                    'created_at' => now(),
-                ]);
-                $msg = Message::find($id);
-            } catch (\Throwable $e2) {
-                $id = DB::table('messages')->insertGetId([
-                    'sender_id' => $user->id,
-                    'receiver_id' => $request->receiver_id,
-                    'body' => strip_tags($messageText),
-                    'image_path' => $attachmentPath,
-                    'is_read' => 0,
-                    'created_at' => now(),
-                ]);
-                $msg = Message::find($id) ?? (object)[
-                    'id' => $id,
-                    'sender_id' => $user->id,
-                    'receiver_id' => $request->receiver_id,
-                    'message' => strip_tags($messageText),
-                    'attachment_url' => $attachmentPath ? asset($attachmentPath) : null,
-                ];
+            $now = now();
+            $cleanMessage = strip_tags($messageText);
+            $payload = [
+                'sender_id' => $user->id,
+                'receiver_id' => $receiver->id,
+                'is_read' => 0,
+                'created_at' => $now,
+            ];
+
+            // Support installations upgraded from either historical chat schema.
+            $columns = Schema::getColumnListing('messages');
+            if (in_array('message', $columns, true)) {
+                $payload['message'] = $cleanMessage;
             }
+            if (in_array('body', $columns, true)) {
+                $payload['body'] = $cleanMessage;
+            }
+            if (in_array('attachment', $columns, true)) {
+                $payload['attachment'] = $attachmentPath;
+            }
+            if (in_array('image_path', $columns, true)) {
+                $payload['image_path'] = $attachmentPath;
+            }
+            if (in_array('updated_at', $columns, true)) {
+                $payload['updated_at'] = $now;
+            }
+
+            if (!array_key_exists('message', $payload) && !array_key_exists('body', $payload)) {
+                throw new \RuntimeException('The messages table has no text column. Apply today.sql before sending messages.');
+            }
+
+            $id = DB::table('messages')->insertGetId($payload);
+            $msg = Message::findOrFail($id);
+        } catch (\Throwable $e) {
+            Log::error('Message persistence failed', [
+                'sender_id' => $user->id,
+                'receiver_id' => $receiver->id,
+                'has_attachment' => (bool) $attachmentPath,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Message could not be saved. Please try again.',
+            ], 500);
         }
 
         $msgTextOut = $msg->message ?? ($msg->body ?? strip_tags($messageText));

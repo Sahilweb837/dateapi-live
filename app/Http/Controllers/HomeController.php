@@ -18,7 +18,11 @@ class HomeController extends Controller
         // 1. Featured verified active singles for hero and discovery showcase
         try {
             $featuredDaters = User::where('status', 'active')
-                ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
+                ->where('is_admin', 0)
+                ->whereNotNull('full_name')
+                ->where('full_name', '!=', '')
+                ->whereNotNull('avatar')
+                ->where('avatar', '!=', '')
                 ->orderBy('is_verified', 'desc')
                 ->orderBy('last_active', 'desc')
                 ->take(8)

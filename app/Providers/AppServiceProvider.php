@@ -281,13 +281,7 @@ class AppServiceProvider extends ServiceProvider
                     Log::warning('ADMIN_PASSWORD is missing or too short; no administrator account was seeded.');
                 }
 
-                $insUser->execute(['CD-10001', 'priya.mehta.cupdate@gmail.com', $pwHash, 'Priya Mehta', '1999-05-14', 'female', 'Bookworm & pour-over addict. Let us explore hidden roasteries in Shimla! ☕📚', 'Shimla, Himachal Pradesh', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 1, 0, 150, 80, 'active', $now, $now]);
-                
-                $insUser->execute(['CD-10002', 'arjun.kapoor.cupdate@gmail.com', $pwHash, 'Arjun Kapoor', '1997-11-20', 'male', 'Architect by day, espresso aficionado by night. Always looking for cozy cafes. ☕', 'Pune, Maharashtra', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 1, 0, 100, 45, 'active', $now, $now]);
-
-                $insUser->execute(['CD-10003', 'tanya.sharma.cupdate@gmail.com', $pwHash, 'Tanya Sharma', '1998-08-22', 'female', 'Born in Shimla, lover of cedar trails and hot cappuccinos at Cafe Simla Times. ☕🏔️', 'Shimla, Himachal Pradesh', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 1, 0, 200, 110, 'active', $now, $now]);
-
-                $insUser->execute(['CD-10004', 'vikram.thakur.cupdate@gmail.com', $pwHash, 'Vikram Thakur', '1996-03-12', 'male', 'Old Manali local, snowboarder & French roast barista. Let us grab a table at Cafe 1947 by the river. ☕🏂', 'Manali, Himachal Pradesh', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face', 1, 0, 120, 60, 'active', $now, $now]);
+                // Discovery uses only real registered members; never create fictional profiles.
             }
 
             // Seed date places if empty

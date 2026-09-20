@@ -4,7 +4,7 @@
   $initialTab = $initialTab ?? (request()->routeIs('register') || request()->query('tab') === 'register' ? 'register' : 'signin'); 
 @endphp
 
-@section('title', ($initialTab === 'register' ? 'Join CupDate Free — 100% Selfie Verified Coffee Dating' : 'Log In to CupDate — Private Access & Membership'))
+@section('title', ($initialTab === 'register' ? 'Join CupDate Free — Modern Dating for Real Connections' : 'Log In to CupDate — Private Access'))
 
 @section('extra_css')
 <style>
@@ -94,7 +94,7 @@
         <img class="absolute inset-0 w-full h-full object-cover brightness-[0.88] contrast-[1.03] transform scale-100 transition-transform duration-700 hover:scale-105" 
              loading="lazy"
              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqjMN9O3fPncOYIbgCVEY_Q4rRvy_JIuABUs3wX4By6lkExCkHykhSDpDy_lTsjdP4iAykS7FxnAYvR5tVlwf2RT5p9rXBFmVEiocHvuDXwiC6V-JvLsvs6_pAtCYw7X5cghBPSxEtnZ0n-OjdG0-ehUg4LssxAjddh6r41XoqgMtPlsyo8rgjCVaDiFQ-iIoGnScQYcqFV1L92YzSygIOEIpeoZhKZObkZhM5ZyFG2KfxQ8RRcV-8cw"
-             alt="Warm intimate candid portrait of a woman smiling with ceramic coffee cup in an artisan cafe"/>
+             alt="Warm candid portrait of a woman smiling on a modern first date"/>
         
         <!-- Subtle Scrim Overlays -->
         <div class="absolute inset-0 bg-gradient-to-t from-primary-container/95 via-primary-container/40 to-transparent"></div>
@@ -103,8 +103,8 @@
         <!-- Top Badge: Daily Spotlight -->
         <div class="relative z-10 p-space-lg flex justify-between items-start">
           <div class="backdrop-blur-md bg-surface-container-lowest/90 text-on-surface px-space-md py-space-xs rounded-full shadow-md flex items-center gap-space-xs border border-white/40">
-            <span class="material-symbols-outlined text-on-tertiary-container text-sm">local_cafe</span>
-            <span class="font-label-sm text-label-sm tracking-wide text-on-surface uppercase font-bold">Featured Mountain Roaster</span>
+            <span class="material-symbols-outlined text-on-tertiary-container text-sm">favorite</span>
+            <span class="font-label-sm text-label-sm tracking-wide text-on-surface uppercase font-bold">Featured Connection</span>
           </div>
           <span class="font-headline-sm italic text-surface font-normal text-headline-sm tracking-tighter opacity-90">Nº 084</span>
         </div>
@@ -112,9 +112,9 @@
         <!-- Middle Atmospheric Feature -->
         <div class="relative z-10 px-space-lg my-auto max-w-sm">
           <div class="backdrop-blur-md bg-primary-container/75 p-space-md rounded-2xl shadow-lg border border-white/10 text-white">
-            <p class="font-label-sm text-label-sm text-amber-300 uppercase tracking-wider mb-1 font-bold">Wake &amp; Bake · Mall Road, Shimla</p>
+            <p class="font-label-sm text-label-sm text-amber-300 uppercase tracking-wider mb-1 font-bold">Shimla · New connections</p>
             <p class="font-body-sm text-body-sm text-inverse-on-surface leading-snug">
-              "Wild cascara cold brew, cedar-scented veranda seating, and slow conversations that linger until mountain dusk."
+              "Warm light, easy conversation, and the kind of first date that feels natural."
             </p>
           </div>
         </div>
@@ -122,7 +122,7 @@
         <!-- Bottom Testimonial & Metrics Dossier -->
         <div class="relative z-10 p-space-lg flex flex-col gap-space-md">
           <blockquote class="font-headline-sm text-headline-sm text-inverse-on-surface italic leading-snug tracking-tight">
-            “Good coffee is meant to be shared. Meet intentional singles who appreciate the slow ritual of coffee and genuine, unhurried conversation.”
+            “Meet thoughtful singles who value genuine conversation, shared interests, and a real connection.”
           </blockquote>
           
           <div class="pt-space-sm flex items-center justify-between">
@@ -191,7 +191,7 @@
                 Welcome Back to CupDate
               </h2>
               <p class="font-body-md text-body-md text-on-surface-variant">
-                Enter your credentials to view your coffee dates, morning dispatches, and curated matches.
+                Enter your credentials to view your matches, conversations, and private dating experience.
               </p>
             </div>
 
@@ -245,31 +245,13 @@
                 </div>
               </div>
 
-              <!-- Fast Quick-Fill Test Credentials -->
-              <div class="p-2.5 rounded-2xl bg-[#fdf6f0] border border-[#ecd9cc] flex items-center justify-between text-xs">
-                <span class="text-[#78350f] font-bold flex items-center gap-1">
-                  <span class="material-symbols-outlined text-sm text-[#8b5a2b]">bolt</span> Quick Test:
-                </span>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <a href="{{ route('admin.login') }}" class="px-2.5 py-1 rounded-full bg-[#22140D] text-white hover:bg-black text-[11px] font-bold cursor-pointer shadow-xs transition-colors flex items-center gap-1">
-                    <span class="material-symbols-outlined text-xs text-[#E87A88]">shield_person</span> Admin Console
-                  </a>
-                  <button type="button" onclick="quickFillCredentials('priya.mehta.cupdate@gmail.com', 'password123')" class="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-[#78350f] text-[11px] font-semibold border border-amber-200 cursor-pointer shadow-xs transition-colors">
-                    Priya (Shimla)
-                  </button>
-                  <button type="button" onclick="quickFillCredentials('arjun.kapoor.cupdate@gmail.com', 'password123')" class="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-[#78350f] text-[11px] font-semibold border border-amber-200 cursor-pointer shadow-xs transition-colors">
-                    Arjun (Pune)
-                  </button>
-                </div>
-              </div>
-
               <!-- Remember Device -->
               <div class="flex items-center justify-between pt-space-xs">
                 <label class="flex items-center gap-space-sm cursor-pointer select-none">
                   <input name="remember" class="w-4 h-4 accent-secondary rounded" type="checkbox" checked/>
                   <span class="font-body-sm text-body-sm text-on-surface-variant">Remember this private device</span>
                 </label>
-                <span class="font-label-sm text-label-sm text-secondary italic">Auto-sync coffee preferences</span>
+                <span class="font-label-sm text-label-sm text-secondary italic">Your privacy comes first</span>
               </div>
 
               <!-- Submit Button -->
@@ -296,10 +278,10 @@
                 <span class="material-symbols-outlined text-sm">edit_note</span> CupDate Membership Application
               </div>
               <h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">
-                Curate Your Coffee Dating Profile
+                Create Your Dating Profile
               </h2>
               <p class="font-body-md text-body-md text-on-surface-variant">
-                CupDate pairs intentional singles in Himachal Pradesh and India through sensory preferences, slow rituals, and neighborhood roasteries.
+                Build a profile that shows who you are, what you value, and the kind of connection you want.
               </p>
             </div>
 
@@ -444,24 +426,24 @@
                 </div>
               </div>
 
-              <!-- Interactive Selector 1: Signature Coffee Order -->
+              <!-- Interactive Selector 1: Interests -->
               <div class="flex flex-col gap-space-xs pt-space-xs">
                 <div class="flex items-center justify-between">
                   <label class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
-                    <span class="material-symbols-outlined text-secondary text-base">coffee</span>
-                    Your Signature Cafe Order (Choose 1 or 2)
+                    <span class="material-symbols-outlined text-secondary text-base">interests</span>
+                    Your Interests (Choose 1 or 2)
                   </label>
-                  <span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Taste Compatibility</span>
+                  <span class="font-label-sm text-label-sm text-on-surface-variant font-mono">                  Shared Interests</span>
                 </div>
                 <div class="flex flex-wrap gap-2" id="drink-chips">
-                  @foreach(['Oat Cortado','Double Espresso','Pour-over (V60)','Iced Flat White','Himalayan French Press','Vanilla Oat Latte','Matcha Latte','Masala Chai Vibe'] as $index => $drink)
+                  @foreach(['Movies','Travel','Music','Fitness','Books','Food','Art','Outdoors'] as $index => $drink)
                     <button type="button" class="drink-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all duration-200 cursor-pointer {{ $index === 0 || $index === 5 ? 'selected-drink' : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container' }}" 
                             data-drink="{{ $drink }}" onclick="toggleDrinkChip(this)">
                       {{ $drink }}
                     </button>
                   @endforeach
                 </div>
-                <input type="hidden" name="coffee_style" id="coffeeStyleInput" value="Vanilla Oat Latte">
+                <input type="hidden" name="coffee_style" id="coffeeStyleInput" value="Movies">
               </div>
 
               <!-- Interactive Selector 2: Ideal First Date Setting -->
@@ -481,9 +463,9 @@
                     <span class="font-body-sm text-[11px] leading-tight text-on-surface-variant">Intimate talks</span>
                   </div>
                   <div class="vibe-card p-space-sm rounded-2xl bg-surface-container-high text-left transition-all hover:bg-surface-container flex flex-col gap-1 cursor-pointer" 
-                       data-vibe="Vibrant Roastery" onclick="selectVibeCard(this)">
+                       data-vibe="Vibrant Social Space" onclick="selectVibeCard(this)">
                     <span class="material-symbols-outlined vibe-icon text-secondary text-lg">factory</span>
-                    <span class="font-label-md text-label-md font-semibold text-on-surface leading-tight">Vibrant Roastery</span>
+                    <span class="font-label-md text-label-md font-semibold text-on-surface leading-tight">Vibrant Social Space</span>
                     <span class="font-body-sm text-[11px] leading-tight text-on-surface-variant">Lively energy</span>
                   </div>
                   <div class="vibe-card p-space-sm rounded-2xl bg-surface-container-high text-left transition-all hover:bg-surface-container flex flex-col gap-1 cursor-pointer" 
@@ -508,7 +490,7 @@
                 <div class="flex flex-col gap-0.5">
                   <span class="font-label-md text-label-md font-semibold text-on-surface">The CupDate Curator Guarantee</span>
                   <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
-                    Every member profile is verified. We guarantee zero bots, no ghosting culture, and authentic coffee lovers in your city who genuinely desire in-person dates.
+                    Every member profile is verified. We work to keep the community authentic, respectful, and focused on meaningful in-person connections.
                   </p>
                 </div>
               </div>
@@ -537,8 +519,8 @@
             </div>
             <div class="flex flex-col items-center gap-1">
               <span class="material-symbols-outlined text-secondary text-lg">storefront</span>
-              <span class="font-label-sm text-label-sm font-semibold text-on-surface">Specialty Cafes</span>
-              <span class="font-body-sm text-[11px] text-on-surface-variant">320+ partnered roasters in HP &amp; India</span>
+              <span class="font-label-sm text-label-sm font-semibold text-on-surface">Real-world dates</span>
+              <span class="font-body-sm text-[11px] text-on-surface-variant">Thoughtful people across HP &amp; India</span>
             </div>
             <div class="flex flex-col items-center gap-1">
               <span class="material-symbols-outlined text-secondary text-lg">alarm_on</span>
@@ -592,8 +574,8 @@
     }
   }
 
-  // Toggle multi-select coffee order pill chips
-  const selectedDrinks = new Set(['Vanilla Oat Latte']);
+  // Toggle multi-select interest pills
+  const selectedDrinks = new Set(['Movies']);
   function toggleDrinkChip(button) {
     const drink = button.getAttribute('data-drink');
     if (selectedDrinks.has(drink)) {
@@ -632,15 +614,6 @@
       input.type = 'password';
       icon.textContent = 'visibility';
     }
-  }
-
-  // Quick credentials filler for testing
-  function quickFillCredentials(email, pass) {
-    const emailInput = document.getElementById('signin-email');
-    const passInput = document.getElementById('signin-password');
-    if (emailInput) emailInput.value = email;
-    if (passInput) passInput.value = pass;
-    simulateToast('Credentials filled: ' + email);
   }
 
   // Toast Notification Simulation
@@ -709,7 +682,7 @@
         });
 
         if (label) {
-          label.innerHTML = `📍 Nearest Coffee Hub: <strong class="text-secondary font-bold">${closest.name.split(',')[0]}</strong>`;
+          label.innerHTML = `📍 Nearest dating area: <strong class="text-secondary font-bold">${closest.name.split(',')[0]}</strong>`;
         }
         if (btn) btn.innerText = "Auto-Matched ✓";
 

@@ -15,12 +15,20 @@ class VideoController extends Controller
         // Simulated online video partners from active users
         try {
             $partners = User::where('status', 'active')
+                ->where('is_admin', 0)
+                ->whereNotNull('full_name')
+                ->where('full_name', '!=', '')
+                ->whereNotNull('avatar')
+                ->where('avatar', '!=', '')
                 ->when($user, function($query) use ($user) {
                     return $query->where('id', '!=', $user->id);
                 })
-                ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
-                ->orderBy('last_active', 'desc')
-                ->orderBy('id', 'desc')
+                ->where(function ($query) {
+                    $query->whereNull('last_active')
+                        ->orWhere('last_active', '>=', now()->subHours(24));
+                })
+                ->orderByDesc('is_verified')
+                ->orderByDesc('last_active')
                 ->take(20)
                 ->get();
         } catch (\Throwable $e) {

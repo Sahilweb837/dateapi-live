@@ -318,11 +318,15 @@ class CityController extends Controller
         // Query singles matching this city or state
         try {
             $singles = User::where('status', 'active')
+                ->where('is_admin', 0)
+                ->whereNotNull('full_name')
+                ->where('full_name', '!=', '')
+                ->whereNotNull('avatar')
+                ->where('avatar', '!=', '')
                 ->where(function($q) use ($city, $slug, $cityNameOnly) {
                     $q->where('country', 'like', "%{$slug}%")
                       ->orWhere('country', 'like', "%{$cityNameOnly}%")
-                      ->orWhere('country', 'like', "%{$city['state']}%")
-                      ->orWhere('is_verified', 1);
+                      ->orWhere('country', 'like', "%{$city['state']}%");
                 })
                 ->take(6)
                 ->get();

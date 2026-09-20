@@ -90,10 +90,10 @@ class User extends Authenticatable
             try {
                 return \Carbon\Carbon::parse($this->dob)->age;
             } catch (\Exception $e) {
-                return 24;
+                return null;
             }
         }
-        return 24;
+        return null;
     }
 
     public function getAvatarUrlAttribute()

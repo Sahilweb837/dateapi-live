@@ -57,10 +57,14 @@ class FeedController extends Controller
 
         try {
             $activeDaters = User::where('status', 'active')
+                ->where('is_admin', 0)
                 ->when($user, function($query) use ($user) {
                     return $query->where('id', '!=', $user->id);
                 })
-                ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
+                ->whereNotNull('full_name')
+                ->where('full_name', '!=', '')
+                ->whereNotNull('avatar')
+                ->where('avatar', '!=', '')
                 ->orderBy('last_active', 'desc')
                 ->take(14)
                 ->get();

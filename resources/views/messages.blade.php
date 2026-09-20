@@ -740,7 +740,7 @@
         showToast(data.message || 'Could not dispatch note. Try again.');
       }
     } catch(err) {
-      showToast('Delivery note delay. Message processed.');
+      showToast('Message could not be saved. Please try again.');
     } finally {
       if (sendBtn) sendBtn.disabled = false;
       input.focus();

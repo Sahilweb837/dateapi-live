@@ -2,6 +2,22 @@
 
 @section('title', $blog->title . ' — CupDate')
 @section('meta_desc', $blog->excerpt)
+@section('extra_head')
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="{{ optional($blog->created_at)->toIso8601String() }}">
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Article',
+            'headline' => $blog->title,
+            'description' => $blog->excerpt,
+            'datePublished' => optional($blog->created_at)->toIso8601String(),
+            'author' => ['@type' => 'Organization', 'name' => 'CupDate Editorial Team'],
+            'publisher' => ['@type' => 'Organization', 'name' => 'CupDate'],
+            'mainEntityOfPage' => url()->current(),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+@endsection
 
 @section('content')
 <article class="max-w-3xl mx-auto px-4 py-10 font-['Inter']">
@@ -29,7 +45,7 @@
         <img src="{{ asset('assets/images/default_avatar.png') }}" class="w-14 h-14 rounded-full object-cover border-2 border-[#8b5a2b]">
         <div>
             <strong class="font-['Plus_Jakarta_Sans'] font-bold text-sm text-[#24140d] block">CupDate Editorial Team</strong>
-            <p class="text-xs text-[#7a666c] mt-0.5">Written by certified relationship coaches and coffee enthusiasts dedicated to healthy, verified dating over coffee.</p>
+            <p class="text-xs text-[#7a666c] mt-0.5">Written by the CupDate editorial team to support safer, kinder, and more meaningful modern dating.</p>
         </div>
     </div>
 </article>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Frequently Asked Questions & Help Guide — CupDate')
-@section('meta_desc', 'Answers to common questions about CupDate: selfie verification, coffee date etiquette, landmark cafe discounts, membership plans, and safety protocols.')
+@section('title', 'Dating FAQ, Online Chat & Video Calls in India — CupDate')
+@section('meta_desc', 'Learn how CupDate free online dating chat, one-to-one video introductions, profile safety, verification, and city discovery work in Himachal Pradesh and across India.')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 py-12 font-['Inter']">
@@ -13,7 +13,7 @@
             Frequently Asked Questions
         </h1>
         <p class="text-sm text-[#7d6558] max-w-xl mx-auto leading-relaxed">
-            Everything you need to know about CupDate's verification, coffee dates, safety standards, and membership tiers.
+            Clear answers about free online chat, one-to-one video introductions, profiles, privacy, safety, and meeting people in Himachal Pradesh and cities across India.
         </p>
     </div>
 
@@ -106,7 +106,20 @@
                 <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
             </div>
             <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
-                Our WebRTC Video Lounge connects you instantly to verified online daters for quick 1-on-1 video chats. You can use your camera, chat face-to-face, test your conversational chemistry, and send a 45-minute coffee date proposal in real time with a single click.
+                The Video Lounge presents one active member at a time for a respectful introduction. You can enable your camera and microphone, review the member profile, move to the next person, or send a date invitation. A future real-time call connection should only be described as live when both people accept and the call service is connected.
+            </div>
+
+            <!-- Q10 -->
+            <div class="bg-white border border-[#e5d5ca] rounded-2xl p-5 cursor-pointer shadow-none" onclick="toggleFaqItem(this)">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-['Plus_Jakarta_Sans'] font-bold text-sm md:text-base text-[#24140d]">
+                        Can I chat online with people for free?
+                    </h3>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#8b5a2b] transition-transform duration-200"></i>
+                </div>
+                <div class="faq-content hidden mt-3 text-xs text-[#7d6558] leading-relaxed pt-2 border-t border-[#e5d5ca]">
+                    Yes. CupDate supports free account registration, profile discovery, and direct online chat for adults who follow the community guidelines. You choose who to contact, can block or report anyone, and should never share private financial or location information.
+                </div>
             </div>
         </div>
 
@@ -140,7 +153,7 @@
     <!-- Schema.org FAQPage JSON-LD -->
     <script type="application/ld+json">
     {
-      "@@context": "https://schema.org",
+      "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
         {
@@ -173,6 +186,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "CupDate never shares exact GPS coordinates; your location is fuzz-shifted by 1.5 to 2 kilometers to prevent stalking."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I chat online with people for free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CupDate supports free registration, profile discovery, and direct online chat for adults who follow the community guidelines."
           }
         }
       ]

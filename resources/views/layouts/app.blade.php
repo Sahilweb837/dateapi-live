@@ -4,8 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'CupDate — Meet Verified Singles Over Coffee | Curated Coffee Dating')</title>
-    <meta name="description" content="@yield('meta_desc', 'CupDate matches you with intentional singles nearby who share your taste in brew, neighborhood spots, and genuine conversation.')">
+    <title>@yield('title', 'CupDate — Modern Dating for Genuine Connections')</title>
+    <meta name="description" content="@yield('meta_desc', 'CupDate helps you meet verified singles for genuine conversations, meaningful dates, and lasting relationships.')">
+    <meta name="robots" content="@yield('robots', 'index,follow')">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'CupDate — Modern Dating for Genuine Connections')">
+    <meta property="og:description" content="@yield('meta_desc', 'Meet verified singles for genuine conversations and meaningful dates.')">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta name="geo.region" content="IN">
+    <meta name="geo.placename" content="Himachal Pradesh, India">
+    <meta name="geo.position" content="31.1048;77.1734">
+    <meta name="ICBM" content="31.1048, 77.1734">
+    @if(request()->routeIs('home'))
+        <script type="application/ld+json">
+            {!! json_encode([
+                '@context' => 'https://schema.org',
+                '@type' => 'Organization',
+                'name' => 'CupDate',
+                'url' => url('/'),
+                'description' => 'Modern dating, online chat, and one-to-one video introductions for adults in Himachal Pradesh and across India.',
+                'areaServed' => ['Himachal Pradesh', 'India'],
+                'sameAs' => [],
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+        </script>
+    @endif
 
     <!-- CupDate Favicon & Brand Touch Icons -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/cupdate_icon.svg') }}">
@@ -41,9 +64,12 @@
     @endif
 
     <!-- Google Identity Services (GSI) Client SDK -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    @if(request()->routeIs('login*', 'register*', 'auth.google'))
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+    @endif
 
-    <!-- Tailwind Play CDN for Precision Layout System -->
+    @if(false)
+    <!-- Legacy Tailwind CDN configuration retained for reference; styles are bundled by Vite. -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
     tailwind.config = {
@@ -149,7 +175,9 @@
     </script>
 
     <!-- Vite Styles & Scripts -->
+    @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @yield('extra_head')
 
     <style>
       /* Natural, fluid smooth scrolling across all browsers & devices */
@@ -290,6 +318,27 @@
       }
       .neon-pink-glow {
         filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.45));
+      }
+      .lazy-media {
+        background: linear-gradient(90deg, #f1dfd8 25%, #fff8f6 50%, #f1dfd8 75%);
+        background-size: 200% 100%;
+        animation: media-shimmer 1.4s ease-in-out infinite;
+        color: transparent;
+        opacity: 0.7;
+        transition: opacity 0.25s ease;
+      }
+      .lazy-media.lazy-loaded {
+        background: transparent;
+        animation: none;
+        color: inherit;
+        opacity: 1;
+      }
+      @keyframes media-shimmer {
+        from { background-position: 200% 0; }
+        to { background-position: -200% 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lazy-media { animation: none; }
       }
     </style>
     @yield('extra_css')
@@ -639,7 +688,43 @@
 
     <!-- Main Content Container (pt-16 sm:pt-20 offsets fixed header) -->
     <main class="w-full pt-16 sm:pt-20 bg-surface min-h-screen flex-grow">
-        @yield('content')
+        @if(auth()->check() && auth()->user()->is_admin && request()->routeIs('admin.*'))
+            <div class="min-h-screen lg:flex bg-[#fffaf8]">
+                <aside class="hidden lg:flex lg:w-64 lg:flex-col border-r border-[#f0d9d6] bg-white p-5">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 mb-8 text-[#281719] font-black text-lg">
+                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#e87a88] text-white material-symbols-outlined">favorite</span>
+                        CupDate <span class="text-[#e87a88]">Admin</span>
+                    </a>
+                    <nav class="space-y-1 text-sm font-semibold">
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-xl px-3 py-2.5 {{ request()->routeIs('admin.dashboard') ? 'bg-[#fff0f1] text-[#c94f63]' : 'text-[#745d61] hover:bg-[#fff7f7]' }}">
+                            <span class="material-symbols-outlined text-lg">dashboard</span> Overview
+                        </a>
+                        <a href="{{ route('admin.blogs') }}" class="flex items-center gap-3 rounded-xl px-3 py-2.5 {{ request()->routeIs('admin.blogs') ? 'bg-[#fff0f1] text-[#c94f63]' : 'text-[#745d61] hover:bg-[#fff7f7]' }}">
+                            <span class="material-symbols-outlined text-lg">edit_note</span> Blog &amp; SEO
+                        </a>
+                        <a href="{{ route('admin.dashboard') }}#members" class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[#745d61] hover:bg-[#fff7f7]">
+                            <span class="material-symbols-outlined text-lg">group</span> Members
+                        </a>
+                        <a href="{{ route('admin.dashboard') }}#analytics" class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[#745d61] hover:bg-[#fff7f7]">
+                            <span class="material-symbols-outlined text-lg">monitoring</span> Analytics
+                        </a>
+                    </nav>
+                    <div class="mt-auto border-t border-[#f0d9d6] pt-4">
+                        <form action="{{ route('admin.logout') }}" method="POST">
+                            @csrf
+                            <button class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-rose-700 hover:bg-rose-50">
+                                <span class="material-symbols-outlined text-lg">logout</span> Sign out
+                            </button>
+                        </form>
+                    </div>
+                </aside>
+                <section class="min-w-0 flex-1">
+                    @yield('content')
+                </section>
+            </div>
+        @else
+            @yield('content')
+        @endif
     </main>
 
     <!-- Global High-SEO Multi-Column Editorial Footer -->
@@ -740,7 +825,10 @@
                         <h4 class="text-xs font-black uppercase tracking-wider text-white">Safety &amp; Compliance</h4>
                     </div>
                     <ul class="space-y-1.5 text-xs text-stone-400">
-                        <li><a href="{{ route('how.it.works') }}" class="hover:text-white transition">Coffee Matchmaking Manifesto</a></li>
+                        <li><a href="{{ route('how.it.works') }}" class="hover:text-white transition">How CupDate Works</a></li>
+                        <li><a href="{{ route('faq') }}" class="hover:text-white transition">Dating FAQ &amp; Help</a></li>
+                        <li><a href="{{ route('video') }}" class="hover:text-white transition">One-to-One Video Introductions</a></li>
+                        <li><a href="{{ route('feed') }}" class="hover:text-white transition">Free Online Dating Chat</a></li>
                         <li><a href="{{ route('safety') }}" class="hover:text-white transition">Women Safety &amp; Protocol</a></li>
                         <li><a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy (DPDP Act 2023)</a></li>
                         <li><a href="{{ route('terms') }}" class="hover:text-white transition">Terms of Service</a></li>
@@ -755,7 +843,7 @@
 
             <!-- Copyright & Sub-footer -->
             <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-stone-800 text-xs text-stone-500">
-                <p>© {{ date('Y') }} CupDate Atelier. Roasted with intention. Dedicated to mindful connections across Himachal Pradesh &amp; India.</p>
+                <p>© {{ date('Y') }} CupDate. Modern dating, online chat, and respectful video introductions across Himachal Pradesh and India.</p>
                 <div class="flex items-center gap-4 text-stone-400">
                     <span class="flex items-center gap-1.5 text-emerald-400 font-semibold">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 100% Selfie-Verified
@@ -1266,7 +1354,7 @@
                         Firebase requires authorizing your domain. In <a href="https://console.firebase.google.com" target="_blank" class="underline font-bold text-blue-700">Firebase Console</a> &rarr; <strong>Authentication &rarr; Settings &rarr; Authorized Domains</strong>, click <strong>Add Domain</strong> and enter <code>cupdate.in</code>.
                     </p>
                     <p class="text-[11px] text-amber-900 font-bold bg-amber-100/70 px-2 py-1 rounded-lg">
-                        👇 In the meantime, select any account below to sign in instantly with 1-click!
+                        Use the official Google sign-in button above, or continue with your email and password.
                     </p>
                 </div>
 
@@ -1280,16 +1368,16 @@
                     <span class="material-symbols-outlined text-blue-600 text-sm">open_in_new</span>
                 </button>
 
-                <div class="flex items-center gap-2 my-2">
+                <div class="hidden items-center gap-2 my-2">
                     <div class="flex-grow h-px bg-gray-200"></div>
                     <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">or instant 1-click single</span>
                     <div class="flex-grow h-px bg-gray-200"></div>
                 </div>
 
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2">Fast 1-Click Accounts</p>
+                <p class="hidden text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2">Fast 1-Click Accounts</p>
 
                 <!-- Account 1: Priya Mehta -->
-                <button type="button" onclick="selectGoogleAccount('priya.mehta.cupdate@gmail.com', 'Priya Mehta', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 'google_demo_female_1')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                <button type="button" onclick="selectGoogleAccount('priya.mehta.cupdate@gmail.com', 'Priya Mehta', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 'google_demo_female_1')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
                     <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Priya Mehta"/>
                     <div class="flex-1 overflow-hidden">
                         <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Priya Mehta</p>
@@ -1299,7 +1387,7 @@
                 </button>
 
                 <!-- Account 2: Arjun Kapoor -->
-                <button type="button" onclick="selectGoogleAccount('arjun.kapoor.cupdate@gmail.com', 'Arjun Kapoor', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 'google_demo_male_1')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                <button type="button" onclick="selectGoogleAccount('arjun.kapoor.cupdate@gmail.com', 'Arjun Kapoor', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 'google_demo_male_1')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
                     <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Arjun Kapoor"/>
                     <div class="flex-1 overflow-hidden">
                         <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Arjun Kapoor</p>
@@ -1309,7 +1397,7 @@
                 </button>
 
                 <!-- Account 3: Tanya Sharma (Himachal) -->
-                <button type="button" onclick="selectGoogleAccount('tanya.sharma.cupdate@gmail.com', 'Tanya Sharma', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 'google_demo_female_2')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                <button type="button" onclick="selectGoogleAccount('tanya.sharma.cupdate@gmail.com', 'Tanya Sharma', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 'google_demo_female_2')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
                     <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Tanya Sharma"/>
                     <div class="flex-1 overflow-hidden">
                         <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Tanya Sharma (Shimla, HP)</p>
@@ -1319,7 +1407,7 @@
                 </button>
 
                 <!-- Account 4: Vikram Thakur (Manali) -->
-                <button type="button" onclick="selectGoogleAccount('vikram.thakur.cupdate@gmail.com', 'Vikram Thakur', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face', 'google_demo_male_2')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
+                <button type="button" onclick="selectGoogleAccount('vikram.thakur.cupdate@gmail.com', 'Vikram Thakur', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face', 'google_demo_male_2')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
                     <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Vikram Thakur"/>
                     <div class="flex-1 overflow-hidden">
                         <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Vikram Thakur (Manali, HP)</p>
@@ -1481,6 +1569,19 @@
     <!-- High-Speed Instant Page Prefetcher & Smart Image Lazy-Loader (Vite/Vue SPA Speed) -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        // Apply the shared theme skeleton to deferred images and let the browser
+        // load them only as they approach the viewport.
+        const deferredImages = document.querySelectorAll('img:not([loading="eager"])');
+        deferredImages.forEach(function(image) {
+          image.loading = 'lazy';
+          image.classList.add('lazy-media');
+          const markLoaded = function() {
+            image.classList.add('lazy-loaded');
+          };
+          image.addEventListener('load', markLoaded, { once: true });
+          if (image.complete && image.naturalWidth > 0) markLoaded();
+        });
+
         // 1. Automatic Native & Blur-up Image Lazy Loading
         const images = document.querySelectorAll('img:not([loading])');
         images.forEach(img => {

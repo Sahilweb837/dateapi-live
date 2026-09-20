@@ -24,24 +24,17 @@ class SwipeController extends Controller
             }
 
             $profiles = User::where('status', 'active')
+                ->where('is_admin', 0)
                 ->whereNotIn('id', $swipedIds)
+                ->whereNotNull('full_name')
+                ->where('full_name', '!=', '')
+                ->whereNotNull('avatar')
+                ->where('avatar', '!=', '')
                 ->orderByRaw('COALESCE(is_boosted, 0) DESC')
-                ->orderByRaw('CASE WHEN avatar IS NOT NULL AND avatar != "" AND avatar NOT LIKE "default%" THEN 1 ELSE 2 END ASC')
                 ->orderBy('is_verified', 'desc')
-                ->orderBy('id', 'desc')
+                ->orderByDesc('last_active')
                 ->take(30)
                 ->get();
-
-            // Fallback so the deck never feels empty
-            if ($profiles->isEmpty()) {
-                $profiles = User::where('id', '!=', $userId)
-                    ->where('status', 'active')
-                    ->orderByRaw('COALESCE(is_boosted, 0) DESC')
-                    ->orderBy('is_verified', 'desc')
-                    ->orderBy('id', 'desc')
-                    ->take(20)
-                    ->get();
-            }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('Swipe profiles query fallback: ' . $e->getMessage());
         }
@@ -58,27 +51,22 @@ class SwipeController extends Controller
 
         // Format profiles for frontend JS deck
         $deckData = $profiles->map(function($p, $idx) {
-            $photos = [
-                $p->avatar_url,
-                'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80&fit=crop',
-                'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&q=80&fit=crop',
-            ];
             $synergy = 91 + (($p->id * 7) % 9);
 
             return [
                 'id' => $p->id,
                 'name' => $p->full_name,
-                'age' => $p->age ?? 27,
-                'location' => $p->country ?? 'Kangra, Himachal Pradesh',
-                'occupation' => !empty($p->bio) ? \Illuminate\Support\Str::limit($p->bio, 45) : 'Coffee Enthusiast & Explorer',
-                'bio' => $p->bio ?? 'Looking for unhurried conversations and shared morning brews. ☕✨',
+                'age' => $p->age,
+                'location' => $p->country ?: 'Location not shared',
+                'occupation' => !empty($p->bio) ? \Illuminate\Support\Str::limit($p->bio, 45) : 'CupDate member',
+                'bio' => $p->bio ?: 'This member has not added a bio yet.',
                 'avatar' => $p->avatar_url,
-                'photos' => $photos,
-                'coffee_style' => $p->coffee_style ?? 'Single-Origin Pour-over',
+                'photos' => [$p->avatar_url],
+                'coffee_style' => $p->coffee_style ?: 'Open to a good conversation',
                 'is_verified' => (bool)$p->is_verified,
                 'synergy' => $synergy,
-                'intent' => 'Lifelong Romance',
-                'interests' => array_filter(array_map('trim', explode(',', $p->interests ?? 'Coffee,Vinyl,Reading,Art'))),
+                'intent' => 'Meaningful connection',
+                'interests' => array_filter(array_map('trim', explode(',', $p->interests ?: ''))),
             ];
         })->values();
 
@@ -138,7 +126,7 @@ class SwipeController extends Controller
             } catch (\Throwable $e) {}
 
             // Exciting chemistry match trigger
-            if ($reciprocal || ($targetId % 2 === 0)) {
+            if ($reciprocal) {
                 $isMatch = true;
                 try {
                     MatchModel::firstOrCreate([

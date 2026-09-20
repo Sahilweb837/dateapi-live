@@ -1,18 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Dating & Relationship Guides — CupDate Editorial')
+@section('title', 'Modern Dating & Relationship Guides — CupDate')
+@section('meta_desc', 'Practical dating, safety, communication, and city guides for modern relationships across India.')
 
 @section('content')
 <div class="max-w-5xl mx-auto px-4 py-10">
     <div class="text-center max-w-2xl mx-auto mb-10">
         <span class="inline-flex items-center gap-1.5 bg-[#f5ede6] text-[#8b5a2b] border border-[#e5d5ca] px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 shadow-none">
-            <i class="fa-solid fa-book-open"></i> Expert Coffee Dating Editorial
+            <i class="fa-solid fa-book-open"></i> CupDate Editorial
         </span>
         <h1 class="font-['Plus_Jakarta_Sans'] font-extrabold text-3xl md:text-4xl text-[#24140d]">
-            CupDate Relationship Guides
+            Modern Dating, Safety &amp; Relationship Guides
         </h1>
         <p class="text-xs md:text-sm text-[#7a666c] mt-2">
-            Thoughtful essays, safe first-meet protocols, and cafe etiquette for dating across Indian cities.
+            Thoughtful, practical guidance for safer first meets, better conversations, and meaningful relationships across Indian cities.
         </p>
     </div>
 
@@ -30,7 +31,7 @@
             </div>
             <div class="mt-6 pt-4 border-t border-[#e5d5ca] flex items-center justify-between">
                 <span class="text-xs text-[#7a666c]">By Ananya Sharma • 8 min read</span>
-                <a href="/blog/ultimate-coffee-dating-etiquette-india-2026.php" class="text-xs font-extrabold text-[#8b5a2b] hover:underline flex items-center gap-1">
+                <a href="{{ route('blog.show', 'ultimate-coffee-dating-etiquette-india-2026') }}" class="text-xs font-extrabold text-[#8b5a2b] hover:underline flex items-center gap-1">
                     Read Guide →
                 </a>
             </div>
@@ -48,7 +49,7 @@
             </div>
             <div class="mt-6 pt-4 border-t border-[#e5d5ca] flex items-center justify-between">
                 <span class="text-xs text-[#7a666c]">By Pooja Deshmukh • 9 min read</span>
-                <a href="/blog/women-dating-safety-guide-india.php" class="text-xs font-extrabold text-[#065f46] hover:underline flex items-center gap-1">
+                <a href="{{ route('blog.show', 'women-dating-safety-guide-india') }}" class="text-xs font-extrabold text-[#065f46] hover:underline flex items-center gap-1">
                     Read Guide →
                 </a>
             </div>

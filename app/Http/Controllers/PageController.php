@@ -118,15 +118,16 @@ class PageController extends Controller
         try {
             $featuredSingles = User::where('status', 'active')
                 ->where('is_verified', 1)
+                ->where('is_admin', 0)
+                ->whereNotNull('full_name')
+                ->where('full_name', '!=', '')
+                ->whereNotNull('avatar')
+                ->where('avatar', '!=', '')
                 ->take(8)
                 ->get();
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('Rishta user query fallback: ' . $e->getMessage());
             $featuredSingles = collect();
-        }
-
-        if ($featuredSingles->isEmpty()) {
-            $featuredSingles = $this->getFallbackSingles();
         }
 
         return view('pages.rishta', compact('featuredSingles'));
@@ -290,80 +291,6 @@ class PageController extends Controller
         return $all;
     }
 
-    protected function getFallbackSingles()
-    {
-        return collect([
-            new User([
-                'id' => 1,
-                'member_code' => 'CD-10001',
-                'full_name' => 'Aditi Rao',
-                'email' => 'aditi.rao@cupdate.in',
-                'gender' => 'female',
-                'dob' => '1999-05-14',
-                'country' => 'Pune, India',
-                'interests' => 'Coffee, Books, Photography, Vinyl Records',
-                'bio' => 'Specialty coffee enthusiast, amateur film photographer, and indie acoustic fan. Let us explore Blue Tokai or Wake & Bake! ☕📸',
-                'coffee_style' => 'Vanilla Oat Milk Latte',
-                'is_verified' => 1,
-                'coins' => 150,
-                'xp' => 80,
-                'status' => 'active',
-                'avatar' => 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face',
-            ]),
-            new User([
-                'id' => 2,
-                'member_code' => 'CD-10002',
-                'full_name' => 'Rahul Kapoor',
-                'email' => 'rahul.kapoor@cupdate.in',
-                'gender' => 'male',
-                'dob' => '1997-11-20',
-                'country' => 'Mumbai, India',
-                'interests' => 'Architecture, Espresso, Hiking, Jazz',
-                'bio' => 'Architect by day, espresso aficionado by night. Always looking for cozy cafes with good reading corners.',
-                'coffee_style' => 'Double Espresso Macchiato',
-                'is_verified' => 1,
-                'coins' => 100,
-                'xp' => 45,
-                'status' => 'active',
-                'avatar' => 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face',
-            ]),
-            new User([
-                'id' => 3,
-                'member_code' => 'CD-10003',
-                'full_name' => 'Tanya Sharma',
-                'email' => 'tanya.sharma@cupdate.in',
-                'gender' => 'female',
-                'dob' => '1998-08-22',
-                'country' => 'Shimla, Himachal Pradesh',
-                'interests' => 'Trekking, Specialty Coffee, Poetry, Himalayas',
-                'bio' => 'Born in Shimla, lover of cedar trails, hot cappuccinos at Cafe Simla Times, and soulful poetry.',
-                'coffee_style' => 'Cinnamon Honey Latte',
-                'is_verified' => 1,
-                'coins' => 200,
-                'xp' => 110,
-                'status' => 'active',
-                'avatar' => 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face',
-            ]),
-            new User([
-                'id' => 4,
-                'member_code' => 'CD-10004',
-                'full_name' => 'Vikram Thakur',
-                'email' => 'vikram.thakur@cupdate.in',
-                'gender' => 'male',
-                'dob' => '1996-03-12',
-                'country' => 'Manali, Himachal Pradesh',
-                'interests' => 'Snowboarding, Pour-overs, Indie Rock, Camping',
-                'bio' => 'Old Manali local, backcountry snowboarder, and French roast barista. Let us grab a table at Cafe 1947 by the river.',
-                'coffee_style' => 'French Press Dark Roast',
-                'is_verified' => 1,
-                'coins' => 120,
-                'xp' => 60,
-                'status' => 'active',
-                'avatar' => 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face',
-            ]),
-        ]);
-    }
-
     public function disclaimer()
     {
         return view('pages.disclaimer');
@@ -379,4 +306,3 @@ class PageController extends Controller
         return view('pages.coffee-date-ideas');
     }
 }
-

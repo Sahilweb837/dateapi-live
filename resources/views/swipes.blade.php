@@ -440,7 +440,7 @@
                     <img alt="{{ $adm->full_name }}" class="w-full h-full object-cover" src="{{ $adm->avatar_url }}"/>
                   </div>
                   <div class="flex flex-col min-w-0">
-                    <span class="font-label-md text-label-md text-on-surface font-semibold truncate">{{ $adm->full_name }}, {{ $adm->age ?? 27 }}</span>
+                    <span class="font-label-md text-label-md text-on-surface font-semibold truncate">{{ $adm->full_name }}@if($adm->age), {{ $adm->age }}@endif</span>
                     <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Sent a Rose • “Loved your coffee style…”</span>
                   </div>
                 </div>
