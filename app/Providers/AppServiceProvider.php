@@ -253,13 +253,33 @@ class AppServiceProvider extends ServiceProvider
             $stmtUsers = $db->query("SELECT COUNT(*) FROM users");
             if ($stmtUsers && $stmtUsers->fetchColumn() == 0) {
                 $pwHash = Hash::make('password123');
-                $adminPwHash = Hash::make('admin123');
                 $now = date('Y-m-d H:i:s');
 
                 $insUser = $db->prepare("INSERT INTO users (member_code, email, password, full_name, dob, gender, bio, country, avatar, is_verified, is_admin, coins, xp, status, created_at, last_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 
-                // Super Admin account (admin / admin123)
-                $insUser->execute(['CD-00001', 'admin@cupdate.in', $adminPwHash, 'CupDate Administrator', '1995-01-01', 'other', 'System Administrator & Moderation Lead.', 'Kangra / Delhi, India', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop', 1, 1, 9999, 9999, 'active', $now, $now]);
+                $adminPassword = env('ADMIN_PASSWORD');
+                if (is_string($adminPassword) && strlen($adminPassword) >= 12) {
+                    $insUser->execute([
+                        'CD-00001',
+                        env('ADMIN_EMAIL', 'admin@cupdate.in'),
+                        Hash::make($adminPassword),
+                        'CupDate Administrator',
+                        '1995-01-01',
+                        'other',
+                        'System Administrator & Moderation Lead.',
+                        'Kangra / Delhi, India',
+                        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop',
+                        1,
+                        1,
+                        9999,
+                        9999,
+                        'active',
+                        $now,
+                        $now,
+                    ]);
+                } else {
+                    Log::warning('ADMIN_PASSWORD is missing or too short; no administrator account was seeded.');
+                }
 
                 $insUser->execute(['CD-10001', 'priya.mehta.cupdate@gmail.com', $pwHash, 'Priya Mehta', '1999-05-14', 'female', 'Bookworm & pour-over addict. Let us explore hidden roasteries in Shimla! ☕📚', 'Shimla, Himachal Pradesh', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 1, 0, 150, 80, 'active', $now, $now]);
                 

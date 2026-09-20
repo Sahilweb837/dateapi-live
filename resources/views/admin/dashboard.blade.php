@@ -51,6 +51,13 @@
                     <span class="material-symbols-outlined text-base">open_in_new</span>
                     <span>View Live Site</span>
                 </a>
+                <form action="{{ route('admin.logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-all">
+                        <span class="material-symbols-outlined text-base">logout</span>
+                        <span>Sign out</span>
+                    </button>
+                </form>
             </div>
         </div>
 

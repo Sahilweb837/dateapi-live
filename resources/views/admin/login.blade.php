@@ -36,32 +36,20 @@
             </div>
         @endif
 
-        <!-- Secure One-Click Admin Access (Authorized Admins Only) -->
-        <div class="mb-5 p-3.5 rounded-2xl bg-[#160a08] border border-amber-500/30 text-xs flex items-center justify-between">
-            <div class="flex flex-col gap-0.5">
-                <div class="text-[11px] text-stone-200 flex items-center gap-1.5 font-bold">
-                    <span class="material-symbols-outlined text-amber-400 text-sm">shield_person</span>
-                    <span>Admin Clearance Portal</span>
-                </div>
-                <div class="text-[10px] text-stone-400 font-mono">
-                    ID: <strong class="text-amber-300">admin</strong> &bull; Pass: <strong class="text-amber-300">admin123</strong>
-                </div>
-            </div>
-            <button type="button" onclick="autofillAdmin()" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[11px] font-bold cursor-pointer transition flex items-center gap-1.5 shadow-sm active:scale-95">
-                <span class="material-symbols-outlined text-sm">key</span>
-                <span>Fill Credentials</span>
-            </button>
+        <div class="mb-5 p-3.5 rounded-2xl bg-[#160a08] border border-stone-700 text-xs text-stone-400 flex items-start gap-2">
+            <span class="material-symbols-outlined text-emerald-400 text-sm">lock</span>
+            <span>Use the administrator account created for this installation. Sign-in attempts are rate limited.</span>
         </div>
 
         <!-- Admin Login Form -->
-        <form action="{{ route('admin.login') }}" method="POST" class="flex flex-col gap-4" autocomplete="off">
+        <form action="{{ route('admin.login') }}" method="POST" class="flex flex-col gap-4" autocomplete="on">
             @csrf
 
             <div>
                 <label class="block text-xs font-bold text-stone-300 mb-1" for="admin-email">Admin ID / Email</label>
                 <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3 text-stone-500 text-lg">admin_panel_settings</span>
-                    <input type="text" name="email" id="admin-email" value="{{ old('email', '') }}" required autocomplete="off"
+                    <input type="text" name="email" id="admin-email" value="{{ old('email', '') }}" required autocomplete="username" autofocus
                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#160a08] border border-stone-700 focus:border-[#ff007f] focus:outline-none text-white text-xs font-semibold placeholder:text-stone-600 transition"
                            placeholder="Enter Admin ID (e.g. admin)">
                 </div>
@@ -71,7 +59,7 @@
                 <label class="block text-xs font-bold text-stone-300 mb-1" for="admin-password">Password</label>
                 <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3 text-stone-500 text-lg">key</span>
-                    <input type="password" name="password" id="admin-password" value="" required autocomplete="new-password"
+                    <input type="password" name="password" id="admin-password" value="" required autocomplete="current-password"
                            class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#160a08] border border-stone-700 focus:border-[#ff007f] focus:outline-none text-white text-xs font-semibold placeholder:text-stone-600 transition"
                            placeholder="Enter Admin Password">
                     <button type="button" onclick="toggleAdminPass()" class="absolute right-3 text-stone-400 hover:text-white text-sm cursor-pointer" title="Toggle password visibility">
@@ -95,15 +83,6 @@
 </div>
 
 <script>
-function autofillAdmin() {
-    const emailField = document.getElementById('admin-email');
-    if (emailField) emailField.value = 'admin';
-    const passField = document.getElementById('admin-password');
-    if (passField) {
-        passField.value = 'admin123';
-        passField.focus();
-    }
-}
 function toggleAdminPass() {
     const input = document.getElementById('admin-password');
     const icon = document.getElementById('adminEyeIcon');

@@ -22,6 +22,11 @@
             <span>{{ session('success') }}</span>
         </div>
     @endif
+    @if($errors->any())
+        <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs font-bold text-rose-800">
+            {{ $errors->first() }}
+        </div>
+    @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- New Article Form -->
@@ -29,14 +34,14 @@
             <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-lg text-[#24140d] mb-3">Publish Article</h2>
             
             <div class="mb-4 p-3 bg-[#f5ede6] border border-[#e5d5ca] rounded-xl text-[11px] text-[#8b5a2b] leading-relaxed shadow-none">
-                <i class="fa-solid fa-magic mr-1"></i> <strong>Automated Slug Generation</strong>: You don't need to write slugs. The system automatically creates the slug from your title, writes the physical file, and appends it to sitemap.xml.
+            <i class="fa-solid fa-magic mr-1"></i> <strong>Simple publishing</strong>: Enter the title and article text. The public blog page and sitemap use the saved article automatically.
             </div>
 
             <form action="{{ route('admin.blogs.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
                     <label class="block text-xs font-bold text-[#7a666c] mb-1">Article Title</label>
-                    <input type="text" name="title" required placeholder="e.g. 5 Best Cafes for First Dates in Bangalore" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
+                    <input type="text" name="title" value="{{ old('title') }}" required maxlength="255" placeholder="e.g. 5 Best Cafes for First Dates in Bangalore" class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b]">
                 </div>
 
                 <div>
@@ -52,12 +57,12 @@
 
                 <div>
                     <label class="block text-xs font-bold text-[#7a666c] mb-1">Short Excerpt</label>
-                    <textarea name="excerpt" rows="2" placeholder="Brief summary of the article for Google search snippets..." class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b] resize-none"></textarea>
+                    <textarea name="excerpt" rows="2" maxlength="500" placeholder="Brief summary of the article for Google search snippets..." class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b] resize-none">{{ old('excerpt') }}</textarea>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-[#7a666c] mb-1">Full Article Body</label>
-                    <textarea name="content" rows="6" required placeholder="Write your full guide here..." class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b] resize-none"></textarea>
+                    <textarea name="content" rows="6" required placeholder="Write your full guide here..." class="w-full bg-[#fbf8f5] border border-[#e5d5ca] rounded-xl px-3 py-2 text-xs text-[#24140d] focus:outline-none focus:border-[#8b5a2b] resize-none">{{ old('content') }}</textarea>
                 </div>
 
                 <button type="submit" class="w-full py-3 bg-[#8b5a2b] text-white font-extrabold rounded-xl text-xs hover:bg-[#6d441e] transition cursor-pointer shadow-none">

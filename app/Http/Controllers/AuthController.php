@@ -29,47 +29,6 @@ class AuthController extends Controller
         $inputEmail = strtolower(trim($credentials['email']));
         $inputPassword = $credentials['password'];
 
-        // 1. Instant Super Admin Authentication (admin / admin123)
-        $isAdminEmail = in_array($inputEmail, ['admin', 'admin@cupdate.in', 'administrator']);
-        $isAdminPassword = in_array($inputPassword, ['admin123', 'Admin123', 'admin@123', 'Admin@123', 'admoin123', 'admoin 123']);
-
-        if ($isAdminEmail && $isAdminPassword) {
-            try {
-                $admin = User::where('email', 'admin@cupdate.in')->orWhere('email', 'admin')->orWhere('is_admin', 1)->first();
-                if (!$admin) {
-                    $admin = User::create([
-                        'member_code'   => 'CD-00001',
-                        'full_name'     => 'CupDate Administrator',
-                        'email'         => 'admin@cupdate.in',
-                        'password'      => Hash::make('admin123'),
-                        'dob'           => '1995-01-01',
-                        'gender'        => 'other',
-                        'preference'    => 'everyone',
-                        'interested_in' => 'everyone',
-                        'bio'           => 'Official CupDate System Administrator & Moderation Lead.',
-                        'country'       => 'Kangra / Delhi, India',
-                        'coins'         => 9999,
-                        'xp'            => 9999,
-                        'status'        => 'active',
-                        'is_verified'   => 1,
-                        'is_admin'      => 1,
-                        'created_at'    => now(),
-                        'last_active'   => now(),
-                    ]);
-                } else {
-                    $admin->password = Hash::make('admin123');
-                    $admin->is_admin = 1;
-                    $admin->is_verified = 1;
-                    $admin->save();
-                }
-
-                Auth::login($admin, true);
-                return redirect()->route('admin.dashboard')->with('success', 'Welcome back, Administrator! Successfully logged into CupDate Command Center.');
-            } catch (\Throwable $e) {
-                // Continue to regular login if error
-            }
-        }
-
         try {
             $user = User::where('email', $credentials['email'])->orWhere('email', $inputEmail)->first();
         } catch (\Throwable $e) {
@@ -90,49 +49,12 @@ class AuthController extends Controller
             }
         }
 
-        if (!$user && in_array(strtolower($credentials['email']), ['priya.mehta.cupdate@gmail.com', 'arjun.kapoor.cupdate@gmail.com', 'tanya.sharma.cupdate@gmail.com', 'vikram.thakur.cupdate@gmail.com'])) {
-            try {
-                $isPriya = str_contains($credentials['email'], 'priya');
-                $isArjun = str_contains($credentials['email'], 'arjun');
-                $isTanya = str_contains($credentials['email'], 'tanya');
-                $name = $isPriya ? 'Priya Mehta' : ($isArjun ? 'Arjun Kapoor' : ($isTanya ? 'Tanya Sharma' : 'Vikram Thakur'));
-                $user = User::create([
-                    'member_code'   => 'CD-' . rand(10000, 99999),
-                    'full_name'     => $name,
-                    'email'         => strtolower($credentials['email']),
-                    'password'      => Hash::make($credentials['password']),
-                    'dob'           => '1998-05-12',
-                    'gender'        => ($isPriya || $isTanya) ? 'female' : 'male',
-                    'preference'    => 'everyone',
-                    'interested_in' => 'everyone',
-                    'bio'           => 'Specialty coffee lover & mountain roastery explorer.',
-                    'country'       => $isArjun ? 'Pune, Maharashtra' : 'Shimla, Himachal Pradesh',
-                    'coins'         => 150,
-                    'xp'            => 50,
-                    'status'        => 'active',
-                    'is_verified'   => 1,
-                    'created_at'    => now(),
-                    'last_active'   => now(),
-                ]);
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('Demo user auto-provision skipped: ' . $e->getMessage());
-            }
-        }
-
         if ($user) {
             if ($user->status === 'blocked') {
                 return back()->withErrors(['email' => 'Your account has been suspended by administration. Please contact support at support@cupdate.in.'])->withInput($request->only('email'));
             }
 
-            $passwordMatches = Hash::check($credentials['password'], $user->password)
-                || (md5($credentials['password']) === $user->password)
-                || ($credentials['password'] === $user->password);
-
-            if ($passwordMatches) {
-                if (!Hash::check($credentials['password'], $user->password)) {
-                    $user->password = Hash::make($credentials['password']);
-                    $user->save();
-                }
+            if ($user->password && Hash::check($credentials['password'], $user->password)) {
                 Auth::login($user, $request->has('remember'));
                 try { $user->last_active = now(); $user->save(); } catch (\Throwable $e) {}
 

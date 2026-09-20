@@ -20,22 +20,6 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-        $isAdminSession = session('admin_authenticated', false);
-        if (!$isAdminSession && (!Auth::check() || !Auth::user()->is_admin)) {
-            return view('admin.login');
-        }
-
-        // If session is authenticated but Auth::user is not yet loaded, auto-login an admin user
-        if ($isAdminSession && !Auth::check()) {
-            try {
-                $admin = User::where('is_admin', 1)->first() ?? User::first();
-                if ($admin) {
-                    $admin->is_admin = 1;
-                    Auth::login($admin, true);
-                }
-            } catch (\Throwable $e) {}
-        }
-
         $searchIp = $request->query('ip');
 
         // Analytics Metrics
@@ -104,6 +88,7 @@ class AdminController extends Controller
         }
 
         // User & Content Metrics
+        $searchIp = is_string($searchIp) ? trim($searchIp) : null;
         $totalUsers = 0;
         $verifiedUsers = 0;
         $users = collect();
@@ -149,15 +134,8 @@ class AdminController extends Controller
         ));
     }
 
-    /**
-     * Toggle User Verification Status
-     */
     public function toggleVerify($id)
     {
-        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
-            return redirect()->route('admin.login');
-        }
-
         try {
             $user = User::findOrFail($id);
             $user->is_verified = $user->is_verified ? 0 : 1;
@@ -175,11 +153,11 @@ class AdminController extends Controller
      */
     public function toggleBlock($id)
     {
-        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
-            return redirect()->route('admin.login');
-        }
-
         try {
+            if ((int) $id === (int) Auth::id()) {
+                return back()->with('error', 'You cannot block your own administrator account.');
+            }
+
             $user = User::findOrFail($id);
             $user->status = ($user->status === 'blocked') ? 'active' : 'blocked';
             $user->save();
@@ -196,10 +174,6 @@ class AdminController extends Controller
      */
     public function deleteMessage($id)
     {
-        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
-            return redirect()->route('admin.login');
-        }
-
         try {
             Message::where('id', $id)->delete();
             return back()->with('success', 'Message deleted by administrator.');
@@ -213,10 +187,6 @@ class AdminController extends Controller
      */
     public function deleteIdea($id)
     {
-        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
-            return redirect()->route('admin.login');
-        }
-
         try {
             Idea::where('id', $id)->delete();
             return back()->with('success', 'Date idea removed from community feed.');
@@ -230,10 +200,6 @@ class AdminController extends Controller
      */
     public function addCoins($id)
     {
-        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
-            return redirect()->route('admin.login');
-        }
-
         try {
             $user = User::findOrFail($id);
             $user->coins = ($user->coins ?? 0) + 100;
@@ -250,10 +216,6 @@ class AdminController extends Controller
      */
     public function clearAnalytics()
     {
-        if (!session('admin_authenticated') && (!Auth::check() || !Auth::user()->is_admin)) {
-            return redirect()->route('admin.login');
-        }
-
         try {
             DB::table('page_views')->truncate();
             return back()->with('success', 'Page view analytics reset successfully.');
@@ -262,89 +224,33 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Handle Admin Authentication (Supports ID: admin & Password: admin123)
-     */
     public function login(Request $request)
     {
         if ($request->isMethod('get')) {
-            if (session('admin_authenticated') || (Auth::check() && Auth::user()->is_admin)) {
+            if (Auth::check() && Auth::user()->is_admin && Auth::user()->status !== 'blocked') {
                 return redirect()->route('admin.dashboard');
             }
             return view('admin.login');
         }
 
-        $input = strtolower(trim($request->input('email', $request->input('username', $request->input('id', '')))));
-        $password = trim($request->input('password', ''));
+        $credentials = $request->validate([
+            'email' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'string', 'max:255'],
+        ]);
+        $identifier = strtolower(trim($credentials['email']));
+        $admin = User::where(function ($query) use ($identifier) {
+            $query->whereRaw('LOWER(email) = ?', [$identifier])
+                ->orWhereRaw('LOWER(member_code) = ?', [$identifier]);
+        })->where('is_admin', true)->where('status', '!=', 'blocked')->first();
 
-        $isAdminEmail = in_array($input, ['admin', 'admin@cupdate.in', 'admin@cupdate.com', 'administrator', 'cupdate_admin', 'root']) || str_contains($input, 'admin');
-        $isAdminPassword = in_array(strtolower($password), ['admin123', 'admin@123', 'admoin123', 'admoin 123', 'admin', 'admin 123', 'password', 'password123']);
-
-        if ($isAdminEmail && $isAdminPassword) {
-            // Guarantee admin session authentication
-            session(['admin_authenticated' => true, 'is_admin' => true, 'admin_username' => 'admin']);
-            session()->regenerate();
-
-            try {
-                $admin = User::where('email', 'admin@cupdate.in')
-                    ->orWhere('email', 'admin')
-                    ->orWhere('member_code', 'CD-00001')
-                    ->orWhere('is_admin', 1)
-                    ->first();
-
-                if (!$admin) {
-                    $admin = new User();
-                    $admin->member_code   = 'CD-00001';
-                    $admin->full_name     = 'CupDate Administrator';
-                    $admin->email         = 'admin@cupdate.in';
-                    $admin->password      = Hash::make('admin123');
-                    $admin->dob           = '1995-01-01';
-                    $admin->gender        = 'other';
-                    $admin->preference    = 'everyone';
-                    $admin->interested_in = 'everyone';
-                    $admin->bio           = 'CupDate System Administrator & Moderation Lead.';
-                    $admin->country       = 'Kangra / Delhi, India';
-                    $admin->coins         = 9999;
-                    $admin->xp            = 9999;
-                    $admin->status        = 'active';
-                    $admin->is_verified   = 1;
-                    $admin->is_admin      = 1;
-                    $admin->created_at    = now();
-                    $admin->last_active   = now();
-                    $admin->save();
-                } else {
-                    $admin->password = Hash::make('admin123');
-                    $admin->is_admin = 1;
-                    $admin->is_verified = 1;
-                    $admin->save();
-                }
-
-                Auth::login($admin, true);
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('Admin DB record creation note: ' . $e->getMessage());
-                try {
-                    $fallbackUser = User::where('is_admin', 1)->first() ?? User::first();
-                    if ($fallbackUser) {
-                        $fallbackUser->is_admin = 1;
-                        Auth::login($fallbackUser, true);
-                    }
-                } catch (\Throwable $e2) {}
-            }
-
-            return redirect()->route('admin.dashboard')->with('success', 'Logged into Admin Command Center successfully.');
+        if (!$admin || !$admin->password || !Hash::check($credentials['password'], $admin->password)) {
+            return back()->withErrors(['email' => 'The administrator ID or password is incorrect.'])->withInput($request->only('email'));
         }
 
-        // Standard user database check for admin role
-        try {
-            $user = User::where('email', $input)->first();
-            if ($user && Hash::check($password, $user->password) && $user->is_admin) {
-                session(['admin_authenticated' => true, 'is_admin' => true]);
-                Auth::login($user, true);
-                return redirect()->route('admin.dashboard');
-            }
-        } catch (\Throwable $e) {}
+        Auth::login($admin, false);
+        $request->session()->regenerate();
 
-        return back()->withErrors(['email' => 'Invalid Admin credentials. Use ID: admin & Password: admin123'])->withInput();
+        return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back.');
     }
 
     /**
@@ -352,8 +258,9 @@ class AdminController extends Controller
      */
     public function logout()
     {
-        session()->forget(['admin_authenticated', 'is_admin', 'admin_username']);
         Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
         return redirect()->route('admin.login')->with('success', 'Admin session terminated.');
     }
 }
