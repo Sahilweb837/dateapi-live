@@ -252,7 +252,6 @@ class AppServiceProvider extends ServiceProvider
             // Seed demo singles if users table is empty
             $stmtUsers = $db->query("SELECT COUNT(*) FROM users");
             if ($stmtUsers && $stmtUsers->fetchColumn() == 0) {
-                $pwHash = Hash::make('password123');
                 $now = date('Y-m-d H:i:s');
 
                 $insUser = $db->prepare("INSERT INTO users (member_code, email, password, full_name, dob, gender, bio, country, avatar, is_verified, is_admin, coins, xp, status, created_at, last_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
