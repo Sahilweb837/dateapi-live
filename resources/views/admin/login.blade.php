@@ -38,7 +38,7 @@
 
         <div class="mb-5 p-3.5 rounded-2xl bg-[#160a08] border border-stone-700 text-xs text-stone-400 flex items-start gap-2">
             <span class="material-symbols-outlined text-emerald-400 text-sm">lock</span>
-            <span>Use the administrator account created for this installation. Sign-in attempts are rate limited.</span>
+            <span>Use the administrator email/member code created for this installation. The password is the private <code class="text-emerald-300">ADMIN_PASSWORD</code> value from the server environment; sign-in attempts are rate limited.</span>
         </div>
 
         <!-- Admin Login Form -->

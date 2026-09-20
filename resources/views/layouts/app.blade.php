@@ -344,6 +344,17 @@
     @yield('extra_css')
 </head>
 <body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col pb-24 md:pb-0 w-full">
+    <div id="pagePreloader" class="page-preloader" role="status" aria-live="polite" aria-label="Loading CupDate">
+        <div class="preloader-card">
+            <div class="preloader-mark"><span class="material-symbols-outlined">favorite</span></div>
+            <div class="preloader-lines">
+                <span class="preloader-line preloader-line-wide"></span>
+                <span class="preloader-line"></span>
+                <span class="preloader-line preloader-line-short"></span>
+            </div>
+            <span class="preloader-label">Preparing your CupDate experience…</span>
+        </div>
+    </div>
 
     @php
         $headerUnreadCount = 0;
@@ -1585,6 +1596,13 @@
     <!-- High-Speed Instant Page Prefetcher & Smart Image Lazy-Loader (Vite/Vue SPA Speed) -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        const pagePreloader = document.getElementById('pagePreloader');
+        if (pagePreloader) {
+          window.setTimeout(function() {
+            pagePreloader.classList.add('is-hidden');
+          }, 120);
+        }
+
         // Apply the shared theme skeleton to deferred images and let the browser
         // load them only as they approach the viewport.
         const deferredImages = document.querySelectorAll('img:not([loading="eager"])');
@@ -1647,6 +1665,7 @@
 
         window.addEventListener('beforeunload', function() {
           progressBar.style.width = '75%';
+          if (pagePreloader) pagePreloader.classList.remove('is-hidden');
         });
       });
     </script>
