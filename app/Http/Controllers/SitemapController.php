@@ -20,6 +20,19 @@ class SitemapController extends Controller
         'chandigarh' => 'Chandigarh Tricity',
         'jaipur' => 'Jaipur, Rajasthan',
         'goa' => 'Goa Beachside',
+        'amritsar' => 'Amritsar, Punjab',
+        'jalandhar' => 'Jalandhar, Punjab',
+        'patiala' => 'Patiala, Punjab',
+        'mohali' => 'Mohali, Punjab',
+        'panchkula' => 'Panchkula, Haryana',
+        'dehradun' => 'Dehradun, Uttarakhand',
+        'london' => 'London, United Kingdom',
+        'dubai' => 'Dubai, United Arab Emirates',
+        'toronto' => 'Toronto, Canada',
+        'new-york' => 'New York, United States',
+        'melbourne' => 'Melbourne, Australia',
+        'singapore' => 'Singapore',
+        'sydney' => 'Sydney, Australia',
     ];
 
     protected function getSafeBlogs()

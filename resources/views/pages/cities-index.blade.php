@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Cities Directory — Coffee Dating Across India & Himachal Pradesh | CupDate')
-@section('meta_desc', 'Discover verified singles and partner specialty cafes across Shimla, Manali, Dharamshala, Pune, Mumbai, Bangalore, Delhi NCR, and Chandigarh.')
+@section('title', 'Dating Cities in Himachal, Punjab, Delhi, Mumbai & Worldwide | CupDate')
+@section('meta_desc', 'Explore CupDate city pages for Himachal Pradesh, Punjab, Delhi, Chandigarh, Amritsar, Mumbai, Pune, Bangalore, India, and international communities in the UK, Canada, UAE, USA, Australia, and Singapore.')
 
 @section('content')
 <div class="max-w-5xl mx-auto px-4 py-12 font-['Inter']">
@@ -11,12 +11,51 @@
             <i class="fa-solid fa-map-location-dot"></i> Regional Hubs
         </span>
         <h1 class="font-['Plus_Jakarta_Sans'] font-extrabold text-3xl md:text-5xl text-[#24140d] mb-4">
-            Dating Cities Across India
+            Dating Cities Across India &amp; the World
         </h1>
         <p class="text-sm md:text-base text-[#7d6558] max-w-xl mx-auto leading-relaxed">
             From the tranquil mountain trails of Himachal Pradesh to India's bustling tech and cultural metros, discover verified singles and curated landmark cafes.
         </p>
     </div>
+
+    <section class="mb-10 rounded-3xl border border-[#e5d5ca] bg-[#fffaf8] p-6 md:p-8">
+        <p class="text-xs font-bold uppercase tracking-widest text-[#8b5a2b]">International CupDate discovery</p>
+        <h2 class="mt-2 font-['Plus_Jakarta_Sans'] text-2xl font-extrabold text-[#24140d]">Connect across borders, at your pace</h2>
+        <p class="mt-2 max-w-3xl text-sm leading-6 text-[#7d6558]">
+            CupDate city guides help adults find local dating information, public date ideas, and online conversation opportunities.
+            Availability depends on real registered members in each location; we never invent profiles or promise a specific match count.
+        </p>
+        <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            @foreach($internationalCities as $slug => $name)
+                <a href="{{ route('city.show', $slug) }}" class="rounded-2xl border border-[#edc7ca] bg-white px-3 py-3 text-xs font-bold text-[#9c4b59] hover:bg-[#fff0f1]">
+                    Dating in {{ $name }} →
+                </a>
+            @endforeach
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h2 class="font-['Plus_Jakarta_Sans'] text-2xl font-extrabold text-[#24140d]">Punjab, Chandigarh, Delhi &amp; Mumbai dating hubs</h2>
+        <p class="mt-2 max-w-3xl text-sm leading-6 text-[#7d6558]">Explore local dating guides for North Indian communities and major cities. Each page is informational and member availability is based on real registrations.</p>
+        <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            @foreach([
+                'amritsar' => 'Amritsar, Punjab',
+                'jalandhar' => 'Jalandhar, Punjab',
+                'patiala' => 'Patiala, Punjab',
+                'mohali' => 'Mohali, Punjab',
+                'chandigarh' => 'Chandigarh',
+                'delhi' => 'Delhi NCR',
+                'mumbai' => 'Mumbai, Maharashtra',
+                'pune' => 'Pune, Maharashtra',
+                'bangalore' => 'Bangalore, Karnataka',
+                'hyderabad' => 'Hyderabad, Telangana',
+            ] as $slug => $name)
+                <a href="{{ route('city.show', $slug) }}" class="rounded-2xl border border-[#e5d5ca] bg-white px-3 py-3 text-xs font-bold text-[#8b5a2b] hover:border-[#e87a88] hover:text-[#c94f63]">
+                    {{ $name }} →
+                </a>
+            @endforeach
+        </div>
+    </section>
 
     <!-- Cities Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">

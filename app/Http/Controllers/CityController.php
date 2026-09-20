@@ -289,7 +289,17 @@ class CityController extends Controller
     public function index()
     {
         $cities = $this->cityData;
-        return view('pages.cities-index', compact('cities'));
+        $internationalCities = [
+            'london' => 'London, United Kingdom',
+            'dubai' => 'Dubai, United Arab Emirates',
+            'toronto' => 'Toronto, Canada',
+            'new-york' => 'New York, United States',
+            'melbourne' => 'Melbourne, Australia',
+            'singapore' => 'Singapore',
+            'sydney' => 'Sydney, Australia',
+        ];
+
+        return view('pages.cities-index', compact('cities', 'internationalCities'));
     }
 
     public function show($slug)
@@ -298,14 +308,23 @@ class CityController extends Controller
         $city = $this->cityData[$slug] ?? null;
 
         if (!$city) {
-            // Smart auto-generate friendly fallback for any city in India
+            $international = [
+                'london' => 'United Kingdom',
+                'dubai' => 'United Arab Emirates',
+                'toronto' => 'Canada',
+                'new-york' => 'United States',
+                'melbourne' => 'Australia',
+                'singapore' => 'Singapore',
+                'sydney' => 'Australia',
+            ];
             $formattedName = ucwords(str_replace('-', ' ', $slug));
+            $country = $international[$slug] ?? 'India';
             $city = [
-                'name' => $formattedName . ', India',
-                'state' => 'Himachal Pradesh & India',
-                'region' => 'India',
+                'name' => $formattedName . ', ' . $country,
+                'state' => $country,
+                'region' => $country === 'India' ? 'India' : 'International',
                 'headline' => 'Meet Verified Singles Over Coffee in ' . $formattedName,
-                'intro' => 'Connect with selfie-verified singles in ' . $formattedName . ' for respectful, low-pressure 45-minute coffee dates at landmark cafes. Safe, verified, and intentional.',
+                'intro' => 'Connect with real CupDate members in ' . $formattedName . ' for respectful online chat, one-to-one introductions, and safe public dates. Profiles and availability vary by city.',
                 'popular_cafes' => ['Specialty Coffee Roasters', 'City Garden Cafe', 'Central Artisan Lounge', 'The Terrace Bistro'],
                 'safety_score' => '99.7%',
                 'icon' => 'mug-hot',

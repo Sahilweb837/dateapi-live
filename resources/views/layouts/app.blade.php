@@ -779,6 +779,7 @@
                         <li><a href="{{ route('city.show', 'chamba') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Chamba</a></li>
                         <li><a href="{{ route('city.show', 'palampur') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Palampur Tea Valley</a></li>
                         <li><a href="{{ route('city.show', 'baddi') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Baddi &amp; Solan</a></li>
+                        <li><a href="{{ route('city.show', 'palampur') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Palampur</a></li>
                     </ul>
                 </div>
 
@@ -796,6 +797,8 @@
                         <li><a href="{{ route('city.show', 'dehradun') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Dehradun &amp; Mussoorie</a></li>
                         <li><a href="{{ route('city.show', 'amritsar') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Amritsar</a></li>
                         <li><a href="{{ route('city.show', 'ludhiana') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Ludhiana</a></li>
+                        <li><a href="{{ route('city.show', 'jalandhar') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Jalandhar, Punjab</a></li>
+                        <li><a href="{{ route('city.show', 'patiala') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Patiala, Punjab</a></li>
                         <li><a href="{{ route('rishta') }}" class="text-amber-400 font-bold hover:underline transition">Traditional Rishta &amp; Matrimony Hub</a></li>
                     </ul>
                 </div>
@@ -814,7 +817,20 @@
                         <li><a href="{{ route('city.show', 'hyderabad') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Hyderabad (Jubilee Hills)</a></li>
                         <li><a href="{{ route('city.show', 'kolkata') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Kolkata (Park Street)</a></li>
                         <li><a href="{{ route('city.show', 'goa') }}" class="hover:text-[#ff80bf] hover:underline transition">Dating in Goa (Assagao &amp; Panjim)</a></li>
-                        <li><a href="{{ route('cities.index') }}" class="text-[#ff80bf] font-bold hover:underline transition">View All 50+ Cities Index →</a></li>
+                        <li><a href="{{ route('cities.index') }}" class="text-[#ff80bf] font-bold hover:underline transition">View All India &amp; International Cities →</a></li>
+                    </ul>
+                    <div class="mt-4 border-t border-stone-800 pt-3">
+                        <h5 class="mb-2 text-[10px] font-black uppercase tracking-wider text-white">International communities</h5>
+                        <ul class="space-y-1.5 text-xs text-stone-400">
+                            <li><a href="{{ route('city.show', 'london') }}" class="hover:text-[#ff80bf] hover:underline">London, UK</a></li>
+                            <li><a href="{{ route('city.show', 'dubai') }}" class="hover:text-[#ff80bf] hover:underline">Dubai, UAE</a></li>
+                            <li><a href="{{ route('city.show', 'toronto') }}" class="hover:text-[#ff80bf] hover:underline">Toronto, Canada</a></li>
+                            <li><a href="{{ route('city.show', 'new-york') }}" class="hover:text-[#ff80bf] hover:underline">New York, USA</a></li>
+                            <li><a href="{{ route('city.show', 'melbourne') }}" class="hover:text-[#ff80bf] hover:underline">Melbourne, Australia</a></li>
+                            <li><a href="{{ route('city.show', 'singapore') }}" class="hover:text-[#ff80bf] hover:underline">Singapore</a></li>
+                            <li><a href="{{ route('city.show', 'sydney') }}" class="hover:text-[#ff80bf] hover:underline">Sydney, Australia</a></li>
+                        </ul>
+                    </div>
                     </ul>
                 </div>
 
