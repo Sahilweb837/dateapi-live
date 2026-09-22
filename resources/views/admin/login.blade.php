@@ -36,9 +36,21 @@
             </div>
         @endif
 
-        <div class="mb-5 p-3.5 rounded-2xl bg-[#160a08] border border-stone-700 text-xs text-stone-400 flex items-start gap-2">
-            <span class="material-symbols-outlined text-emerald-400 text-sm">lock</span>
-            <span>Use the administrator email/member code created for this installation. The password is the private <code class="text-emerald-300">ADMIN_PASSWORD</code> value from the server environment; sign-in attempts are rate limited.</span>
+        <!-- Quick Credentials Card -->
+        <div class="mb-5 p-3.5 rounded-2xl bg-[#160a08] border border-amber-500/30 text-xs flex items-center justify-between gap-3 shadow-inner">
+            <div class="text-[11px] text-stone-300">
+                <span class="text-amber-400 font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm text-amber-400">key</span> Preset Admin Credentials:
+                </span>
+                <span class="mt-0.5 block text-stone-400">
+                    ID: <code class="text-white font-mono font-bold bg-white/10 px-1.5 py-0.5 rounded">admin</code> • 
+                    Pass: <code class="text-white font-mono font-bold bg-white/10 px-1.5 py-0.5 rounded">admin123</code>
+                </span>
+            </div>
+            <button type="button" onclick="autofillAdmin()" class="shrink-0 px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[11px] font-bold cursor-pointer transition active:scale-95 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">bolt</span>
+                <span>Autofill</span>
+            </button>
         </div>
 
         <!-- Admin Login Form -->
@@ -83,6 +95,13 @@
 </div>
 
 <script>
+function autofillAdmin() {
+    const emailInput = document.getElementById('admin-email');
+    const passInput = document.getElementById('admin-password');
+    if (emailInput) emailInput.value = 'admin';
+    if (passInput) passInput.value = 'admin123';
+}
+
 function toggleAdminPass() {
     const input = document.getElementById('admin-password');
     const icon = document.getElementById('adminEyeIcon');

@@ -8,27 +8,26 @@
     <meta name="description" content="@yield('meta_desc', 'CupDate helps you meet verified singles for genuine conversations, meaningful dates, and lasting relationships.')">
     <meta name="robots" content="@yield('robots', 'index,follow')">
     <link rel="canonical" href="{{ url()->current() }}">
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:site_name" content="CupDate">
     <meta property="og:title" content="@yield('title', 'CupDate — Modern Dating for Genuine Connections')">
-    <meta property="og:description" content="@yield('meta_desc', 'Meet verified singles for genuine conversations and meaningful dates.')">
+    <meta property="og:description" content="@yield('meta_desc', 'Meet verified singles for genuine conversations, coffee dates, and intentional relationships.')">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta name="geo.region" content="IN">
+    <meta property="og:image" content="{{ asset('assets/images/hero_couple_4.png') }}">
+    <meta property="og:locale" content="en_IN">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', 'CupDate — Modern Dating for Genuine Connections')">
+    <meta name="twitter:description" content="@yield('meta_desc', 'Meet verified singles for genuine conversations, coffee dates, and intentional relationships.')">
+    <meta name="twitter:image" content="{{ asset('assets/images/hero_couple_4.png') }}">
+
+    <!-- Geo Targeting -->
+    <meta name="geo.region" content="IN-HP">
     <meta name="geo.placename" content="Himachal Pradesh, India">
     <meta name="geo.position" content="31.1048;77.1734">
     <meta name="ICBM" content="31.1048, 77.1734">
-    @if(request()->routeIs('home'))
-        <script type="application/ld+json">
-            {!! json_encode([
-                '@context' => 'https://schema.org',
-                '@type' => 'Organization',
-                'name' => 'CupDate',
-                'url' => url('/'),
-                'description' => 'Modern dating, online chat, and one-to-one video introductions for adults in Himachal Pradesh and across India.',
-                'areaServed' => ['Himachal Pradesh', 'India'],
-                'sameAs' => [],
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-        </script>
-    @endif
 
     <!-- CupDate Favicon & Brand Touch Icons -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/cupdate_icon.svg') }}">
@@ -839,10 +838,8 @@
                             <li><a href="{{ route('city.show', 'new-york') }}" class="hover:text-[#ff80bf] hover:underline">New York, USA</a></li>
                             <li><a href="{{ route('city.show', 'melbourne') }}" class="hover:text-[#ff80bf] hover:underline">Melbourne, Australia</a></li>
                             <li><a href="{{ route('city.show', 'singapore') }}" class="hover:text-[#ff80bf] hover:underline">Singapore</a></li>
-                            <li><a href="{{ route('city.show', 'sydney') }}" class="hover:text-[#ff80bf] hover:underline">Sydney, Australia</a></li>
                         </ul>
                     </div>
-                    </ul>
                 </div>
 
                 <!-- Column 4: Trust, Safety & Legal -->
@@ -863,6 +860,7 @@
                         <li><a href="{{ route('contact') }}" class="hover:text-white transition">Contact &amp; Grievance Officer</a></li>
                         <li><a href="{{ route('sitemap.html') }}" class="hover:text-white transition">HTML Sitemap</a></li>
                         <li><a href="{{ route('sitemap.xml') }}" class="hover:text-white transition">XML Sitemap for Search Engines</a></li>
+                        <li><a href="{{ route('admin.login') }}" class="text-stone-500 hover:text-stone-300 transition text-[11px]">Admin Command Center</a></li>
                     </ul>
                 </div>
 

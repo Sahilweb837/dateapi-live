@@ -1,0 +1,25 @@
+=====================================================
+            CUPDATE ADMIN PANEL CREDENTIALS
+=====================================================
+
+Admin Login Portal:  https://cupdate.in/admin/login
+Local Development:   http://localhost:8000/admin/login
+Standard Login Page: https://cupdate.in/login
+
+Admin ID / Email:    admin
+Alternative Email:   admin@cupdate.in
+Member Code:         CD-00001
+Password:            admin123
+
+-----------------------------------------------------
+CLI COMMANDS FOR INSTANT ACCESS:
+-----------------------------------------------------
+1. View Admin Accounts:
+   php artisan admin:credentials
+
+2. Reset / Sync Admin Password to 'admin123':
+   php artisan admin:reset admin123
+
+3. Custom Admin Password:
+   php artisan admin:reset <new_password> <optional_email>
+=====================================================

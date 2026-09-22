@@ -256,11 +256,12 @@ class AppServiceProvider extends ServiceProvider
 
                 $insUser = $db->prepare("INSERT INTO users (member_code, email, password, full_name, dob, gender, bio, country, avatar, is_verified, is_admin, coins, xp, status, created_at, last_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 
-                $adminPassword = env('ADMIN_PASSWORD');
-                if (is_string($adminPassword) && strlen($adminPassword) >= 12) {
+                $adminPassword = env('ADMIN_PASSWORD', 'admin123');
+                $adminEmail = env('ADMIN_EMAIL', 'admin@cupdate.in');
+                if (is_string($adminPassword) && strlen($adminPassword) >= 6) {
                     $insUser->execute([
                         'CD-00001',
-                        env('ADMIN_EMAIL', 'admin@cupdate.in'),
+                        $adminEmail,
                         Hash::make($adminPassword),
                         'CupDate Administrator',
                         '1995-01-01',
@@ -277,7 +278,7 @@ class AppServiceProvider extends ServiceProvider
                         $now,
                     ]);
                 } else {
-                    Log::warning('ADMIN_PASSWORD is missing or too short; no administrator account was seeded.');
+                    Log::warning('ADMIN_PASSWORD is too short; no administrator account was seeded.');
                 }
 
                 // Discovery uses only real registered members; never create fictional profiles.
