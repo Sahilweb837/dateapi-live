@@ -349,16 +349,41 @@ class CityController extends Controller
                 })
                 ->take(6)
                 ->get();
+
+            // If no local singles yet, showcase other verified active members
+            if ($singles->isEmpty()) {
+                $singles = User::where('status', 'active')
+                    ->where('is_admin', 0)
+                    ->whereNotNull('full_name')
+                    ->where('full_name', '!=', '')
+                    ->whereNotNull('avatar')
+                    ->where('avatar', '!=', '')
+                    ->take(6)
+                    ->get();
+            }
         } catch (\Throwable $e) {
             $singles = collect();
         }
 
         // Local cafe spots
+        $curatedCafeImages = [
+            'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80&fit=crop',
+            'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80&fit=crop',
+            'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80&fit=crop',
+            'https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&q=80&fit=crop',
+        ];
+
         try {
             $cafes = DatePlace::where('city', 'like', "%{$slug}%")
                 ->orWhere('city', 'like', "%{$cityNameOnly}%")
                 ->take(4)
                 ->get();
+
+            foreach ($cafes as $idx => $cafe) {
+                if (empty($cafe->image)) {
+                    $cafe->image = $curatedCafeImages[$idx % count($curatedCafeImages)];
+                }
+            }
         } catch (\Throwable $e) {
             $cafes = collect();
         }
@@ -375,6 +400,7 @@ class CityController extends Controller
                     'address' => $cityNameOnly . ', ' . $city['state'],
                     'cup_offer' => '15% Off Total Bill for CupDate Singles',
                     'rating' => 4.8 + ($index * 0.05),
+                    'image' => $curatedCafeImages[$index % count($curatedCafeImages)],
                 ]);
             }
         }

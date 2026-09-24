@@ -338,6 +338,41 @@
       }
       @media (prefers-reduced-motion: reduce) {
         .lazy-media { animation: none; }
+        .img-skeleton-wrapper::before { animation: none; }
+      }
+
+      /* Universal Lazy Skeleton Image Shimmer */
+      .img-skeleton-wrapper {
+        position: relative;
+        overflow: hidden;
+        background-color: #fcecef;
+      }
+      .img-skeleton-wrapper::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #fcecef 25%, #fff5f7 50%, #fcecef 75%);
+        background-size: 200% 100%;
+        animation: cupdateShimmer 1.5s infinite;
+        z-index: 1;
+        transition: opacity 0.4s ease-out;
+      }
+      .img-skeleton-wrapper.loaded::before {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .img-skeleton-wrapper img {
+        opacity: 0;
+        transition: opacity 0.35s ease-in-out;
+        position: relative;
+        z-index: 2;
+      }
+      .img-skeleton-wrapper.loaded img {
+        opacity: 1;
+      }
+      @keyframes cupdateShimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
       }
     </style>
     @yield('extra_css')
@@ -590,8 +625,8 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     </button>
 
-                    <a href="{{ route('login') }}" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-bold text-on-surface hover:text-secondary hover:bg-surface-container transition-all">Sign In</a>
-                    <a href="{{ route('register') }}" class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-on-tertiary-container text-on-tertiary font-label-md text-xs font-bold shadow-[0_2px_10px_rgba(214,91,108,0.25)] hover:shadow-lg hover:scale-105 active:scale-95 transition-all whitespace-nowrap">Join Free</a>
+                    <button type="button" onclick="openQuickAuthModal('signin')" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-bold text-on-surface hover:text-[#b0284b] hover:bg-[#fff0f3] transition-all cursor-pointer">Sign In</button>
+                    <button type="button" onclick="openQuickAuthModal('register')" class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-[#ff6584] to-[#b0284b] text-white font-label-md text-xs font-bold shadow-md shadow-[#ff6584]/20 hover:scale-105 active:scale-95 transition-all whitespace-nowrap cursor-pointer">Join Free</button>
                 @endauth
 
                 <!-- Mobile Hamburger Toggle -->
@@ -675,15 +710,14 @@
                     <span class="material-symbols-outlined text-base text-amber-600">auto_stories</span>
                     <span>Dating Guides</span>
                 </a>
-                <div class="border-t border-gray-200 my-1"></div>
-                <a href="{{ route('login') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-secondary hover:bg-gray-100 transition-colors">
+                <button type="button" onclick="toggleMobileMenu(); openQuickAuthModal('signin');" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-[#b0284b] hover:bg-[#fff0f3] transition-colors cursor-pointer text-left">
                     <span class="material-symbols-outlined text-base">login</span>
                     <span>Sign In</span>
-                </a>
-                <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold bg-on-tertiary-container text-on-tertiary shadow-sm">
+                </button>
+                <button type="button" onclick="toggleMobileMenu(); openQuickAuthModal('register');" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[#ff6584] to-[#b0284b] text-white shadow-md cursor-pointer">
                     <span class="material-symbols-outlined text-base">person_add</span>
                     <span>Join CupDate Free</span>
-                </a>
+                </button>
             @endauth
         </div>
     </header>
@@ -926,14 +960,14 @@
                 <span class="material-symbols-outlined text-2xl leading-none">storefront</span>
                 <span class="mt-0.5">Cafés</span>
             </a>
-            <a href="{{ route('login') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all {{ request()->routeIs('login*') ? 'text-[#ff007f] font-bold scale-105' : 'text-on-surface-variant hover:text-on-surface' }}">
+            <button type="button" onclick="openQuickAuthModal('signin')" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-semibold transition-all text-on-surface-variant hover:text-[#b0284b] cursor-pointer">
                 <span class="material-symbols-outlined text-2xl leading-none">login</span>
                 <span class="mt-0.5">Login</span>
-            </a>
-            <a href="{{ route('register') }}" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-bold text-[#ff007f] hover:scale-105 transition-all">
-                <span class="material-symbols-outlined text-2xl leading-none">add_circle</span>
+            </button>
+            <button type="button" onclick="openQuickAuthModal('register')" class="flex flex-col items-center justify-center flex-1 h-full py-1 text-[11px] font-bold text-[#b0284b] hover:scale-105 transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-2xl leading-none text-[#ff6584]">add_circle</span>
                 <span class="mt-0.5">Join Free</span>
-            </a>
+            </button>
         </nav>
     @endauth
 
@@ -1657,16 +1691,221 @@
 
         // 3. Top Progress Bar for Snappy Nav
         const progressBar = document.createElement('div');
-        progressBar.id = 'top-nav-progress';
-        progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2.5px;width:0%;background:linear-gradient(90deg,#8b5a2b,#d65b6c);z-index:99999;transition:width 0.2s ease,opacity 0.2s ease;pointer-events:none;';
-        document.body.appendChild(progressBar);
+        // 4. Universal Lazy Image Skeleton Resolver
+        const resolveImgSkeletons = () => {
+          document.querySelectorAll('.img-skeleton-wrapper img').forEach(img => {
+            if (img.complete && img.naturalHeight !== 0) {
+              img.closest('.img-skeleton-wrapper')?.classList.add('loaded');
+            } else {
+              img.addEventListener('load', () => {
+                img.closest('.img-skeleton-wrapper')?.classList.add('loaded');
+              }, { once: true });
+              img.addEventListener('error', () => {
+                img.closest('.img-skeleton-wrapper')?.classList.add('loaded');
+              }, { once: true });
+            }
+          });
+        };
+        resolveImgSkeletons();
+        setTimeout(resolveImgSkeletons, 150);
+        setTimeout(resolveImgSkeletons, 750);
+      });
 
-        window.addEventListener('beforeunload', function() {
-          progressBar.style.width = '75%';
-          if (pagePreloader) pagePreloader.classList.remove('is-hidden');
-        });
+      // Global Quick Auth Pop-up Modal Controls
+      window.openQuickAuthModal = function(mode = 'signin') {
+        const modal = document.getElementById('globalQuickAuthModal');
+        if (!modal) return;
+        switchQuickAuthTab(mode);
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.classList.add('opacity-100', 'pointer-events-auto');
+        document.body.style.overflow = 'hidden';
+      };
+
+      window.closeQuickAuthModal = function() {
+        const modal = document.getElementById('globalQuickAuthModal');
+        if (!modal) return;
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.classList.remove('opacity-100', 'pointer-events-auto');
+        document.body.style.overflow = '';
+      };
+
+      function switchQuickAuthTab(mode) {
+        const signinForm = document.getElementById('quickModalSignInForm');
+        const registerForm = document.getElementById('quickModalRegisterForm');
+        const tabIn = document.getElementById('quickTabBtnSignIn');
+        const tabReg = document.getElementById('quickTabBtnRegister');
+        const title = document.getElementById('quickModalTitle');
+        const sub = document.getElementById('quickModalSubtitle');
+
+        if (mode === 'register') {
+          if (signinForm) { signinForm.classList.add('hidden'); signinForm.classList.remove('flex'); }
+          if (registerForm) { registerForm.classList.remove('hidden'); registerForm.classList.add('flex'); }
+          if (tabReg) tabReg.className = "flex-1 py-2 rounded-full transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer bg-white text-[#1b1b21] shadow-xs font-extrabold";
+          if (tabIn) tabIn.className = "flex-1 py-2 rounded-full transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer text-[#584143] hover:text-[#1b1b21]";
+          if (title) title.innerText = "Join CupDate Free";
+          if (sub) sub.innerText = "Create your verified profile in 30 seconds.";
+        } else {
+          if (registerForm) { registerForm.classList.add('hidden'); registerForm.classList.remove('flex'); }
+          if (signinForm) { signinForm.classList.remove('hidden'); signinForm.classList.add('flex'); }
+          if (tabIn) tabIn.className = "flex-1 py-2 rounded-full transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer bg-white text-[#1b1b21] shadow-xs font-extrabold";
+          if (tabReg) tabReg.className = "flex-1 py-2 rounded-full transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer text-[#584143] hover:text-[#1b1b21]";
+          if (title) title.innerText = "Welcome Back to CupDate";
+          if (sub) sub.innerText = "Find your perfect match with 100% verified singles.";
+        }
+      }
+
+      function toggleQuickPass(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('.material-symbols-outlined');
+        if (!input) return;
+        if (input.type === 'password') {
+          input.type = 'text';
+          if (icon) icon.textContent = 'visibility_off';
+        } else {
+          input.type = 'password';
+          if (icon) icon.textContent = 'visibility';
+        }
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          window.closeQuickAuthModal();
+        }
       });
     </script>
+
+    <!-- Global Quick Auth Popup Modal -->
+    <div id="globalQuickAuthModal" class="fixed inset-0 z-50 bg-[#1b1b21]/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none" onclick="if(event.target === this) closeQuickAuthModal();">
+      <div class="w-full max-w-md relative my-auto">
+        <!-- Glow Aura -->
+        <div class="absolute -inset-1.5 bg-gradient-to-tr from-[#ff6584]/40 via-[#fd748e]/30 to-[#ffb2bc]/40 rounded-3xl blur-xl opacity-80 pointer-events-none"></div>
+
+        <!-- Modal Container -->
+        <div class="relative bg-white/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-7 shadow-2xl border border-[#dfbfc2]/40 flex flex-col items-center text-center max-h-[92vh] overflow-y-auto">
+          
+          <!-- Close Button -->
+          <button type="button" onclick="closeQuickAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#f5f2fb] hover:bg-[#ffd9dd] text-[#584143] hover:text-[#b0284b] flex items-center justify-center transition cursor-pointer" title="Close">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+
+          <!-- Brand Logo -->
+          <div class="relative mb-2 flex items-center justify-center">
+            <div class="absolute w-16 h-16 rounded-full bg-[#ffd9dd]/60 blur-md"></div>
+            <img alt="CupDate Logo" class="relative w-12 h-12 object-contain" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
+          </div>
+
+          <h2 class="font-extrabold text-xl sm:text-2xl text-[#1b1b21] tracking-tight" id="quickModalTitle">
+            Welcome to CupDate
+          </h2>
+          <p class="text-xs text-[#584143] mt-0.5" id="quickModalSubtitle">
+            Find your perfect match with 100% verified singles.
+          </p>
+
+          <!-- Tab Switcher -->
+          <div class="w-full mt-4 p-1 bg-[#f5f2fb] rounded-full border border-[#dfbfc2]/40 flex items-center gap-1 text-xs font-bold">
+            <button type="button" onclick="switchQuickAuthTab('signin')" id="quickTabBtnSignIn" class="flex-1 py-2 rounded-full transition-all duration-200 flex items-center justify-center gap-1 cursor-pointer bg-white text-[#1b1b21] shadow-xs font-extrabold">
+              <span class="material-symbols-outlined text-sm text-[#b0284b]">login</span>
+              <span>Sign In</span>
+            </button>
+            <button type="button" onclick="switchQuickAuthTab('register')" id="quickTabBtnRegister" class="flex-1 py-2 rounded-full transition-all duration-200 flex items-center justify-center gap-1 cursor-pointer text-[#584143] hover:text-[#1b1b21]">
+              <span class="material-symbols-outlined text-sm text-[#ff6584]">person_add</span>
+              <span>Create Account</span>
+            </button>
+          </div>
+
+          <!-- Google 1-Click Button -->
+          <button type="button" onclick="handleGoogleSignIn(event)" class="w-full h-11 mt-4 bg-white text-[#1b1b21] font-bold text-xs rounded-full shadow-xs border border-stone-200 flex items-center justify-center gap-2.5 transition hover:bg-[#f5f2fb] active:scale-[0.98] cursor-pointer">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+              <path d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z" fill="#EA4335"></path>
+              <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z" fill="#4285F4"></path>
+              <path d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9c-.2-.7-.4-1.5-.4-2.4l.4-3z" fill="#FBBC05"></path>
+              <path d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16.5C3.7 20.3 7.5 23.5 12 23.5z" fill="#34A853"></path>
+            </svg>
+            <span>Continue with Google</span>
+            <span class="w-2 h-2 rounded-full bg-[#ff6584] animate-ping ml-1"></span>
+          </button>
+
+          <div class="w-full flex items-center my-3">
+            <div class="flex-grow h-[1px] bg-[#dfbfc2]/40"></div>
+            <span class="px-2 text-[10px] uppercase tracking-wider text-[#584143] font-bold">or email</span>
+            <div class="flex-grow h-[1px] bg-[#dfbfc2]/40"></div>
+          </div>
+
+          <!-- 1. Quick Sign In Form -->
+          <form action="{{ route('login.submit') }}" method="POST" class="w-full flex flex-col gap-2.5 text-left" id="quickModalSignInForm">
+            @csrf
+            <div>
+              <label class="text-[11px] font-bold text-[#1b1b21] ml-2 block mb-0.5">Email address or Admin ID</label>
+              <input class="w-full h-11 px-4 rounded-full bg-[#f5f2fb] text-[#1b1b21] text-xs font-semibold placeholder:text-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#ff6584] transition" 
+                     name="email" required type="text" placeholder="you@domain.com or admin"/>
+            </div>
+            <div>
+              <div class="flex items-center justify-between ml-2 mb-0.5">
+                <label class="text-[11px] font-bold text-[#1b1b21]">Password</label>
+                <a href="{{ route('password.request') }}" class="text-[11px] font-bold text-[#b0284b] hover:underline">Forgot?</a>
+              </div>
+              <div class="relative flex items-center">
+                <input class="w-full h-11 pl-4 pr-11 rounded-full bg-[#f5f2fb] text-[#1b1b21] text-xs font-semibold placeholder:text-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#ff6584] transition" 
+                       id="quickModalPass" name="password" required type="password" placeholder="••••••••••••"/>
+                <button type="button" onclick="toggleQuickPass('quickModalPass', this)" class="absolute right-3 text-[#584143] hover:text-[#b0284b] cursor-pointer">
+                  <span class="material-symbols-outlined text-base">visibility</span>
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="w-full h-11 mt-1 bg-gradient-to-r from-[#ff6584] via-[#fd748e] to-[#b0284b] text-white font-bold text-xs rounded-full shadow-md shadow-[#ff6584]/30 flex items-center justify-center gap-1.5 hover:brightness-105 active:scale-[0.98] transition cursor-pointer">
+              <span>Sign In &amp; Meet Singles</span>
+              <span class="material-symbols-outlined text-base">favorite</span>
+            </button>
+          </form>
+
+          <!-- 2. Quick Register Form -->
+          <form action="{{ route('register.submit') }}" method="POST" class="w-full flex-col gap-2 text-left hidden" id="quickModalRegisterForm">
+            @csrf
+            <div>
+              <label class="text-[11px] font-bold text-[#1b1b21] ml-2 block mb-0.5">Full Name</label>
+              <input class="w-full h-10 px-3.5 rounded-full bg-[#f5f2fb] text-[#1b1b21] text-xs font-semibold placeholder:text-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#ff6584] transition" 
+                     name="full_name" required placeholder="e.g. Priya Mehta" type="text"/>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-[#1b1b21] ml-2 block mb-0.5">Email Address</label>
+              <input class="w-full h-10 px-3.5 rounded-full bg-[#f5f2fb] text-[#1b1b21] text-xs font-semibold placeholder:text-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#ff6584] transition" 
+                     name="email" required placeholder="you@domain.com" type="email"/>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-[#1b1b21] ml-2 block mb-0.5">Password (min 6 chars)</label>
+              <input class="w-full h-10 px-3.5 rounded-full bg-[#f5f2fb] text-[#1b1b21] text-xs font-semibold placeholder:text-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#ff6584] transition" 
+                     name="password" required minlength="6" placeholder="••••••••••••" type="password"/>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[10px] font-bold text-[#1b1b21] ml-2 block mb-0.5">Birth Date</label>
+                <input class="w-full h-10 px-2 rounded-full bg-[#f5f2fb] text-[#1b1b21] text-xs font-semibold focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#ff6584] transition" 
+                       name="dob" value="2000-01-01" required type="date"/>
+              </div>
+              <div>
+                <label class="text-[10px] font-bold text-[#1b1b21] ml-2 block mb-0.5">Gender</label>
+                <select class="w-full h-10 px-2 rounded-full bg-[#f5f2fb] text-[#1b1b21] text-xs font-semibold focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#ff6584] transition cursor-pointer" 
+                        name="gender" required>
+                  <option value="female" selected>Female</option>
+                  <option value="male">Male</option>
+                  <option value="nonbinary">Non-Binary</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="w-full h-11 mt-1 bg-gradient-to-r from-[#ff6584] via-[#fd748e] to-[#b0284b] text-white font-bold text-xs rounded-full shadow-md shadow-[#ff6584]/30 flex items-center justify-center gap-1.5 hover:brightness-105 active:scale-[0.98] transition cursor-pointer">
+              <span>Create Free Account</span>
+              <span class="material-symbols-outlined text-base">auto_awesome</span>
+            </button>
+          </form>
+
+          <div class="mt-3 text-[11px] text-[#584143]">
+            <span>100% Selfie-Verified Members • Zero Spam</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
 
     @yield('extra_js')
 </body>
