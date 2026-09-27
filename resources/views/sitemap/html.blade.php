@@ -41,23 +41,24 @@
                 </ul>
             </div>
 
-            <!-- Card 2: Himachal Pradesh & City Hubs -->
-            <div class="bg-white border border-[#e5d5ca] rounded-3xl p-7 shadow-none space-y-4">
-                <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-lg text-[#24140d] flex items-center gap-2.5 pb-3 border-b border-[#e5d5ca]">
-                    <i class="fa-solid fa-mountain text-[#8b5a2b]"></i> Himachal Pradesh & Metro Hubs
-                </h2>
-                <ul class="space-y-2.5 text-xs sm:text-sm font-['Inter'] text-[#4a383e]">
-                    <li><a href="{{ route('cities.index') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>All Cities Directory</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/cities</span></a></li>
-                    <li><a href="{{ route('city.show', 'shimla') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Shimla Mountain Dates</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/shimla</span></a></li>
-                    <li><a href="{{ route('city.show', 'manali') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Manali Alpine Dates</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/manali</span></a></li>
-                    <li><a href="{{ route('city.show', 'dharamshala') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Dharamshala & McLeodGanj</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/dharamshala</span></a></li>
-                    <li><a href="{{ route('city.show', 'kasauli') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Kasauli & Solan Hills</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/kasauli</span></a></li>
-                    <li><a href="{{ route('city.show', 'pune') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Pune Specialty Roasteries</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/pune</span></a></li>
-                    <li><a href="{{ route('city.show', 'mumbai') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Mumbai Heritage Bakehouses</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/mumbai</span></a></li>
-                    <li><a href="{{ route('city.show', 'bangalore') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Bangalore Micro-Lot Cafes</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/bangalore</span></a></li>
-                    <li><a href="{{ route('city.show', 'delhi') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Delhi NCR Champa Gali</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/delhi</span></a></li>
-                    <li><a href="{{ route('city.show', 'chandigarh') }}" class="hover:text-[#8b5a2b] font-medium flex items-center justify-between"><span>Chandigarh Garden Cafes</span> <span class="text-[10px] text-[#8b5a2b] font-mono font-semibold">/city/chandigarh</span></a></li>
-                </ul>
+            <!-- Card 2: 100+ Dating Destinations & Himachal Hubs -->
+            <div class="bg-white border border-[#e5d5ca] rounded-3xl p-7 shadow-none space-y-4 md:col-span-2">
+                <div class="flex items-center justify-between pb-3 border-b border-[#e5d5ca]">
+                    <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-lg text-[#24140d] flex items-center gap-2.5">
+                        <i class="fa-solid fa-mountain text-[#8b5a2b]"></i> 100+ Dating Hubs & City Guides
+                    </h2>
+                    <a href="{{ route('cities.index') }}" class="text-xs font-bold text-[#b0284b] hover:underline flex items-center gap-1">
+                        View Directory ({{ count($cities) }} Hubs) <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-xs font-['Inter'] text-[#4a383e] max-h-96 overflow-y-auto pr-2">
+                    @foreach($cities as $slug => $name)
+                        <a href="{{ route('city.show', $slug) }}" class="p-2 rounded-xl bg-[#fdfaf7] hover:bg-[#fae8e4] hover:text-[#b0284b] transition flex items-center justify-between group">
+                            <span class="truncate font-medium">{{ $name }}</span>
+                            <span class="text-[9px] text-[#8b5a2b] font-mono group-hover:text-[#b0284b]">/{{ $slug }}</span>
+                        </a>
+                    @endforeach
+                </div>
             </div>
 
             <!-- Card 3: Editorial Guides & Articles -->

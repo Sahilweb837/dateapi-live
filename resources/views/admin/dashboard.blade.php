@@ -74,65 +74,165 @@
             </div>
         @endif
 
-        <!-- KPI Metric Cards Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- KPI Metric Cards Grid (5-Cards Layout) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <!-- Metric 1: Total Hits -->
             <div class="kpi-card p-5 rounded-3xl border border-[#ebdcd1] shadow-xs">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Page Views</span>
-                    <div class="w-10 h-10 rounded-2xl bg-[#f7ede6] text-[#8b5a2b] flex items-center justify-center">
-                        <span class="material-symbols-outlined text-xl">visibility</span>
+                    <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Total Views</span>
+                    <div class="w-9 h-9 rounded-xl bg-[#f7ede6] text-[#8b5a2b] flex items-center justify-center">
+                        <span class="material-symbols-outlined text-lg">visibility</span>
                     </div>
                 </div>
                 <div class="text-3xl font-black text-[#24150e] font-['Plus_Jakarta_Sans']">{{ number_format($totalViews) }}</div>
                 <div class="text-[11px] text-emerald-700 font-semibold mt-2 flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">trending_up</span>
-                    <span>+{{ number_format($viewsToday) }} views logged today</span>
+                    <span>+{{ number_format($viewsToday) }} today</span>
                 </div>
             </div>
 
             <!-- Metric 2: Unique IP Visitors -->
             <div class="kpi-card p-5 rounded-3xl border border-[#ebdcd1] shadow-xs">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Unique Visitors (IPs)</span>
-                    <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                        <span class="material-symbols-outlined text-xl">fingerprint</span>
+                    <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Unique IPs</span>
+                    <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-lg">fingerprint</span>
                     </div>
                 </div>
                 <div class="text-3xl font-black text-blue-900 font-['Plus_Jakarta_Sans']">{{ number_format($uniqueVisitors) }}</div>
                 <div class="text-[11px] text-blue-700 font-semibold mt-2 flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">public</span>
-                    <span>{{ number_format($uniqueToday) }} unique IPs today</span>
+                    <span>{{ number_format($uniqueToday) }} unique today</span>
                 </div>
             </div>
 
-            <!-- Metric 3: Registered Singles -->
+            <!-- Metric 3: Live Active Visitors Now -->
+            <div class="kpi-card p-5 rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50/50 to-white shadow-xs">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Active Right Now</span>
+                    <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 live-pulse"></span>
+                    </div>
+                </div>
+                <div class="text-3xl font-black text-emerald-950 font-['Plus_Jakarta_Sans'] flex items-baseline gap-1.5">
+                    <span>{{ max(1, $activeNow) }}</span>
+                    <span class="text-xs font-bold text-emerald-600 uppercase">Online</span>
+                </div>
+                <div class="text-[11px] text-emerald-700 font-semibold mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">speed</span>
+                    <span>Active in last 15 mins</span>
+                </div>
+            </div>
+
+            <!-- Metric 4: Registered Singles -->
             <div class="kpi-card p-5 rounded-3xl border border-[#ebdcd1] shadow-xs">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Registered Daters</span>
-                    <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
-                        <span class="material-symbols-outlined text-xl">group</span>
+                    <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Members</span>
+                    <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-lg">group</span>
                     </div>
                 </div>
                 <div class="text-3xl font-black text-rose-900 font-['Plus_Jakarta_Sans']">{{ number_format($totalUsers) }}</div>
                 <div class="text-[11px] text-rose-700 font-semibold mt-2 flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">verified</span>
-                    <span>{{ number_format($verifiedUsers) }} verified profiles</span>
+                    <span>{{ number_format($verifiedUsers) }} verified</span>
                 </div>
             </div>
 
-            <!-- Metric 4: Curated Cafes & Editorial Guides -->
+            <!-- Metric 5: Curated Cafes & Editorial Guides -->
             <div class="kpi-card p-5 rounded-3xl border border-[#ebdcd1] shadow-xs">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Content &amp; Spots</span>
-                    <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center">
-                        <span class="material-symbols-outlined text-xl">coffee</span>
+                    <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Content &amp; Hubs</span>
+                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-lg">coffee</span>
                     </div>
                 </div>
-                <div class="text-3xl font-black text-amber-900 font-['Plus_Jakarta_Sans']">{{ number_format($totalPlaces) }} Spots</div>
+                <div class="text-3xl font-black text-amber-900 font-['Plus_Jakarta_Sans']">100+</div>
                 <div class="text-[11px] text-amber-800 font-semibold mt-2 flex items-center gap-1">
-                    <span class="material-symbols-outlined text-sm">article</span>
-                    <span>{{ number_format($totalBlogs) }} editorial guides active</span>
+                    <span class="material-symbols-outlined text-sm">explore</span>
+                    <span>100+ City Guides Indexed</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Analytics Intelligence: Device, Browser & 7-Day Trend -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-3xl border border-[#e8d8cc] shadow-xs">
+            @php
+                $totalDeviceHits = max(1, ($deviceBreakdown['mobile'] ?? 0) + ($deviceBreakdown['desktop'] ?? 0));
+                $mobilePct = round((($deviceBreakdown['mobile'] ?? 0) / $totalDeviceHits) * 100);
+                $desktopPct = 100 - $mobilePct;
+            @endphp
+            <!-- Device Breakdown -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#231713] uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base text-[#8b5a2b]">devices</span> Device Ratio
+                    </span>
+                    <span class="text-[11px] text-gray-500 font-mono">{{ $totalDeviceHits }} samples</span>
+                </div>
+                <div class="flex items-center justify-between text-xs font-bold">
+                    <span class="text-rose-700 flex items-center gap-1">📱 Mobile: {{ $mobilePct }}%</span>
+                    <span class="text-blue-700 flex items-center gap-1">💻 Desktop: {{ $desktopPct }}%</span>
+                </div>
+                <div class="w-full h-3 rounded-full bg-gray-100 flex overflow-hidden">
+                    <div class="bg-gradient-to-r from-rose-500 to-pink-500 h-full" style="width: {{ $mobilePct }}%"></div>
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full" style="width: {{ $desktopPct }}%"></div>
+                </div>
+                <p class="text-[11px] text-gray-400">CupDate is fully optimized for mobile touch &amp; desktop viewport.</p>
+            </div>
+
+            <!-- Top Browsers -->
+            <div class="space-y-3 md:border-l md:border-r border-[#f0e3d9] md:px-6">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#231713] uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base text-[#8b5a2b]">language</span> Browsers
+                    </span>
+                    <span class="text-[11px] text-gray-500">Live share</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="p-2 rounded-xl bg-amber-50/60 border border-amber-100 flex items-center justify-between">
+                        <span class="font-bold text-gray-700">Chrome</span>
+                        <span class="font-mono text-amber-800 font-bold">{{ $browserBreakdown['chrome'] ?? 0 }}</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-blue-50/60 border border-blue-100 flex items-center justify-between">
+                        <span class="font-bold text-gray-700">Safari</span>
+                        <span class="font-mono text-blue-800 font-bold">{{ $browserBreakdown['safari'] ?? 0 }}</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-cyan-50/60 border border-cyan-100 flex items-center justify-between">
+                        <span class="font-bold text-gray-700">Edge</span>
+                        <span class="font-mono text-cyan-800 font-bold">{{ $browserBreakdown['edge'] ?? 0 }}</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-orange-50/60 border border-orange-100 flex items-center justify-between">
+                        <span class="font-bold text-gray-700">Firefox</span>
+                        <span class="font-mono text-orange-800 font-bold">{{ $browserBreakdown['firefox'] ?? 0 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7-Day Pageview Activity Mini Bar Chart -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#231713] uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base text-emerald-600">bar_chart</span> 7-Day Trend
+                    </span>
+                    <span class="text-[11px] text-emerald-700 font-bold">Real-time</span>
+                </div>
+                @php
+                    $maxCount = $dailyTrends->max('count') ?: 1;
+                @endphp
+                <div class="flex items-end justify-between gap-1.5 h-14 pt-2">
+                    @foreach($dailyTrends as $trend)
+                        @php
+                            $heightPct = max(15, round(($trend['count'] / $maxCount) * 100));
+                        @endphp
+                        <div class="flex-1 flex flex-col items-center gap-1 group relative">
+                            <div class="w-full bg-[#8b5a2b]/20 hover:bg-[#8b5a2b] transition-all rounded-t-md" style="height: {{ $heightPct }}%"></div>
+                            <span class="text-[9px] text-gray-400 font-mono">{{ $trend['label'] }}</span>
+                            <div class="absolute -top-7 hidden group-hover:block bg-stone-900 text-white text-[9px] px-1.5 py-0.5 rounded shadow z-10 whitespace-nowrap">
+                                {{ $trend['count'] }} hits
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

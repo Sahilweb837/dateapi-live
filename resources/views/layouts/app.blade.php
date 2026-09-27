@@ -35,15 +35,81 @@
     <link rel="apple-touch-icon" href="{{ asset('assets/images/cupdate_icon.svg') }}">
     <meta name="theme-color" content="#22140D">
 
-    <!-- Material Symbols & Typography -->
+    <!-- Material Symbols & Typography (Outfit + Plus Jakarta Sans + Playfair Display) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
     
     <!-- FontAwesome 6 (Compatibility) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Global Structured Data / Schema.org JSON-LD (SEO Excellence) -->
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'WebSite',
+                '@id' => url('/') . '#website',
+                'url' => url('/'),
+                'name' => 'CupDate',
+                'description' => 'Meet verified singles for intentional relationships, low-pressure 45-minute coffee dates, and genuine conversation.',
+                'inLanguage' => 'en-IN',
+                'potentialAction' => [
+                    '@type' => 'SearchAction',
+                    'target' => url('/cities') . '?q={search_term_string}',
+                    'query-input' => 'required name=search_term_string',
+                ],
+            ],
+            [
+                '@type' => 'Organization',
+                '@id' => url('/') . '#organization',
+                'name' => 'CupDate',
+                'url' => url('/'),
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('assets/images/cupdate_logo.svg'),
+                    'width' => 180,
+                    'height' => 45,
+                ],
+                'sameAs' => [
+                    'https://twitter.com/cupdate_in',
+                    'https://www.instagram.com/cupdate.in',
+                    'https://www.linkedin.com/company/cupdate',
+                ],
+                'contactPoint' => [
+                    '@type' => 'ContactPoint',
+                    'contactType' => 'customer support',
+                    'email' => 'support@cupdate.in',
+                    'availableLanguage' => ['English', 'Hindi', 'Punjabi'],
+                ],
+            ],
+            [
+                '@type' => 'DatingService',
+                '@id' => url('/') . '#service',
+                'name' => 'CupDate Intentional Coffee Dating',
+                'serviceType' => 'Verified 45-Minute Coffee Dates & Matchmaking',
+                'provider' => [
+                    '@id' => url('/') . '#organization',
+                ],
+                'areaServed' => [
+                    ['@type' => 'Country', 'name' => 'India'],
+                    ['@type' => 'AdministrativeArea', 'name' => 'Himachal Pradesh'],
+                    ['@type' => 'AdministrativeArea', 'name' => 'Punjab'],
+                    ['@type' => 'AdministrativeArea', 'name' => 'Delhi NCR'],
+                    ['@type' => 'AdministrativeArea', 'name' => 'Maharashtra'],
+                    ['@type' => 'AdministrativeArea', 'name' => 'Karnataka'],
+                ],
+                'audience' => [
+                    '@type' => 'Audience',
+                    'audienceType' => 'Verified Singles Seeking Intentional Relationships',
+                ],
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
 
     <!-- Google tag (gtag.js) - Google Analytics GA4 -->
     @php

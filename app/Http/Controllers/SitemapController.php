@@ -5,35 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\User;
+use App\Services\CityDirectory;
 
 class SitemapController extends Controller
 {
-    protected $cities = [
-        'shimla' => 'Shimla, Himachal Pradesh',
-        'manali' => 'Manali, Himachal Pradesh',
-        'dharamshala' => 'Dharamshala & McLeodGanj',
-        'kasauli' => 'Kasauli & Solan',
-        'pune' => 'Pune, Maharashtra',
-        'mumbai' => 'Mumbai, Maharashtra',
-        'bangalore' => 'Bangalore, Karnataka',
-        'delhi' => 'Delhi NCR',
-        'chandigarh' => 'Chandigarh Tricity',
-        'jaipur' => 'Jaipur, Rajasthan',
-        'goa' => 'Goa Beachside',
-        'amritsar' => 'Amritsar, Punjab',
-        'jalandhar' => 'Jalandhar, Punjab',
-        'patiala' => 'Patiala, Punjab',
-        'mohali' => 'Mohali, Punjab',
-        'panchkula' => 'Panchkula, Haryana',
-        'dehradun' => 'Dehradun, Uttarakhand',
-        'london' => 'London, United Kingdom',
-        'dubai' => 'Dubai, United Arab Emirates',
-        'toronto' => 'Toronto, Canada',
-        'new-york' => 'New York, United States',
-        'melbourne' => 'Melbourne, Australia',
-        'singapore' => 'Singapore',
-        'sydney' => 'Sydney, Australia',
-    ];
+    protected function getCities(): array
+    {
+        $all = CityDirectory::all();
+        $map = [];
+        foreach ($all as $slug => $data) {
+            $map[$slug] = $data['name'];
+        }
+        return $map;
+    }
 
     protected function getSafeBlogs()
     {
@@ -64,7 +48,8 @@ class SitemapController extends Controller
     public function xml()
     {
         $blogs = $this->getSafeBlogs();
-        $cities = array_keys($this->cities);
+        $citiesMap = $this->getCities();
+        $cities = array_keys($citiesMap);
 
         return response()->view('sitemap.xml', [
             'blogs' => $blogs,
@@ -75,7 +60,7 @@ class SitemapController extends Controller
     public function html()
     {
         $blogs = $this->getSafeBlogs();
-        $cities = $this->cities;
+        $cities = $this->getCities();
 
         return view('sitemap.html', compact('blogs', 'cities'));
     }

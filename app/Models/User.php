@@ -61,6 +61,26 @@ class User extends Authenticatable
         'boosted_until' => 'datetime',
     ];
 
+    public function getNameAttribute()
+    {
+        return $this->full_name ?? 'CupDate Member';
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['full_name'] = $value;
+    }
+
+    public function getRoleAttribute()
+    {
+        return !empty($this->is_admin) ? 'admin' : 'user';
+    }
+
+    public function setRoleAttribute($value)
+    {
+        $this->attributes['is_admin'] = ($value === 'admin' || $value === true || $value === 1);
+    }
+
     public function getRememberTokenName()
     {
         return '';

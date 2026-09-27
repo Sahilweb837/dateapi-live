@@ -34,11 +34,18 @@ class AppServiceProvider extends ServiceProvider
     protected function ensureResilientDatabase(): void
     {
         $mysqlOk = false;
-        try {
-            DB::connection('mysql')->getPdo();
-            $mysqlOk = true;
-        } catch (\Throwable $e) {
-            $mysqlOk = false;
+        $host = config('database.connections.mysql.host', '127.0.0.1');
+        $port = (int) (config('database.connections.mysql.port') ?: 3306);
+
+        $socket = @fsockopen($host, $port, $errno, $errstr, 0.15);
+        if ($socket) {
+            @fclose($socket);
+            try {
+                DB::connection('mysql')->getPdo();
+                $mysqlOk = true;
+            } catch (\Throwable $e) {
+                $mysqlOk = false;
+            }
         }
 
         if (!$mysqlOk) {

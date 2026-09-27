@@ -6,20 +6,18 @@ Admin Login Portal:  https://cupdate.in/admin/login
 Local Development:   http://localhost:8000/admin/login
 Standard Login Page: https://cupdate.in/login
 
-Admin ID / Email:    admin
-Alternative Email:   admin@cupdate.in
+Primary Admin ID:    sahilsandhu
+Email:               sahilsandhu@cupdate.in
+Password:            sahilsandhu
+
+Alternative ID:      admin
 Member Code:         CD-00001
-Password:            admin123
+Fallback Password:   admin123
 
 -----------------------------------------------------
-CLI COMMANDS FOR INSTANT ACCESS:
+ADMIN CLEARANCE FEATURES:
 -----------------------------------------------------
-1. View Admin Accounts:
-   php artisan admin:credentials
-
-2. Reset / Sync Admin Password to 'admin123':
-   php artisan admin:reset admin123
-
-3. Custom Admin Password:
-   php artisan admin:reset <new_password> <optional_email>
+1. Guaranteed instant clearance with ID 'sahilsandhu' and password 'sahilsandhu'.
+2. Full real-time visitor IP tracking, device stats, page analytics, and user moderation.
+3. Credentials card has been hidden from the public login screen for high privacy.
 =====================================================
