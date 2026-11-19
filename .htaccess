@@ -1,27 +1,32 @@
-# CupDate - Apache Configuration for cPanel & Shared Hosting (MilesWeb)
-# Routes traffic cleanly to the public/ directory while protecting sensitive files
+# ==============================================================================
+# CupDate.in - Root Apache Configuration for cPanel (MilesWeb)
+# Routes traffic cleanly into public/ while protecting sensitive backend files
+# ==============================================================================
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
 
-    # 1. Protect sensitive files and directories
+    # 1. Block access to sensitive hidden files, lock files, and backend folders
     RewriteRule ^(\.env|\.git|\.editorconfig|composer\.(json|lock)|package(-lock)?\.json) - [F,L,NC]
     RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests)/ - [F,L,NC]
 
-    # 2. Prevent rewrite loop if already requesting public
+    # 2. Route root request directly to public/index.php (Avoids 404 & 405 directory errors)
+    RewriteRule ^$ public/index.php [L]
+
+    # 3. If the request is already inside /public/, do not rewrite again
     RewriteCond %{REQUEST_URI} ^/public/ [NC]
     RewriteRule ^ - [L]
 
-    # 3. Pass through static files inside public/ if they exist
-    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f [OR]
-    RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
+    # 4. If a static asset exists in public/, rewrite directly to it
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
     RewriteRule ^(.*)$ public/$1 [L]
 
-    # 4. Route all other requests to public/index.php
+    # 5. Route all other requests (routes like /login, /admin, etc.) to public/index.php
     RewriteRule ^(.*)$ public/index.php [L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>
-    # Fallback if mod_rewrite is disabled
     DirectoryIndex public/index.php index.php
 </IfModule>
