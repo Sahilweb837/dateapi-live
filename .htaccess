@@ -1,0 +1,27 @@
+# CupDate - Apache Configuration for cPanel & Shared Hosting (MilesWeb)
+# Routes traffic cleanly to the public/ directory while protecting sensitive files
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. Protect sensitive files and directories
+    RewriteRule ^(\.env|\.git|\.editorconfig|composer\.(json|lock)|package(-lock)?\.json) - [F,L,NC]
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests)/ - [F,L,NC]
+
+    # 2. Prevent rewrite loop if already requesting public
+    RewriteCond %{REQUEST_URI} ^/public/ [NC]
+    RewriteRule ^ - [L]
+
+    # 3. Pass through static files inside public/ if they exist
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # 4. Route all other requests to public/index.php
+    RewriteRule ^(.*)$ public/index.php [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # Fallback if mod_rewrite is disabled
+    DirectoryIndex public/index.php index.php
+</IfModule>

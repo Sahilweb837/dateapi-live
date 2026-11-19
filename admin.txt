@@ -1,23 +1,42 @@
 =====================================================
-            CUPDATE ADMIN PANEL CREDENTIALS
+            CUPDATE ADMIN PANEL & SERVER CONFIG
 =====================================================
 
+Live Domain:         https://cupdate.in
 Admin Login Portal:  https://cupdate.in/admin/login
-Local Development:   http://localhost:8000/admin/login
 Standard Login Page: https://cupdate.in/login
+Local Development:   http://localhost:8000/admin/login
 
+Live Database:       cupdate_1_cupcup
+phpMyAdmin URL:      https://phpmyadmin.milesweb.com
+SQL Schema File:     safe.sql (100% ready for phpMyAdmin import)
+
+-----------------------------------------------------
+ADMIN CREDENTIALS (Seeded in safe.sql):
+-----------------------------------------------------
 Primary Admin ID:    sahilsandhu
 Email:               sahilsandhu@cupdate.in
 Password:            sahilsandhu
 
 Alternative ID:      admin
-Member Code:         CD-00001
+Email:               admin@cupdate.in
+Member Code:         CD-00002
 Fallback Password:   admin123
 
 -----------------------------------------------------
-ADMIN CLEARANCE FEATURES:
+LIVE SERVER SETUP INSTRUCTIONS (MilesWeb / cPanel):
 -----------------------------------------------------
-1. Guaranteed instant clearance with ID 'sahilsandhu' and password 'sahilsandhu'.
-2. Full real-time visitor IP tracking, device stats, page analytics, and user moderation.
-3. Credentials card has been hidden from the public login screen for high privacy.
+1. phpMyAdmin Database Import:
+   - Go to: https://phpmyadmin.milesweb.com
+   - Click `cupdate_1_cupcup` on the left sidebar.
+   - Click the "SQL" tab at the top.
+   - Copy all content from `safe.sql`, paste it, and click "Go".
+
+2. cPanel Database Permissions:
+   - In cPanel -> "MySQL® Databases" -> "Add User To Database"
+   - Add your user to `cupdate_1_cupcup` with ALL PRIVILEGES.
+
+3. Instant Admin Access:
+   - Go to https://cupdate.in/admin/login
+   - Login with `sahilsandhu` / `sahilsandhu` (or `admin` / `admin123`).
 =====================================================

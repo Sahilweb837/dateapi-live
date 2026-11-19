@@ -1,25 +1,25 @@
 -- ==============================================================================
 -- CUPDATE LIVE DATABASE SETUP FOR PHPMYADMIN (MilesWeb / cPanel)
--- Database Target: cupamate1_backenlaraveldate
+-- Database Target: cupdate_1_cupcup
 -- ==============================================================================
 --
 -- IMPORTANT CPANEL NOTICE (Why phpMyAdmin gave error #1227):
--- In cPanel shared hosting, phpMyAdmin does NOT have "root / CREATE USER" privileges.
+-- In cPanel shared hosting, phpMyAdmin users do NOT have "root / CREATE USER" privileges.
 -- You CANNOT run CREATE USER or GRANT in the phpMyAdmin SQL tab.
 --
--- DO THESE 3 CLICKS IN CPANEL TO FIX ERROR 1045 (Takes 30 seconds):
+-- DO THESE 3 CLICKS IN CPANEL TO FIX DATABASE PERMISSIONS (Takes 30 seconds):
 -- 1. Open cPanel -> Click "MySQL® Databases".
--- 2. Scroll to "Current Users" -> Next to 'cupamate1_backendlaraveldate2s',
---    click "Change Password" -> Set password to: a0}A6(k7R#N=
---    and click "Change Password".
--- 3. Scroll to "Add User To Database":
---    - Select User: cupamate1_backendlaraveldate2s
---    - Select Database: cupamate1_backenlaraveldate
+-- 2. Under "Add User To Database":
+--    - Select User: (Your cPanel user, e.g. cupdate_1_cupcup or cupamate1_backendlaraveldate2s)
+--    - Select Database: cupdate_1_cupcup
 --    - Click "Add".
---    - Tick the box "ALL PRIVILEGES" and click "Make Changes".
+--    - Check the box "ALL PRIVILEGES" and click "Make Changes".
 --
--- AFTER DOING THE 3 CLICKS ABOVE, RUN THE SQL SCRIPT BELOW IN PHPMYADMIN:
--- (Open phpMyAdmin -> Click `cupamate1_backenlaraveldate` on left -> Click SQL tab -> Paste & Run)
+-- AFTER DOING THE STEPS ABOVE, RUN THE SQL SCRIPT BELOW IN PHPMYADMIN:
+-- 1. Open phpMyAdmin: https://phpmyadmin.milesweb.com
+-- 2. Click `cupdate_1_cupcup` on the left panel.
+-- 3. Click the "SQL" tab.
+-- 4. Paste everything below and click "Go".
 -- ==============================================================================
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `member_code` VARCHAR(20) DEFAULT NULL,
+  `member_code` VARCHAR(30) DEFAULT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `full_name` VARCHAR(100) NOT NULL,
@@ -63,46 +63,67 @@ CREATE TABLE IF NOT EXISTS `users` (
   `security_pin` VARCHAR(10) DEFAULT NULL,
   `last_active` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_users_email` (`email`),
   KEY `idx_users_status` (`status`),
   KEY `idx_users_gender` (`gender`),
+  KEY `idx_users_boosted` (`is_boosted`),
   KEY `idx_users_coords` (`lat`, `lng`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 2. Table: messages (Real-time Dating Chat & Photo Sharing)
+-- 2. Table: password_reset_tokens
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
+  `email` VARCHAR(255) NOT NULL,
+  `token` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- 3. Table: messages (Real-time Dating Chat & Photo Sharing)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `messages` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `sender_id` INT(11) NOT NULL,
   `receiver_id` INT(11) NOT NULL,
+  `message` TEXT DEFAULT NULL,
   `body` TEXT DEFAULT NULL,
+  `attachment` VARCHAR(255) DEFAULT NULL,
   `image_path` VARCHAR(255) DEFAULT NULL,
   `is_read` TINYINT(1) NOT NULL DEFAULT 0,
+  `is_call_request` TINYINT(1) NOT NULL DEFAULT 0,
+  `call_status` VARCHAR(30) DEFAULT NULL,
   `is_audio` TINYINT(1) DEFAULT 0,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_msg_sender` (`sender_id`),
+  KEY `idx_msg_receiver` (`receiver_id`),
   KEY `idx_msg_convo` (`sender_id`, `receiver_id`),
-  KEY `idx_msg_unread` (`receiver_id`, `is_read`)
+  KEY `idx_msg_unread` (`receiver_id`, `is_read`, `created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 3. Table: swipes (Discovery Swipes & Coffee Spontaneity)
+-- 4. Table: swipes (Discovery Swipes & Coffee Spontaneity)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `swipes` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `swiper_id` INT(11) NOT NULL,
   `swipee_id` INT(11) NOT NULL,
-  `direction` ENUM('like','pass','superlike') NOT NULL DEFAULT 'like',
+  `type` VARCHAR(20) NOT NULL DEFAULT 'like',
+  `direction` VARCHAR(20) NOT NULL DEFAULT 'like',
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_unique_swipe` (`swiper_id`, `swipee_id`),
   KEY `idx_swipe_direction` (`direction`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 4. Table: matches (Mutual Coffee Matches & Conversations)
+-- 5. Table: matches (Mutual Coffee Matches & Conversations)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `matches` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -110,19 +131,21 @@ CREATE TABLE IF NOT EXISTS `matches` (
   `user2_id` INT(11) NOT NULL,
   `matched_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` ENUM('active','unmatched') NOT NULL DEFAULT 'active',
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_unique_match` (`user1_id`, `user2_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 5. Table: ideas (Community Coffee Date Ideas Feed)
+-- 6. Table: ideas (Community Coffee Date Ideas Feed)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ideas` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
-  `idea_text` TEXT NOT NULL,
   `content` TEXT DEFAULT NULL,
-  `cafe_name` VARCHAR(150) DEFAULT NULL,
+  `idea_text` TEXT DEFAULT NULL,
+  `cafe_name` VARCHAR(150) DEFAULT 'Cozy Coffee Spot',
   `city` VARCHAR(50) DEFAULT 'Shimla',
   `vibe` VARCHAR(50) DEFAULT 'Cozy',
   `budget` VARCHAR(20) DEFAULT '₹₹',
@@ -131,19 +154,14 @@ CREATE TABLE IF NOT EXISTS `ideas` (
   `sparks` INT(11) NOT NULL DEFAULT 0,
   `sparks_count` INT(11) NOT NULL DEFAULT 0,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_ideas_user` (`user_id`),
   KEY `idx_ideas_city` (`city`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Migration patches in case ideas table already existed without new columns
-ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `content` TEXT NULL AFTER `idea_text`;
-ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `image` VARCHAR(255) NULL AFTER `budget`;
-ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `image_path` VARCHAR(255) NULL AFTER `image`;
-ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `sparks_count` INT(11) DEFAULT 0 AFTER `sparks`;
-
 -- --------------------------------------------------------
--- 6. Table: idea_sparks (Track sparks/likes on community feed)
+-- 7. Table: idea_sparks (Track sparks/likes on community feed)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `idea_sparks` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -155,21 +173,25 @@ CREATE TABLE IF NOT EXISTS `idea_sparks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 7. Table: daily_rewards (Streak Tracker & Daily Coins)
+-- 8. Table: daily_rewards (Streak Tracker & Daily Coins)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `daily_rewards` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
   `reward_date` DATE NOT NULL,
+  `claimed_date` DATE DEFAULT NULL,
   `day_streak` INT(11) NOT NULL DEFAULT 1,
+  `streak_count` INT(11) NOT NULL DEFAULT 1,
   `coins_rewarded` INT(11) NOT NULL DEFAULT 10,
+  `reward_coins` INT(11) NOT NULL DEFAULT 10,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_reward_day` (`user_id`, `reward_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 8. Table: date_places (Curated Landmark Coffee Date Spots)
+-- 9. Table: date_places (Curated Landmark Coffee Date Spots)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `date_places` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -183,12 +205,14 @@ CREATE TABLE IF NOT EXISTS `date_places` (
   `rating` DECIMAL(3,1) NOT NULL DEFAULT 4.8,
   `cup_offer` VARCHAR(100) DEFAULT '15% Off with CupDate Badge',
   `image_url` VARCHAR(255) DEFAULT 'assets/images/default_cafe.jpg',
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_places_city` (`city`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 9. Table: blogs (Editorial Guides & Auto-Slug Engine)
+-- 10. Table: blogs (Editorial Guides & Auto-Slug Engine)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `blogs` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -200,12 +224,13 @@ CREATE TABLE IF NOT EXISTS `blogs` (
   `image_icon` VARCHAR(50) DEFAULT 'fa-mug-hot',
   `views` INT(11) DEFAULT 0,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_blogs_slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 10. Table: reports (Moderation & Safety Center)
+-- 11. Table: reports (Moderation & Safety Center)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `reports` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -215,26 +240,28 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `content_snapshot` TEXT DEFAULT NULL,
   `status` ENUM('pending','resolved','dismissed') NOT NULL DEFAULT 'pending',
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_reports_reported` (`reported_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 11. Table: transactions (Coin & Boost Economy Audit)
+-- 12. Table: transactions (Coin & Boost Economy Audit)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
-  `type` VARCHAR(50) NOT NULL,
-  `amount_coins` INT(11) NOT NULL,
+  `type` VARCHAR(50) NOT NULL DEFAULT 'coins',
+  `amount_coins` INT(11) NOT NULL DEFAULT 0,
   `description` VARCHAR(255) DEFAULT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_tx_user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 12. Table: contact_messages (Grievance & Support Inquiries)
+-- 13. Table: contact_messages (Grievance & Support Inquiries)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `contact_messages` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -252,32 +279,7 @@ CREATE TABLE IF NOT EXISTS `contact_messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- 13. Table: sessions (Database Session Storage Driver)
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` VARCHAR(255) NOT NULL,
-  `user_id` BIGINT UNSIGNED DEFAULT NULL,
-  `ip_address` VARCHAR(45) DEFAULT NULL,
-  `user_agent` TEXT DEFAULT NULL,
-  `payload` LONGTEXT NOT NULL,
-  `last_activity` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sessions_user_id_index` (`user_id`),
-  KEY `sessions_last_activity_index` (`last_activity`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
--- 14. Table: cache (Database Cache Storage Driver)
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cache` (
-  `key` VARCHAR(255) NOT NULL,
-  `value` MEDIUMTEXT NOT NULL,
-  `expiration` INT(11) NOT NULL,
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
--- 15. Table: page_views (Visitor IP Capture & Analytics)
+-- 14. Table: page_views (Visitor IP Capture & Analytics)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `page_views` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -293,6 +295,81 @@ CREATE TABLE IF NOT EXISTS `page_views` (
   KEY `idx_pv_ip` (`ip_address`),
   KEY `idx_pv_url` (`url`),
   KEY `idx_pv_created` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- 15. Table: sessions (Database Session Storage Driver)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` VARCHAR(255) NOT NULL,
+  `user_id` BIGINT UNSIGNED DEFAULT NULL,
+  `ip_address` VARCHAR(45) DEFAULT NULL,
+  `user_agent` TEXT DEFAULT NULL,
+  `payload` LONGTEXT NOT NULL,
+  `last_activity` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sessions_user_id_index` (`user_id`),
+  KEY `sessions_last_activity_index` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- 16. Table: cache & cache_locks (Database Cache Driver)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cache` (
+  `key` VARCHAR(255) NOT NULL,
+  `value` MEDIUMTEXT NOT NULL,
+  `expiration` INT(11) NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `cache_locks` (
+  `key` VARCHAR(255) NOT NULL,
+  `owner` VARCHAR(255) NOT NULL,
+  `expiration` INT(11) NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_locks_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- 17. Tables: jobs, job_batches, failed_jobs (Queue Driver)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `jobs` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `queue` VARCHAR(255) NOT NULL,
+  `payload` LONGTEXT NOT NULL,
+  `attempts` TINYINT UNSIGNED NOT NULL,
+  `reserved_at` INT UNSIGNED DEFAULT NULL,
+  `available_at` INT UNSIGNED NOT NULL,
+  `created_at` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `job_batches` (
+  `id` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `total_jobs` INT(11) NOT NULL,
+  `pending_jobs` INT(11) NOT NULL,
+  `failed_jobs` INT(11) NOT NULL,
+  `failed_job_ids` LONGTEXT NOT NULL,
+  `options` MEDIUMTEXT DEFAULT NULL,
+  `cancelled_at` INT(11) DEFAULT NULL,
+  `created_at` INT(11) NOT NULL,
+  `finished_at` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `failed_jobs` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uuid` VARCHAR(255) NOT NULL,
+  `connection` TEXT NOT NULL,
+  `queue` TEXT NOT NULL,
+  `payload` LONGTEXT NOT NULL,
+  `exception` LONGTEXT NOT NULL,
+  `failed_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -313,10 +390,13 @@ INSERT INTO `date_places` (`name`, `type`, `city`, `description`, `address`, `la
 ON DUPLICATE KEY UPDATE `description`=VALUES(`description`), `cup_offer`=VALUES(`cup_offer`);
 
 -- --------------------------------------------------------
--- SEED DATA: Verified Demo Users (Password: password123)
+-- SEED DATA: Registered Admin & Verified Demo Users
+-- Admin 1: sahilsandhu / Password: sahilsandhu
+-- Admin 2: admin / Password: admin123
 -- --------------------------------------------------------
 INSERT INTO `users` (`id`, `member_code`, `email`, `password`, `full_name`, `dob`, `gender`, `bio`, `avatar`, `country`, `interests`, `astrology`, `mbti`, `coffee_style`, `is_verified`, `is_admin`, `coins`, `xp`, `status`, `created_at`) VALUES
-(100, 'CD-00001', 'admin@cupdate.in', '$2y$10$v77nmgkttLHKquWp62FBSeckLkqMl9JiL0v/Z3XTVa2FmS9t7K48q', 'CupDate Administrator', '1995-01-01', 'other', 'Official System Administrator & Moderation Lead for CupDate.', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop', 'Kangra / Delhi, India', 'Moderation, Cyber Security, Coffee, Technology', 'Aquarius', 'INTJ', 'Double Ristretto', 1, 1, 9999, 9999, 'active', NOW()),
+(100, 'CD-00001', 'sahilsandhu@cupdate.in', '$2y$12$tioF1jTnljzWmE0HpljuOuLDB/mo2D0JWYjklt5Ey8OB8NfUG3PAi', 'Sahil Sandhu', '1995-01-01', 'male', 'Head of Engineering & Community Moderation Lead for CupDate.', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop', 'Kangra / Delhi, India', 'Coffee, Cybersecurity, Engineering, Mountains', 'Aquarius', 'INTJ', 'Double Ristretto', 1, 1, 9999, 9999, 'active', NOW()),
+(101, 'CD-00002', 'admin@cupdate.in', '$2y$12$WKWe0rl/k4RvzMIjKKIS/uOeI7tOzSoOUge4nU/vHftSkVZHnH6iS', 'CupDate Administrator', '1995-01-01', 'other', 'System Administrator & Trust Moderation Lead for CupDate.', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop', 'Kangra / Delhi, India', 'Moderation, Cyber Security, Coffee, Technology', 'Aquarius', 'INTJ', 'Double Ristretto', 1, 1, 9999, 9999, 'active', NOW()),
 (1, 'CD-10001', 'priya.mehta.cupdate@gmail.com', '$2y$12$K88F5s2yU1wN4Q3Lp9Zke.pZfxr2k3Wk6PZ5M1G9aB3vC7eD8f1h2', 'Priya Mehta', '1999-05-14', 'female', 'Specialty coffee enthusiast, amateur film photographer, and indie acoustic fan. Let us explore Wake & Bake! ☕📸', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 'Shimla, Himachal Pradesh', 'Coffee, Books, Photography, Vinyl Records', 'Taurus', 'ENFP', 'Vanilla Oat Milk Latte', 1, 0, 150, 80, 'active', NOW()),
 (2, 'CD-10002', 'arjun.kapoor.cupdate@gmail.com', '$2y$12$K88F5s2yU1wN4Q3Lp9Zke.pZfxr2k3Wk6PZ5M1G9aB3vC7eD8f1h2', 'Arjun Kapoor', '1997-11-20', 'male', 'Architect by day, espresso aficionado by night. Always looking for cozy cafes with mountain views. ☕', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 'Pune, Maharashtra', 'Architecture, Espresso, Hiking, Jazz', 'Scorpio', 'INTJ', 'Double Espresso Macchiato', 1, 0, 100, 45, 'active', NOW()),
 (3, 'CD-10003', 'tanya.sharma.cupdate@gmail.com', '$2y$12$K88F5s2yU1wN4Q3Lp9Zke.pZfxr2k3Wk6PZ5M1G9aB3vC7eD8f1h2', 'Tanya Sharma', '1998-08-22', 'female', 'Born in Shimla, lover of cedar trails, hot cappuccinos at Cafe Simla Times, and soulful poetry. ☕🏔️', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 'Shimla, Himachal Pradesh', 'Trekking, Specialty Coffee, Poetry, Himalayas', 'Virgo', 'INFJ', 'Cinnamon Honey Latte', 1, 0, 200, 110, 'active', NOW()),
