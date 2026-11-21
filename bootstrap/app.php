@@ -11,10 +11,12 @@ foreach ([
     $baseDir.'/storage/framework/sessions',
     $baseDir.'/storage/framework/cache/data',
     $baseDir.'/storage/logs',
+    $baseDir.'/bootstrap/cache',
 ] as $directory) {
     if (!is_dir($directory)) {
-        @mkdir($directory, 0755, true);
+        @mkdir($directory, 0777, true);
     }
+    @chmod($directory, 0777);
 }
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -37,16 +39,22 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (\Illuminate\Database\QueryException $e, $request) {
-            \Illuminate\Support\Facades\Log::warning('Database QueryException: ' . $e->getMessage());
+            try {
+                \Illuminate\Support\Facades\Log::warning('Database QueryException: ' . $e->getMessage());
+            } catch (\Throwable $logEx) {}
 
-            $sqlitePath = database_path('database.sqlite');
-            if (!file_exists($sqlitePath)) @touch($sqlitePath);
-            config([
-                'database.default' => 'sqlite',
-                'database.connections.sqlite.database' => $sqlitePath,
-            ]);
-            \Illuminate\Support\Facades\DB::purge();
-            \Illuminate\Support\Facades\DB::setDefaultConnection('sqlite');
+            if (extension_loaded('pdo_sqlite')) {
+                try {
+                    $sqlitePath = database_path('database.sqlite');
+                    if (!file_exists($sqlitePath)) { @touch($sqlitePath); @chmod($sqlitePath, 0666); }
+                    config([
+                        'database.default' => 'sqlite',
+                        'database.connections.sqlite.database' => $sqlitePath,
+                    ]);
+                    \Illuminate\Support\Facades\DB::purge();
+                    \Illuminate\Support\Facades\DB::setDefaultConnection('sqlite');
+                } catch (\Throwable $sqEx) {}
+            }
 
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json(['success' => true, 'fallback' => true]);
@@ -60,16 +68,22 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (\PDOException $e, $request) {
-            \Illuminate\Support\Facades\Log::warning('Database PDOException: ' . $e->getMessage());
+            try {
+                \Illuminate\Support\Facades\Log::warning('Database PDOException: ' . $e->getMessage());
+            } catch (\Throwable $logEx) {}
 
-            $sqlitePath = database_path('database.sqlite');
-            if (!file_exists($sqlitePath)) @touch($sqlitePath);
-            config([
-                'database.default' => 'sqlite',
-                'database.connections.sqlite.database' => $sqlitePath,
-            ]);
-            \Illuminate\Support\Facades\DB::purge();
-            \Illuminate\Support\Facades\DB::setDefaultConnection('sqlite');
+            if (extension_loaded('pdo_sqlite')) {
+                try {
+                    $sqlitePath = database_path('database.sqlite');
+                    if (!file_exists($sqlitePath)) { @touch($sqlitePath); @chmod($sqlitePath, 0666); }
+                    config([
+                        'database.default' => 'sqlite',
+                        'database.connections.sqlite.database' => $sqlitePath,
+                    ]);
+                    \Illuminate\Support\Facades\DB::purge();
+                    \Illuminate\Support\Facades\DB::setDefaultConnection('sqlite');
+                } catch (\Throwable $sqEx) {}
+            }
 
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json(['success' => true, 'fallback' => true]);

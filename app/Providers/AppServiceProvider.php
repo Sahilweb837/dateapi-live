@@ -33,30 +33,35 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function ensureResilientDatabase(): void
     {
-        $mysqlOk = false;
         try {
-            DB::connection('mysql')->getPdo();
-            $mysqlOk = true;
-        } catch (\Throwable $e) {
             $mysqlOk = false;
-        }
-
-        if (!$mysqlOk) {
-            $sqlitePath = database_path('database.sqlite');
-            if (!file_exists($sqlitePath)) {
-                @touch($sqlitePath);
+            try {
+                DB::connection('mysql')->getPdo();
+                $mysqlOk = true;
+            } catch (\Throwable $e) {
+                $mysqlOk = false;
             }
 
-            config([
-                'database.default' => 'sqlite',
-                'database.connections.sqlite.database' => $sqlitePath,
-            ]);
+            if (!$mysqlOk && extension_loaded('pdo_sqlite')) {
+                $sqlitePath = database_path('database.sqlite');
+                if (!file_exists($sqlitePath)) {
+                    @touch($sqlitePath);
+                    @chmod($sqlitePath, 0666);
+                }
 
-            DB::purge('mysql');
-            DB::purge('sqlite');
-            DB::setDefaultConnection('sqlite');
+                config([
+                    'database.default' => 'sqlite',
+                    'database.connections.sqlite.database' => $sqlitePath,
+                ]);
 
-            $this->initializeSqliteSchema();
+                DB::purge('mysql');
+                DB::purge('sqlite');
+                DB::setDefaultConnection('sqlite');
+
+                $this->initializeSqliteSchema();
+            }
+        } catch (\Throwable $globalEx) {
+            // Silently protect app boot from crashing on database connection issues
         }
     }
 
