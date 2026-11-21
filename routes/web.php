@@ -114,6 +114,7 @@ Route::get('/sitemap.xml', [SitemapController::class, 'xml'])->name('sitemap.xml
 Route::get('/sitemap', [SitemapController::class, 'html'])->name('sitemap.html');
 
 // Legacy 301 SEO Redirects (Protects indexed Google URLs)
+Route::redirect('/index.php', '/', 301);
 Route::redirect('/about.php', '/about', 301);
 Route::redirect('/contact.php', '/contact', 301);
 Route::redirect('/privacy.php', '/privacy', 301);
@@ -140,3 +141,8 @@ Route::redirect('/chandigarh.php', '/city/chandigarh', 301);
 Route::redirect('/jaipur.php', '/city/jaipur', 301);
 Route::redirect('/goa.php', '/city/goa', 301);
 Route::redirect('/sitemap.php', '/sitemap', 301);
+
+// 404 Fallback Handler (Returns strict 404 HTTP status & SEO-friendly recovery page)
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});

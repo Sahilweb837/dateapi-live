@@ -85,42 +85,10 @@
                 </div>
             @endif
 
-            <!-- Social Login Suite -->
-            <div class="w-full mt-5 flex flex-col gap-2.5">
-                <!-- Google Sign In -->
-                <button type="button" onclick="handleGoogleSignIn(event)" id="google-auth-btn"
-                        class="w-full h-12 bg-white text-[#1b1b21] font-bold text-xs sm:text-sm rounded-full shadow-xs border border-stone-200 flex items-center justify-center gap-3 transition-all duration-200 hover:bg-[#f5f2fb] hover:shadow-md active:scale-[0.98] cursor-pointer group">
-                    <svg class="w-5 h-5 transition-transform group-hover:scale-110 shrink-0" viewBox="0 0 24 24">
-                        <path d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z" fill="#EA4335"></path>
-                        <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z" fill="#4285F4"></path>
-                        <path d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9c-.2-.7-.4-1.5-.4-2.4l.4-3z" fill="#FBBC05"></path>
-                        <path d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16.5C3.7 20.3 7.5 23.5 12 23.5z" fill="#34A853"></path>
-                    </svg>
-                    <span>Continue with Google</span>
-                    <span class="w-2 h-2 rounded-full bg-[#ff6584] animate-ping ml-1"></span>
-                </button>
-
-                <!-- Apple Sign In -->
-                <button type="button" onclick="alert('Apple Sign-In is enabled for iOS devices. You can also use Google 1-tap or Email.')"
-                        class="w-full h-12 bg-[#1b1b21] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs flex items-center justify-center gap-3 transition-all duration-200 hover:bg-black active:scale-[0.98] cursor-pointer">
-                    <svg class="w-4 h-4 fill-current mb-0.5 shrink-0" viewBox="0 0 170 170">
-                        <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.74 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.69-7.85-12.01-14.42-6.14-9.35-10.89-19.86-14.25-31.54-3.36-11.68-5.04-22.65-5.04-32.92 0-14.37 3.58-26.31 10.74-35.81 7.15-9.5 16.29-14.37 27.42-14.61 5.37-.12 11.2 1.34 17.5 4.38 6.3 3.04 10.33 4.62 12.09 4.74 1.34 0 5.48-1.58 12.43-4.74 6.94-3.16 12.52-4.56 16.73-4.2 12.72.61 22.86 5.34 30.43 14.18-11.08 6.7-16.5 15.73-16.26 27.09.24 8.77 3.63 16.14 10.16 22.11 6.53 5.97 14.28 9.53 23.26 10.68-2.2 6.7-4.88 13.25-8.03 19.64zM119.22 31.81c0-7.31 2.63-14.19 7.89-20.64 5.26-6.45 11.75-10.42 19.47-11.91.24 1.1.36 2.07.36 2.92 0 7.19-2.73 14.11-8.2 20.76-5.46 6.64-12 10.69-19.62 12.15-.24-1.1-.36-2.07-.36-2.92z"></path>
-                    </svg>
-                    <span>Continue with Apple</span>
-                </button>
-            </div>
-
-            <!-- Divider -->
-            <div class="w-full flex items-center my-4">
-                <div class="flex-grow h-[1px] bg-[#dfbfc2]/50"></div>
-                <span class="px-3 text-[11px] uppercase tracking-wider text-[#584143] font-bold">or continue with email</span>
-                <div class="flex-grow h-[1px] bg-[#dfbfc2]/50"></div>
-            </div>
-
             <!-- ============================================== -->
             <!-- 1. SIGN IN FORM -->
             <!-- ============================================== -->
-            <form action="{{ route('login.submit') }}" method="POST" class="w-full flex flex-col gap-3 text-left {{ $initialTab === 'signin' ? 'flex' : 'hidden' }}" id="signInForm">
+            <form action="{{ route('login.submit') }}" method="POST" class="w-full flex flex-col gap-3 text-left mt-5 {{ $initialTab === 'signin' ? 'flex' : 'hidden' }}" id="signInForm">
                 @csrf
 
                 <!-- Email or Admin ID -->
@@ -364,15 +332,6 @@ function toggleAuthPass(inputId, btn) {
     } else {
         input.type = 'password';
         if (icon) icon.textContent = 'visibility';
-    }
-}
-
-function handleGoogleSignIn(e) {
-    if (e) e.preventDefault();
-    if (typeof window.triggerFirebaseGoogleSignIn === 'function') {
-        window.triggerFirebaseGoogleSignIn();
-    } else {
-        window.location.href = "{{ route('auth.google') }}";
     }
 }
 </script>

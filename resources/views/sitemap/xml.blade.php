@@ -1,25 +1,13 @@
 {!! '<' . '?xml version="1.0" encoding="UTF-8"?' . '>' !!}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <!-- ═══════════════════════════════════════════════════════
-         TIER 1 — CORE APPLICATION & DATING HUBS (Priority 1.0 - 0.90)
+         TIER 1 — CORE APPLICATION & DATING HUBS
     ═══════════════════════════════════════════════════════ -->
     <url>
         <loc>https://cupdate.in/</loc>
         <lastmod>{{ now()->format('Y-m-d') }}</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
-    </url>
-    <url>
-        <loc>https://cupdate.in/feed</loc>
-        <lastmod>{{ now()->format('Y-m-d') }}</lastmod>
-        <changefreq>always</changefreq>
-        <priority>0.95</priority>
-    </url>
-    <url>
-        <loc>https://cupdate.in/swipes</loc>
-        <lastmod>{{ now()->format('Y-m-d') }}</lastmod>
-        <changefreq>always</changefreq>
-        <priority>0.95</priority>
     </url>
     <url>
         <loc>https://cupdate.in/dates</loc>
@@ -32,12 +20,6 @@
         <lastmod>{{ now()->format('Y-m-d') }}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.90</priority>
-    </url>
-    <url>
-        <loc>https://cupdate.in/video</loc>
-        <lastmod>{{ now()->format('Y-m-d') }}</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.85</priority>
     </url>
 
     <!-- ═══════════════════════════════════════════════════════
@@ -79,6 +61,14 @@
         <changefreq>daily</changefreq>
         <priority>0.85</priority>
     </url>
+    @foreach($blogs as $blog)
+    <url>
+        <loc>https://cupdate.in/blog/{{ $blog->slug }}</loc>
+        <lastmod>{{ $blog->updated_at ? $blog->updated_at->format('Y-m-d') : now()->format('Y-m-d') }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    @endforeach
 
     <!-- ═══════════════════════════════════════════════════════
          TIER 4 — GOOGLE ADSENSE E-E-A-T & LEGAL COMPLIANCE
@@ -143,22 +133,4 @@
         <changefreq>monthly</changefreq>
         <priority>0.80</priority>
     </url>
-    <url>
-        <loc>https://cupdate.in/sitemap</loc>
-        <lastmod>{{ now()->format('Y-m-d') }}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.70</priority>
-    </url>
-
-    <!-- ═══════════════════════════════════════════════════════
-         TIER 5 — DYNAMIC EDITORIAL BLOGS & GUIDES
-    ═══════════════════════════════════════════════════════ -->
-    @foreach($blogs as $blog)
-    <url>
-        <loc>https://cupdate.in/blog/{{ $blog->slug }}</loc>
-        <lastmod>{{ $blog->created_at ? $blog->created_at->format('Y-m-d') : now()->format('Y-m-d') }}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.80</priority>
-    </url>
-    @endforeach
 </urlset>

@@ -7,7 +7,7 @@
     <title>@yield('title', 'CupDate — Modern Dating for Genuine Connections')</title>
     <meta name="description" content="@yield('meta_desc', 'CupDate helps you meet verified singles for genuine conversations, meaningful dates, and lasting relationships.')">
     <meta name="robots" content="@yield('robots', 'index,follow')">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="canonical" href="{{ url()->current() == url('/index.php') ? url('/') : url()->current() }}">
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:site_name" content="CupDate">
     <meta property="og:title" content="@yield('title', 'CupDate — Modern Dating for Genuine Connections')">
@@ -126,11 +126,6 @@
         cookie_flags: 'SameSite=None;Secure'
       });
     </script>
-    @endif
-
-    <!-- Google Identity Services (GSI) Client SDK -->
-    @if(request()->routeIs('login*', 'register*', 'auth.google'))
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
     @endif
 
     @if(false)
@@ -684,13 +679,6 @@
                         </div>
                     </div>
                 @else
-                    <!-- Google 1-Click Sign-In (Firebase Powered) -->
-                    <button type="button" onclick="triggerFirebaseGoogleSignIn()" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-label-md text-xs font-bold shadow-xs hover:shadow hover:scale-105 active:scale-95 transition-all cursor-pointer">
-                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
-                        <span>Sign in with Google</span>
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    </button>
-
                     <button type="button" onclick="openQuickAuthModal('signin')" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-bold text-on-surface hover:text-[#b0284b] hover:bg-[#fff0f3] transition-all cursor-pointer">Sign In</button>
                     <button type="button" onclick="openQuickAuthModal('register')" class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-[#ff6584] to-[#b0284b] text-white font-label-md text-xs font-bold shadow-md shadow-[#ff6584]/20 hover:scale-105 active:scale-95 transition-all whitespace-nowrap cursor-pointer">Join Free</button>
                 @endauth
@@ -759,11 +747,6 @@
                     </button>
                 </form>
             @else
-                <button type="button" onclick="triggerFirebaseGoogleSignIn(); toggleMobileMenu();" class="flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-sm font-bold bg-white text-gray-800 border border-gray-200 shadow-sm mb-1 hover:bg-gray-50 transition-all cursor-pointer">
-                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
-                    <span>Continue with Google</span>
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                </button>
                 <a href="{{ route('cities.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-100 transition-colors">
                     <span class="material-symbols-outlined text-base text-indigo-500">explore</span>
                     <span>Explore &amp; Cities</span>
@@ -1313,382 +1296,6 @@
                 if (feedback) feedback.innerText = "Error activating boost.";
             }
         }
-
-        // ==========================================
-        // GOOGLE SIGN-IN POPUP & MODAL SYSTEM
-        // ==========================================
-        function openGooglePopup() {
-            const modal = document.getElementById('googleAuthModal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-        }
-
-        function closeGooglePopup() {
-            const modal = document.getElementById('googleAuthModal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-            cancelGoogleSpinner();
-        }
-
-        function cancelGoogleSpinner() {
-            const spinner = document.getElementById('googleAuthSpinner');
-            const content = document.getElementById('googleModalBody');
-            if (spinner) spinner.classList.add('hidden');
-            if (content) {
-                content.classList.remove('opacity-30', 'pointer-events-none');
-            }
-        }
-
-        function openGooglePopupWindow() {
-            closeGooglePopup();
-            const w = 520;
-            const h = 640;
-            const y = window.top.outerHeight / 2 + window.top.screenY - (h / 2);
-            const x = window.top.outerWidth / 2 + window.top.screenX - (w / 2);
-            const popupUrl = "{{ route('auth.google') }}?popup=1";
-            window.open(popupUrl, 'GoogleSignInPopup', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + y + ', left=' + x);
-        }
-
-        function selectGoogleAccount(email, name, avatar, googleId) {
-            const spinner = document.getElementById('googleAuthSpinner');
-            const content = document.getElementById('googleModalBody');
-            if (spinner && content) {
-                content.classList.add('opacity-30', 'pointer-events-none');
-                spinner.classList.remove('hidden');
-            }
-
-            // Create and submit hidden form to /auth/google
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = "{{ route('auth.google') }}";
-
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = '_token';
-            csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            form.appendChild(csrfInput);
-
-            if (email) {
-                const emailInput = document.createElement('input');
-                emailInput.type = 'hidden';
-                emailInput.name = 'email';
-                emailInput.value = email;
-                form.appendChild(emailInput);
-            }
-
-            if (name) {
-                const nameInput = document.createElement('input');
-                nameInput.type = 'hidden';
-                nameInput.name = 'name';
-                nameInput.value = name;
-                form.appendChild(nameInput);
-            }
-
-            if (avatar) {
-                const avatarInput = document.createElement('input');
-                avatarInput.type = 'hidden';
-                avatarInput.name = 'avatar';
-                avatarInput.value = avatar;
-                form.appendChild(avatarInput);
-            }
-
-            if (googleId) {
-                const gIdInput = document.createElement('input');
-                gIdInput.type = 'hidden';
-                gIdInput.name = 'google_id';
-                gIdInput.value = googleId;
-                form.appendChild(gIdInput);
-            }
-
-            document.body.appendChild(form);
-            form.submit();
-        }
-
-        function toggleCustomGoogleInput() {
-            const container = document.getElementById('customGoogleAccountForm');
-            if (container) {
-                container.classList.toggle('hidden');
-            }
-        }
-
-        function submitCustomGoogleAccount(e) {
-            e.preventDefault();
-            const email = document.getElementById('customGoogleEmail').value.trim();
-            const name = document.getElementById('customGoogleName').value.trim() || email.split('@')[0];
-            if (!email) {
-                alert('Please enter your Google email');
-                return;
-            }
-            selectGoogleAccount(email, name, '', 'g_' + btoa(email).replace(/[^a-zA-Z0-9]/g, ''));
-        }
-    </script>
-
-    <!-- Google Sign-In Account Chooser Modal Dialog -->
-    <div id="googleAuthModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden" onclick="event.stopPropagation()">
-            
-            <!-- Close Button -->
-            <button type="button" onclick="closeGooglePopup()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors cursor-pointer" aria-label="Close">
-                <span class="material-symbols-outlined text-lg">close</span>
-            </button>
-
-            <!-- Modal Header with Google Branding -->
-            <div class="pt-7 pb-4 px-6 text-center border-b border-gray-100">
-                <div class="w-11 h-11 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-50 border border-gray-100 shadow-xs">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/>
-                        <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/>
-                        <path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/>
-                        <path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 tracking-tight">Sign in with Google</h3>
-                <p class="text-xs text-gray-500 mt-0.5">Choose an account to continue to <strong class="text-gray-800">CupDate</strong></p>
-            </div>
-
-            <!-- Loading Spinner State with Cancel, Timeout & Password Access -->
-            <div id="googleAuthSpinner" class="hidden absolute inset-0 bg-white/95 backdrop-blur-xs flex flex-col items-center justify-center z-30 p-6 text-center">
-                <button type="button" onclick="cancelGoogleSpinner()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center font-bold text-sm cursor-pointer transition-colors" title="Close Spinner">✕</button>
-                <div class="w-12 h-12 border-3 border-[#8b5a2b] border-t-transparent rounded-full animate-spin mb-4"></div>
-                <h4 class="text-sm font-bold text-gray-900 mb-1" id="googleSpinnerText">Connecting to Google Account...</h4>
-                <p class="text-xs text-gray-500 max-w-[280px] mb-4" id="googleSpinnerSubtext">Opening secure Google window. If it takes too long, you can switch to instant accounts or password.</p>
-                <div class="flex flex-col sm:flex-row gap-2 w-full max-w-[300px]">
-                    <button type="button" onclick="cancelGoogleSpinner()" class="flex-1 py-2 px-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition-all cursor-pointer border border-gray-200">
-                        Pick Account Below
-                    </button>
-                    <a href="{{ route('login') }}" class="flex-1 py-2 px-3 rounded-full bg-[#8b5a2b] hover:bg-[#724820] text-white text-xs font-bold transition-all text-center">
-                        Use Password
-                    </a>
-                </div>
-            </div>
-
-            <!-- Modal Content / Account List -->
-            <div id="googleModalBody" class="p-5 max-h-[70vh] overflow-y-auto space-y-2">
-                
-                <!-- Firebase Domain Notice (appears if cupdate.in is not yet in Firebase Console authorized domains) -->
-                <div id="firebaseDomainNotice" class="hidden mb-3 p-3 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs">
-                    <div class="font-bold flex items-center gap-1.5 mb-1 text-amber-800">
-                        <span class="material-symbols-outlined text-base">warning</span>
-                        <span>Add Domain to Firebase Console</span>
-                    </div>
-                    <p class="text-[11px] text-amber-700 leading-relaxed mb-1.5">
-                        Firebase requires authorizing your domain. In <a href="https://console.firebase.google.com" target="_blank" class="underline font-bold text-blue-700">Firebase Console</a> &rarr; <strong>Authentication &rarr; Settings &rarr; Authorized Domains</strong>, click <strong>Add Domain</strong> and enter <code>cupdate.in</code>.
-                    </p>
-                    <p class="text-[11px] text-amber-900 font-bold bg-amber-100/70 px-2 py-1 rounded-lg">
-                        Use the official Google sign-in button above, or continue with your email and password.
-                    </p>
-                </div>
-
-                <!-- Primary Action: Real Google OAuth via Firebase Web SDK -->
-                <button type="button" onclick="triggerFirebaseGoogleSignIn()" class="w-full flex items-center justify-center gap-3 p-3.5 mb-2 rounded-2xl bg-white hover:bg-gray-50 border-2 border-blue-500 shadow-sm transition-all text-left cursor-pointer group hover:scale-[1.01] active:scale-[0.99]">
-                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24"><path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z" fill="#EA4335"/><path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" fill="#4285F4"/><path d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14.2s.6 4.9 1.6 6.9l3.7-3.3z" fill="#FBBC05"/><path d="M12 23.4c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16.8C3.5 20.8 7.4 23.4 12 23.4z" fill="#34A853"/></svg>
-                    <div class="flex-1">
-                        <p class="text-xs font-bold text-blue-700">Official Google Pop-Up Sign-In</p>
-                        <p class="text-[10px] text-gray-500">Sign in with your personal Google / Gmail account</p>
-                    </div>
-                    <span class="material-symbols-outlined text-blue-600 text-sm">open_in_new</span>
-                </button>
-
-                <div class="hidden items-center gap-2 my-2">
-                    <div class="flex-grow h-px bg-gray-200"></div>
-                    <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">or instant 1-click single</span>
-                    <div class="flex-grow h-px bg-gray-200"></div>
-                </div>
-
-                <p class="hidden text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2">Fast 1-Click Accounts</p>
-
-                <!-- Account 1: Priya Mehta -->
-                <button type="button" onclick="selectGoogleAccount('priya.mehta.cupdate@gmail.com', 'Priya Mehta', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face', 'google_demo_female_1')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
-                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Priya Mehta"/>
-                    <div class="flex-1 overflow-hidden">
-                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Priya Mehta</p>
-                        <p class="text-[11px] text-gray-500 truncate">priya.mehta.cupdate@gmail.com</p>
-                    </div>
-                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold border border-emerald-200">Online</span>
-                </button>
-
-                <!-- Account 2: Arjun Kapoor -->
-                <button type="button" onclick="selectGoogleAccount('arjun.kapoor.cupdate@gmail.com', 'Arjun Kapoor', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face', 'google_demo_male_1')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Arjun Kapoor"/>
-                    <div class="flex-1 overflow-hidden">
-                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Arjun Kapoor</p>
-                        <p class="text-[11px] text-gray-500 truncate">arjun.kapoor.cupdate@gmail.com</p>
-                    </div>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold border border-blue-200">Verified</span>
-                </button>
-
-                <!-- Account 3: Tanya Sharma (Himachal) -->
-                <button type="button" onclick="selectGoogleAccount('tanya.sharma.cupdate@gmail.com', 'Tanya Sharma', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face', 'google_demo_female_2')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Tanya Sharma"/>
-                    <div class="flex-1 overflow-hidden">
-                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Tanya Sharma (Shimla, HP)</p>
-                        <p class="text-[11px] text-gray-500 truncate">tanya.sharma.cupdate@gmail.com</p>
-                    </div>
-                    <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold border border-amber-200">HP Hub</span>
-                </button>
-
-                <!-- Account 4: Vikram Thakur (Manali) -->
-                <button type="button" onclick="selectGoogleAccount('vikram.thakur.cupdate@gmail.com', 'Vikram Thakur', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face', 'google_demo_male_2')" class="hidden w-full items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 border border-gray-100 transition-all text-left cursor-pointer group hover:border-gray-300">
-                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" alt="Vikram Thakur"/>
-                    <div class="flex-1 overflow-hidden">
-                        <p class="text-xs font-bold text-gray-900 truncate group-hover:text-blue-600">Vikram Thakur (Manali, HP)</p>
-                        <p class="text-[11px] text-gray-500 truncate">vikram.thakur.cupdate@gmail.com</p>
-                    </div>
-                    <span class="text-[10px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full font-bold border border-purple-200">Local</span>
-                </button>
-
-                <!-- Option: Use Custom Email -->
-                <div class="pt-2">
-                    <button type="button" onclick="toggleCustomGoogleInput()" class="w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-gray-50 border border-dashed border-gray-300 transition-all text-xs font-bold text-gray-700 cursor-pointer">
-                        <span class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-base text-gray-500">add_circle</span>
-                            <span>Use another Google account</span>
-                        </span>
-                        <span class="material-symbols-outlined text-sm text-gray-400">expand_more</span>
-                    </button>
-
-                    <!-- Expandable Custom Account Form -->
-                    <form id="customGoogleAccountForm" onsubmit="submitCustomGoogleAccount(event)" class="hidden mt-2 p-3 bg-gray-50 rounded-2xl border border-gray-200 space-y-2.5">
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-700 mb-1" for="customGoogleEmail">Your Gmail / Google Email</label>
-                            <input type="email" id="customGoogleEmail" required placeholder="your.name@gmail.com" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"/>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-700 mb-1" for="customGoogleName">Your Display Name</label>
-                            <input type="text" id="customGoogleName" placeholder="Your Full Name" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"/>
-                        </div>
-                        <button type="submit" class="w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs">
-                            Sign In with This Account
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Option: Launch Separate Popup Window -->
-                <div class="pt-2">
-                    <button type="button" onclick="openGooglePopupWindow()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold transition-colors cursor-pointer">
-                        <span class="material-symbols-outlined text-sm text-gray-500">open_in_new</span>
-                        <span>Open in Separate Popup Window</span>
-                    </button>
-                </div>
-
-                <!-- Direct Password Login & Registration Shortcuts -->
-                <div class="pt-3 border-t border-gray-100 flex flex-col gap-2">
-                    <div class="flex items-center gap-2">
-                        <div class="flex-grow h-px bg-gray-200"></div>
-                        <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">or sign in with password</span>
-                        <div class="flex-grow h-px bg-gray-200"></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="{{ route('login') }}" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition-all border border-amber-200 text-center">
-                            <span class="material-symbols-outlined text-sm text-amber-700">key</span>
-                            <span>Email Login</span>
-                        </a>
-                        <a href="{{ route('register') }}" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-900 text-xs font-bold transition-all border border-rose-200 text-center">
-                            <span class="material-symbols-outlined text-sm text-rose-600">person_add</span>
-                            <span>Create Account</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="pt-2 text-center">
-                    <p class="text-[10px] text-gray-400">
-                        🔒 Safe &amp; 256-Bit Encrypted. Your email is private and will never be shared with other singles.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase Web App SDK v12.19.0 Configuration & Google Auth Module -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-
-        // Web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyANseXnR-JENWjiG7lLGVrnOZ6yWkLg294",
-            authDomain: "test-41138.firebaseapp.com",
-            projectId: "test-41138",
-            storageBucket: "test-41138.firebasestorage.app",
-            messagingSenderId: "262263158531",
-            appId: "1:262263158531:web:1a0bbaa7efdfbdf65e1b36"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-
-        window.firebaseApp = app;
-        window.firebaseAuth = auth;
-
-        // Global Firebase Google Sign-In Trigger with 3.5s Safety Timeout
-        let googleSafetyTimer = null;
-        window.triggerFirebaseGoogleSignIn = async function() {
-            const spinner = document.getElementById('googleAuthSpinner');
-            const modal = document.getElementById('googleAuthModal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-            if (spinner) spinner.classList.remove('hidden');
-
-            // 3.5-second safety timer: if popup is blocked or waiting, auto-dismiss spinner
-            clearTimeout(googleSafetyTimer);
-            googleSafetyTimer = setTimeout(() => {
-                if (spinner && !spinner.classList.contains('hidden')) {
-                    cancelGoogleSpinner();
-                    const domainNotice = document.getElementById('firebaseDomainNotice');
-                    if (domainNotice) domainNotice.classList.remove('hidden');
-                }
-            }, 3500);
-
-            try {
-                const result = await signInWithPopup(auth, provider);
-                clearTimeout(googleSafetyTimer);
-                const user = result.user;
-                if (user && user.email) {
-                    selectGoogleAccount(
-                        user.email,
-                        user.displayName || user.email.split('@')[0],
-                        user.photoURL || '',
-                        user.uid || ('google_' + user.email.replace(/[^a-zA-Z0-9]/g, ''))
-                    );
-                } else {
-                    throw new Error('No user returned from Google');
-                }
-            } catch (error) {
-                clearTimeout(googleSafetyTimer);
-                console.warn('Firebase Google Sign-In warning:', error);
-                cancelGoogleSpinner();
-                if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-                    // Popup closed by user, leave modal open to allow picking account or password
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    // Show friendly domain authorization hint & open instant chooser
-                    const domainNotice = document.getElementById('firebaseDomainNotice');
-                    if (domainNotice) domainNotice.classList.remove('hidden');
-                    openGooglePopup();
-                } else {
-                    // Fallback to in-page account chooser
-                    openGooglePopup();
-                }
-            }
-        };
-
-        // Bind global handler to window
-        window.handleGoogleSignIn = function(e) {
-            if (e) e.preventDefault();
-            if (typeof window.triggerFirebaseGoogleSignIn === 'function') {
-                window.triggerFirebaseGoogleSignIn();
-            } else {
-                openGooglePopup();
-            }
-        };
     </script>
 
     <!-- High-Speed Instant Page Prefetcher & Smart Image Lazy-Loader (Vite/Vue SPA Speed) -->
@@ -1868,7 +1475,7 @@
           </p>
 
           <!-- Tab Switcher -->
-          <div class="w-full mt-4 p-1 bg-[#f5f2fb] rounded-full border border-[#dfbfc2]/40 flex items-center gap-1 text-xs font-bold">
+          <div class="w-full mt-4 mb-2 p-1 bg-[#f5f2fb] rounded-full border border-[#dfbfc2]/40 flex items-center gap-1 text-xs font-bold">
             <button type="button" onclick="switchQuickAuthTab('signin')" id="quickTabBtnSignIn" class="flex-1 py-2 rounded-full transition-all duration-200 flex items-center justify-center gap-1 cursor-pointer bg-white text-[#1b1b21] shadow-xs font-extrabold">
               <span class="material-symbols-outlined text-sm text-[#b0284b]">login</span>
               <span>Sign In</span>
@@ -1877,24 +1484,6 @@
               <span class="material-symbols-outlined text-sm text-[#ff6584]">person_add</span>
               <span>Create Account</span>
             </button>
-          </div>
-
-          <!-- Google 1-Click Button -->
-          <button type="button" onclick="handleGoogleSignIn(event)" class="w-full h-11 mt-4 bg-white text-[#1b1b21] font-bold text-xs rounded-full shadow-xs border border-stone-200 flex items-center justify-center gap-2.5 transition hover:bg-[#f5f2fb] active:scale-[0.98] cursor-pointer">
-            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-              <path d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z" fill="#EA4335"></path>
-              <path d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z" fill="#4285F4"></path>
-              <path d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9c-.2-.7-.4-1.5-.4-2.4l.4-3z" fill="#FBBC05"></path>
-              <path d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16.5C3.7 20.3 7.5 23.5 12 23.5z" fill="#34A853"></path>
-            </svg>
-            <span>Continue with Google</span>
-            <span class="w-2 h-2 rounded-full bg-[#ff6584] animate-ping ml-1"></span>
-          </button>
-
-          <div class="w-full flex items-center my-3">
-            <div class="flex-grow h-[1px] bg-[#dfbfc2]/40"></div>
-            <span class="px-2 text-[10px] uppercase tracking-wider text-[#584143] font-bold">or email</span>
-            <div class="flex-grow h-[1px] bg-[#dfbfc2]/40"></div>
           </div>
 
           <!-- 1. Quick Sign In Form -->

@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # 1. 301 Permanent Redirect for /index.php to canonical root / (Fixes Google Search Console)
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php[/\s\?] [NC]
+    RewriteRule ^index\.php(?:/(.*))?$ https://cupdate.in/$1 [R=301,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -48,7 +52,4 @@
     ExpiresByType text/css "access plus 1 month"
     ExpiresByType application/javascript "access plus 1 month"
     ExpiresByType application/x-javascript "access plus 1 month"
-    ExpiresByType font/woff2 "access plus 1 year"
-    ExpiresByType font/woff "access plus 1 year"
-    ExpiresByType font/ttf "access plus 1 year"
 </IfModule>

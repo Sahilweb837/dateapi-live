@@ -7,23 +7,27 @@
     RewriteEngine On
     RewriteBase /
 
-    # 1. Block access to sensitive hidden files, lock files, and backend folders
+    # 1. 301 Permanent Redirect for /index.php to canonical root / (Fixes Google Search Console indexing issue)
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php[/\s\?] [NC]
+    RewriteRule ^index\.php(?:/(.*))?$ https://cupdate.in/$1 [R=301,L]
+
+    # 2. Block access to sensitive hidden files, lock files, and backend folders
     RewriteRule ^(\.env|\.git|\.editorconfig|composer\.(json|lock)|package(-lock)?\.json) - [F,L,NC]
     RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests)/ - [F,L,NC]
 
-    # 2. Route root request directly to public/index.php (Avoids 404 & 405 directory errors)
+    # 3. Route root request directly to public/index.php (Avoids 404 & 405 directory errors)
     RewriteRule ^$ public/index.php [L]
 
-    # 3. If the request is already inside /public/, do not rewrite again
+    # 4. If the request is already inside /public/, do not rewrite again
     RewriteCond %{REQUEST_URI} ^/public/ [NC]
     RewriteRule ^ - [L]
 
-    # 4. If a static asset exists in public/, rewrite directly to it
+    # 5. If a static asset exists in public/, rewrite directly to it
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
     RewriteRule ^(.*)$ public/$1 [L]
 
-    # 5. Route all other requests (routes like /login, /admin, etc.) to public/index.php
+    # 6. Route all other requests (routes like /login, /admin, etc.) to public/index.php
     RewriteRule ^(.*)$ public/index.php [L]
 </IfModule>
 
