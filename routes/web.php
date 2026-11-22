@@ -61,8 +61,16 @@ Route::post('/api/profile/boost', [ProfileController::class, 'boostProfile'])->n
 // Standalone Video Portal
 Route::get('/video', [VideoController::class, 'index'])->name('video');
 
-// Coffee Date Spots Directory across India & Himachal Pradesh
+// Coffee Date Spots Directory & Radar
 Route::get('/dates', [PageController::class, 'dates'])->name('dates');
+Route::get('/radar', [PageController::class, 'radar'])->name('radar');
+Route::get('/api/radar/singles', [PageController::class, 'radarSingles'])->name('api.radar.singles');
+
+// Inclusivity Community Pages (Stand-alone Hubs, not in header/footer)
+Route::get('/community/lgbtq', [PageController::class, 'lgbtq'])->name('community.lgbtq');
+Route::get('/community/lesbian', [PageController::class, 'lesbian'])->name('community.lesbian');
+Route::get('/community/gay', [PageController::class, 'gay'])->name('community.gay');
+Route::get('/community/transgender', [PageController::class, 'transgender'])->name('community.transgender');
 
 // Traditional Matrimony & Serious Relationship Hub
 Route::get('/rishta', [PageController::class, 'rishta'])->name('rishta');
@@ -107,6 +115,9 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::post('/analytics/clear', [AdminController::class, 'clearAnalytics'])->name('admin.analytics.clear');
     Route::get('/blogs', [AdminBlogController::class, 'index'])->name('admin.blogs');
     Route::post('/blogs/store', [AdminBlogController::class, 'store'])->name('admin.blogs.store');
+    Route::post('/cafe/store', [AdminController::class, 'storeCafe'])->name('admin.cafe.store');
+    Route::post('/cafe/delete/{id}', [AdminController::class, 'deleteCafe'])->name('admin.cafe.delete');
+    Route::get('/realtime-stats', [AdminController::class, 'realtimeStats'])->name('admin.realtime.stats');
 });
 
 // Sitemaps (XML & HTML)

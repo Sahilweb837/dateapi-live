@@ -465,16 +465,58 @@
         }
     @endphp
 
+    <!-- CupDate Cinematic Opening Logo Animation -->
+    <div id="cupdateIntroSplash" class="fixed inset-0 z-[999999] bg-[#0c0809] flex flex-col items-center justify-center transition-all duration-700 ease-out pointer-events-auto" style="opacity: 1;">
+        <div class="relative flex flex-col items-center text-center px-4 max-w-sm">
+            <!-- Pulsing Rose Aura -->
+            <div class="absolute -inset-10 bg-gradient-to-tr from-[#FF3366]/40 via-purple-600/30 to-amber-500/20 blur-3xl rounded-full animate-pulse pointer-events-none"></div>
+
+            <!-- App Icon with Heartbeat Animation -->
+            <div class="relative w-24 h-24 sm:w-28 sm:h-28 mb-5 rounded-3xl overflow-hidden shadow-2xl shadow-[#FF3366]/50 border-2 border-[#FF3366]/40 transform transition-transform hover:scale-105 animate-[bounce_2s_infinite]">
+                <img src="{{ asset('assets/images/cupdate_icon_main.jpg') }}" alt="CupDate App Icon" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Brand Logo Wordmark -->
+            <img src="{{ asset('assets/images/cupdate_logo_main.png') }}" alt="CupDate Logo" class="h-11 sm:h-14 w-auto object-contain mb-3 drop-shadow-[0_4px_24px_rgba(255,51,102,0.4)]">
+
+            <p class="text-xs sm:text-sm font-medium text-pink-200/90 tracking-wide font-['Plus_Jakarta_Sans',sans-serif]">
+                Where Real Coffee Meets Real Chemistry
+            </p>
+
+            <!-- Loading Progress Bar -->
+            <div class="w-32 h-1 bg-white/10 rounded-full mt-6 overflow-hidden relative">
+                <div class="h-full w-full bg-gradient-to-r from-[#FF3366] via-[#ff6584] to-[#FF3366] rounded-full animate-[pulse_1.2s_ease-in-out_infinite]"></div>
+            </div>
+
+            <button type="button" onclick="dismissCupDateIntro()" class="mt-5 text-[10px] text-stone-400 hover:text-white transition tracking-widest uppercase font-bold cursor-pointer">
+                Enter CupDate &rarr;
+            </button>
+        </div>
+    </div>
+    <script>
+    function dismissCupDateIntro() {
+        const splash = document.getElementById('cupdateIntroSplash');
+        if (splash && splash.style.display !== 'none') {
+            splash.style.opacity = '0';
+            splash.style.pointerEvents = 'none';
+            setTimeout(function() { splash.style.display = 'none'; }, 700);
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Automatically smooth-transition splash away
+        setTimeout(dismissCupDateIntro, 1200);
+    });
+    </script>
+
     <!-- Global Top Fixed Editorial Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] border-b border-[#ebdcd7]/80 transition-all">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-[0_2px_16px_rgba(0,0,0,0.04)] border-b border-[#f3e5e8] transition-all">
         <div class="h-16 sm:h-20 max-w-[1360px] mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-6">
             
-            <!-- Brand Logo & Atelier Moniker -->
+            <!-- Brand Logo -->
             <div class="flex items-center gap-3">
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5 group text-decoration-none">
-                    <img alt="CupDate Logo" class="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
+                <a href="{{ route('home') }}" class="flex items-center gap-2 group text-decoration-none">
+                    <img alt="CupDate Logo" class="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105" src="{{ asset('assets/images/cupdate_logo_main.png') }}"/>
                 </a>
-                <span class="hidden xl:inline-block text-secondary font-headline-sm italic text-label-sm tracking-normal px-space-xs">· Atelier des Rencontres</span>
             </div>
 
             <!-- Desktop Navigation Links -->
@@ -497,30 +539,45 @@
                         <span class="ml-1 px-1.5 py-0.2 rounded-full bg-pink-600 text-white text-[10px] font-black leading-tight shadow-xs animate-pulse">{{ $headerUnreadCount }}</span>
                     </a>
 
-                    <a href="{{ route('dates') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('dates*') ? 'bg-surface-container text-emerald-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
-                        <span class="material-symbols-outlined text-base leading-none text-emerald-600">storefront</span>
-                        <span>Nearby Cafés</span>
+                    <a href="{{ route('radar') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('radar*') ? 'bg-[#FFE6E6] text-[#FF3366] font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span>Nearby Radar</span>
                     </a>
 
-                    <a href="{{ route('cities.index') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
-                        <span class="material-symbols-outlined text-base leading-none text-indigo-500">explore</span>
-                        <span>Cities</span>
+                    <a href="{{ route('dates') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('dates*') ? 'bg-surface-container text-emerald-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-emerald-600">storefront</span>
+                        <span>Date Cafés</span>
+                    </a>
+
+                    <a href="{{ route('profile') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('profile*') ? 'bg-surface-container text-pink-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-pink-500">person</span>
+                        <span>Profile</span>
                     </a>
                 @else
                     <!-- Guest Navigation Suite -->
-                    <a href="{{ route('cities.index') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('cities*') || request()->routeIs('city*') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
-                        <span class="material-symbols-outlined text-base leading-none text-indigo-500">explore</span>
-                        <span>Explore &amp; Cities</span>
+                    <a href="{{ route('swipes') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('swipes*') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-pink-500">style</span>
+                        <span>Discover</span>
                     </a>
-                    
+
+                    <a href="{{ route('radar') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('radar*') ? 'bg-[#FFE6E6] text-[#FF3366] font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span>Nearby Radar</span>
+                    </a>
+
                     <a href="{{ route('dates') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('dates*') ? 'bg-surface-container text-emerald-700 font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
                         <span class="material-symbols-outlined text-base leading-none text-emerald-600">storefront</span>
-                        <span>Nearby Cafés</span>
+                        <span>Date Cafés</span>
+                    </a>
+                    
+                    <a href="{{ route('how.it.works') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('how.it.works') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
+                        <span class="material-symbols-outlined text-base leading-none text-indigo-500">help</span>
+                        <span>How It Works</span>
                     </a>
                     
                     <a href="{{ route('blog.index') }}" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md text-xs font-bold transition-all {{ request()->routeIs('blog*') ? 'bg-surface-container text-on-surface font-bold shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50' }}">
                         <span class="material-symbols-outlined text-base leading-none text-amber-600">auto_stories</span>
-                        <span>Dating Guides</span>
+                        <span>Dating Tips</span>
                     </a>
                 @endauth
             </nav>
@@ -828,8 +885,8 @@
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-stone-800">
                 <div class="flex flex-col gap-2 max-w-lg">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full overflow-hidden shadow-[0_0_12px_rgba(255,0,127,0.4)] border border-[#ff007f]/50 p-0.5 bg-[#180e0c]">
-                            <img alt="CupDate Logo" class="w-full h-full object-contain" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
+                        <div class="w-8 h-8 rounded-full overflow-hidden shadow-[0_0_12px_rgba(255,0,127,0.4)] border border-[#ff007f]/50 bg-[#180e0c]">
+                            <img alt="CupDate Logo" class="w-full h-full object-cover" src="{{ asset('assets/images/cupdate_icon_main.jpg') }}"/>
                         </div>
                         <span class="text-2xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">Cup<span class="neon-pink-text">Date</span></span>
                         <span class="text-[10px] bg-[#ff007f]/20 text-[#ff80bf] border border-[#ff007f]/40 px-2 py-0.5 rounded-full font-bold">India &amp; Himachal Dating</span>
@@ -1463,8 +1520,7 @@
 
           <!-- Brand Logo -->
           <div class="relative mb-2 flex items-center justify-center">
-            <div class="absolute w-16 h-16 rounded-full bg-[#ffd9dd]/60 blur-md"></div>
-            <img alt="CupDate Logo" class="relative w-12 h-12 object-contain" src="{{ asset('assets/images/cupdate_logo.svg') }}"/>
+            <img alt="CupDate Logo" class="relative h-10 w-auto object-contain" src="{{ asset('assets/images/cupdate_logo_main.png') }}"/>
           </div>
 
           <h2 class="font-extrabold text-xl sm:text-2xl text-[#1b1b21] tracking-tight" id="quickModalTitle">

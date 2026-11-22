@@ -8,17 +8,17 @@
         
         <!-- Header Moniker -->
         <div class="text-center mb-6">
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#b0284b] to-[#ff6584] mx-auto mb-3 flex items-center justify-center shadow-lg shadow-[#b0284b]/30">
-                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <div class="mb-3 flex justify-center">
+                <img src="{{ asset('assets/images/cupdate_logo_main.png') }}" alt="CupDate Logo" class="h-10 w-auto object-contain">
             </div>
             <span class="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold bg-emerald-950/80 border border-emerald-800/60 px-3 py-1 rounded-full">
                 RESTRICTED COMMAND CENTER
             </span>
             <h1 class="text-2xl font-black mt-2 text-white">
-                Cup<span class="text-[#ff6584]">Date</span> Admin
+                Admin <span class="text-[#FF3366]">Security Portal</span>
             </h1>
             <p class="text-xs text-[#94a3b8] mt-1">
-                Moderation, real-time analytics &amp; identity clearance portal.
+                Real-time user telemetries, cafe listings &amp; moderation.
             </p>
         </div>
 
@@ -29,7 +29,7 @@
             </div>
         @endif
 
-        @if($errors->any())
+        @if(isset($errors) && $errors->any())
             <div class="mb-4 p-3 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 text-xs font-bold flex items-center gap-2">
                 <span>⚠</span>
                 <span>{{ $errors->first() }}</span>
@@ -64,7 +64,19 @@
             <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#b0284b] to-[#ff6584] hover:brightness-105 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#b0284b]/25 transition active:scale-98 cursor-pointer mt-2">
                 Access Admin Command Center &rarr;
             </button>
+
+            <!-- Quick Credential Pill for Test Convenience -->
+            <button type="button" onclick="fillAdminDemo()" class="w-full py-2 rounded-xl bg-[#1e293b] hover:bg-[#334155] text-emerald-400 text-xs font-mono font-bold border border-emerald-900/60 transition cursor-pointer">
+                ⚡ Auto-Fill: admin / admin123
+            </button>
         </form>
+
+        <script>
+        function fillAdminDemo() {
+            document.getElementById('admin-email').value = 'admin';
+            document.getElementById('admin-password').value = 'admin123';
+        }
+        </script>
 
         <div class="mt-6 pt-4 border-t border-[#1e293b] text-center">
             <a href="{{ route('home') }}" class="text-xs text-[#94a3b8] hover:text-white transition flex items-center justify-center gap-1">

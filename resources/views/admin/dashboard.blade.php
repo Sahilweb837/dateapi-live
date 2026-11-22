@@ -108,7 +108,7 @@
                     </span>
                 </div>
                 <div class="text-3xl font-black text-emerald-400 font-mono flex items-baseline gap-2">
-                    <span>{{ max(1, $activeNow) }}</span>
+                    <span id="activeNowCount">{{ max(1, $activeNow) }}</span>
                     <span class="text-xs font-bold text-emerald-500 uppercase">Live</span>
                 </div>
                 <div class="mt-2 text-xs font-semibold text-[#94a3b8]">
@@ -122,7 +122,7 @@
                     <span class="text-xs font-bold uppercase tracking-wider">Total Members</span>
                     <span class="w-8 h-8 rounded-lg bg-pink-950 text-[#ff6584] flex items-center justify-center font-bold text-xs">👥</span>
                 </div>
-                <div class="text-3xl font-black text-white font-mono">{{ number_format($totalUsers) }}</div>
+                <div class="text-3xl font-black text-white font-mono" id="totalUsersCount">{{ number_format($totalUsers) }}</div>
                 <div class="mt-2 text-xs font-semibold text-[#ff6584] flex items-center gap-1">
                     <span>✓ {{ number_format($verifiedUsers) }} verified singles</span>
                 </div>
@@ -138,12 +138,17 @@
             <button type="button" onclick="switchAdminTab('members')" id="tabBtnMembers" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition cursor-pointer text-[#94a3b8] hover:text-white hover:bg-[#1e293b]/50">
                 <span>👥</span>
                 <span>Member Management</span>
-                <span class="text-[10px] bg-[#334155] px-2 py-0.5 rounded-full text-white">{{ $totalUsers }}</span>
+                <span class="text-[10px] bg-[#334155] px-2 py-0.5 rounded-full text-white" id="badgeTotalMembers">{{ $totalUsers }}</span>
             </button>
             <button type="button" onclick="switchAdminTab('visitors')" id="tabBtnVisitors" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition cursor-pointer text-[#94a3b8] hover:text-white hover:bg-[#1e293b]/50">
                 <span>📡</span>
                 <span>Live Visitor Stream</span>
                 <span class="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full">{{ $recentVisitors->count() }}</span>
+            </button>
+            <button type="button" onclick="switchAdminTab('cafes')" id="tabBtnCafes" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition cursor-pointer text-[#94a3b8] hover:text-white hover:bg-[#1e293b]/50">
+                <span>☕</span>
+                <span>Curated Cafes</span>
+                <span class="text-[10px] bg-[#334155] px-2 py-0.5 rounded-full text-white">{{ $cafes->count() }}</span>
             </button>
             <button type="button" onclick="switchAdminTab('content')" id="tabBtnContent" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition cursor-pointer text-[#94a3b8] hover:text-white hover:bg-[#1e293b]/50">
                 <span>💬</span>
@@ -467,6 +472,124 @@
         </div>
 
         <!-- ============================================== -->
+        <!-- TAB: CURATED CAFES & DATE SPOTS MANAGER -->
+        <!-- ============================================== -->
+        <div id="tabContentCafes" class="hidden space-y-6">
+            
+            <!-- Add New Cafe Form -->
+            <div class="p-6 rounded-2xl bg-[#111827] border border-[#1f2937]">
+                <h2 class="text-base font-bold text-white mb-1">Add Curated Coffee Date Spot</h2>
+                <p class="text-xs text-[#94a3b8] mb-4">Add high-rated romantic cafes with exclusive discounts for CupDate singles.</p>
+
+                <form action="{{ route('admin.cafe.store') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    @csrf
+                    <div>
+                        <label class="block text-[11px] font-bold text-[#cbd5e1] mb-1">Cafe Name</label>
+                        <input type="text" name="name" required placeholder="e.g. Blue Tokai" 
+                               class="w-full px-3 py-2 rounded-xl bg-[#1e293b] border border-[#334155] text-xs text-white focus:outline-none focus:border-[#ff6584]">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-[#cbd5e1] mb-1">City</label>
+                        <input type="text" name="city" required placeholder="e.g. Shimla or Pune" 
+                               class="w-full px-3 py-2 rounded-xl bg-[#1e293b] border border-[#334155] text-xs text-white focus:outline-none focus:border-[#ff6584]">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-[#cbd5e1] mb-1">Rating (1.0 to 5.0)</label>
+                        <input type="number" step="0.1" min="1" max="5" name="rating" value="4.8" required 
+                               class="w-full px-3 py-2 rounded-xl bg-[#1e293b] border border-[#334155] text-xs text-white focus:outline-none focus:border-[#ff6584]">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-[#cbd5e1] mb-1">CupDate Offer / Perk</label>
+                        <input type="text" name="cup_offer" placeholder="e.g. 15% Off Total Bill" 
+                               class="w-full px-3 py-2 rounded-xl bg-[#1e293b] border border-[#334155] text-xs text-white focus:outline-none focus:border-[#ff6584]">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-bold text-[#cbd5e1] mb-1">Street Address</label>
+                        <input type="text" name="address" required placeholder="Full street address" 
+                               class="w-full px-3 py-2 rounded-xl bg-[#1e293b] border border-[#334155] text-xs text-white focus:outline-none focus:border-[#ff6584]">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-bold text-[#cbd5e1] mb-1">Photo Image URL</label>
+                        <input type="url" name="image_url" placeholder="https://images.unsplash.com/..." 
+                               class="w-full px-3 py-2 rounded-xl bg-[#1e293b] border border-[#334155] text-xs text-white focus:outline-none focus:border-[#ff6584]">
+                    </div>
+                    <div class="sm:col-span-4">
+                        <label class="block text-[11px] font-bold text-[#cbd5e1] mb-1">Description &amp; Date Ambiance</label>
+                        <textarea name="description" rows="2" required placeholder="Why is this a great romantic spot?" 
+                                  class="w-full px-3 py-2 rounded-xl bg-[#1e293b] border border-[#334155] text-xs text-white focus:outline-none focus:border-[#ff6584]"></textarea>
+                    </div>
+                    <div class="sm:col-span-4 flex justify-end">
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#b0284b] to-[#ff6584] hover:brightness-105 text-white font-bold text-xs shadow-md transition cursor-pointer">
+                            + Add Cafe Date Spot
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Existing Cafes List -->
+            <div class="p-6 rounded-2xl bg-[#111827] border border-[#1f2937]">
+                <div class="flex items-center justify-between pb-3 border-b border-[#1f2937] mb-4">
+                    <div>
+                        <h2 class="text-base font-bold text-white">All Listed Date Cafes</h2>
+                        <p class="text-xs text-[#94a3b8]">Live database of date spots visible in the app and on the radar.</p>
+                    </div>
+                    <span class="text-xs font-mono text-emerald-400 font-bold">{{ $cafes->count() }} listed</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-[#1e293b] text-[#94a3b8] uppercase text-[10px] font-bold">
+                            <tr>
+                                <th class="py-3 px-3 rounded-l-xl">Cafe Name</th>
+                                <th class="py-3 px-3">City</th>
+                                <th class="py-3 px-3">Rating</th>
+                                <th class="py-3 px-3">Offer / Perk</th>
+                                <th class="py-3 px-3">Address</th>
+                                <th class="py-3 px-3 text-right rounded-r-xl">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#1f2937]">
+                            @forelse($cafes as $cafe)
+                                <tr class="hover:bg-[#1e293b]/40 transition">
+                                    <td class="py-3 px-3 font-bold text-white">
+                                        {{ $cafe->name }}
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        <span class="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold">
+                                            {{ $cafe->city }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-3 text-amber-400 font-bold">
+                                        ★ {{ $cafe->rating }}
+                                    </td>
+                                    <td class="py-3 px-3 text-[#ff80bf] font-medium">
+                                        {{ $cafe->cup_offer ?? 'Standard' }}
+                                    </td>
+                                    <td class="py-3 px-3 text-[#94a3b8] max-w-xs truncate">
+                                        {{ $cafe->address }}
+                                    </td>
+                                    <td class="py-3 px-3 text-right">
+                                        <form action="{{ route('admin.cafe.delete', $cafe->id) }}" method="POST" onsubmit="return confirm('Remove {{ $cafe->name }}?');" class="inline">
+                                            @csrf
+                                            <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-800 hover:bg-rose-900 transition cursor-pointer">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-6 text-center text-[#94a3b8]">No cafes listed yet.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ============================================== -->
         <!-- TAB 4: CHAT & CONTENT OVERSIGHT -->
         <!-- ============================================== -->
         <div id="tabContentContent" class="hidden space-y-6">
@@ -625,10 +748,10 @@
     </div>
 </div>
 
-<!-- Tab Switcher & Member Filter Script -->
+<!-- Tab Switcher, Cafe Management & Real-Time Poller Script -->
 <script>
 function switchAdminTab(tabKey) {
-    const tabKeys = ['overview', 'members', 'visitors', 'content', 'security'];
+    const tabKeys = ['overview', 'members', 'visitors', 'cafes', 'content', 'security'];
     tabKeys.forEach(k => {
         const content = document.getElementById('tabContent' + capitalize(k));
         const btn = document.getElementById('tabBtn' + capitalize(k));
@@ -656,5 +779,32 @@ function filterMembersTable() {
         row.style.display = text.includes(filter) ? '' : 'none';
     });
 }
+
+// Real-Time Active Users & Live Poller (Every 4 seconds)
+function pollLiveAdminStats() {
+    fetch('{{ route("admin.realtime.stats") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const activeEl = document.getElementById('activeNowCount');
+                if (activeEl && data.active_now !== undefined) {
+                    activeEl.textContent = data.active_now;
+                }
+                const usersEl = document.getElementById('totalUsersCount');
+                if (usersEl && data.total_users !== undefined) {
+                    usersEl.textContent = data.total_users;
+                }
+                const badgeEl = document.getElementById('badgeTotalMembers');
+                if (badgeEl && data.total_users !== undefined) {
+                    badgeEl.textContent = data.total_users;
+                }
+            }
+        })
+        .catch(err => console.debug('Live stats poll ping:', err));
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setInterval(pollLiveAdminStats, 4000);
+});
 </script>
 @endsection

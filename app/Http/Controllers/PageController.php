@@ -305,4 +305,112 @@ class PageController extends Controller
     {
         return view('pages.coffee-date-ideas');
     }
+
+    /**
+     * Nearby Radar & Curated Cafes Interactive Hub
+     */
+    public function radar(Request $request)
+    {
+        $city = $request->query('city', 'Shimla');
+        $cities = collect(['Shimla', 'Manali', 'Dharamshala', 'Kasauli', 'Mumbai', 'Pune', 'Bangalore', 'Delhi NCR', 'Chandigarh', 'Jaipur', 'Goa']);
+
+        try {
+            $dbCities = DatePlace::select('city')->distinct()->pluck('city');
+            if ($dbCities->isNotEmpty()) {
+                $cities = $cities->merge($dbCities)->unique()->values();
+            }
+        } catch (\Throwable $e) {}
+
+        try {
+            $query = DatePlace::query();
+            if ($city && strtolower($city) !== 'all') {
+                $query->where('city', 'like', "%{$city}%");
+            }
+            $places = $query->orderBy('rating', 'desc')->get();
+            if ($places->isEmpty()) {
+                $places = $this->getFallbackPlaces($city);
+            }
+        } catch (\Throwable $e) {
+            $places = $this->getFallbackPlaces($city);
+        }
+
+        // Fetch nearby singles
+        try {
+            $singlesQuery = User::where('status', 'active')->where('is_admin', 0);
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                $singlesQuery->where('id', '!=', \Illuminate\Support\Facades\Auth::id());
+            }
+            $singles = $singlesQuery->take(12)->get();
+        } catch (\Throwable $e) {
+            $singles = collect();
+        }
+
+        return view('pages.radar', compact('places', 'cities', 'city', 'singles'));
+    }
+
+    /**
+     * JSON API for Radar Interactive Scanner
+     */
+    public function radarSingles(Request $request)
+    {
+        $city = $request->query('city', 'Shimla');
+        try {
+            $singles = User::where('status', 'active')
+                ->where('is_admin', 0)
+                ->take(15)
+                ->get()
+                ->map(function ($u, $idx) {
+                    $distances = [0.4, 0.8, 1.2, 1.7, 2.3, 2.9, 3.5, 4.1, 4.8, 5.4, 6.2];
+                    $angles = [25, 70, 115, 160, 205, 250, 295, 335, 45, 135, 225];
+                    return [
+                        'id' => $u->id,
+                        'name' => $u->full_name,
+                        'avatar' => $u->avatar_url,
+                        'age' => $u->age ?? (21 + ($u->id % 9)),
+                        'gender' => $u->gender,
+                        'coffee_style' => $u->coffee_style ?? 'Artisan Pour-Over',
+                        'city' => $u->country ?? 'Shimla',
+                        'distance_km' => $distances[$idx % count($distances)],
+                        'radar_angle' => $angles[$idx % count($angles)],
+                        'bio' => $u->bio ?: 'Looking for low-pressure coffee dates and genuine chemistry.',
+                    ];
+                });
+
+            return response()->json(['success' => true, 'singles' => $singles]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * LGBTQ+ Dating & Community Hub
+     */
+    public function lgbtq()
+    {
+        return view('pages.community-lgbtq');
+    }
+
+    /**
+     * Lesbian Dating Community
+     */
+    public function lesbian()
+    {
+        return view('pages.community-lesbian');
+    }
+
+    /**
+     * Gay Dating Community
+     */
+    public function gay()
+    {
+        return view('pages.community-gay');
+    }
+
+    /**
+     * Transgender Dating Community
+     */
+    public function transgender()
+    {
+        return view('pages.community-transgender');
+    }
 }

@@ -1,727 +1,444 @@
 @extends('layouts.app')
 
-@section('title', 'CupDate — Verified Dating & 45-Minute Coffee Dates in India')
-@section('meta_desc', 'Meet verified singles in Himachal Pradesh, Punjab, Chandigarh, Delhi NCR & major cities. CupDate makes dating authentic, safe, and relaxed with 45-minute coffee dates.')
+@section('title', 'CupDate — Find Your Real Connections Over Coffee')
+@section('meta_desc', 'CupDate connects verified singles for intentional conversations and low-pressure 45-minute coffee dates. Welcoming inclusive dating for all.')
 
 @section('content')
-<div class="cupdate-home min-h-screen bg-[#fff9fa] text-[#1b1b21]">
+<div class="min-h-screen bg-[#FFFDF9] text-[#1e1e24] font-['Plus_Jakarta_Sans',sans-serif]">
 
-    <!-- HERO SECTION -->
-    <section class="relative overflow-hidden pt-8 pb-14 sm:pt-14 sm:pb-20 lg:pt-18 lg:pb-24 border-b border-[#f1d8de]/60">
-        <!-- Soft Ambient Glow -->
-        <div class="pointer-events-none absolute -top-24 -left-20 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-[#ffdce2]/50 blur-3xl"></div>
-        <div class="pointer-events-none absolute top-12 -right-20 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-[#ffe8ec]/60 blur-3xl"></div>
+    <!-- ======================================================== -->
+    <!-- 1. HERO SECTION (Inspired by Matchmaker Reference Image) -->
+    <!-- ======================================================== -->
+    <section class="relative pt-10 pb-16 sm:pt-14 sm:pb-20 overflow-hidden border-b border-[#f3e5e8]">
+        <!-- Soft Warm Background Accents -->
+        <div class="pointer-events-none absolute -top-24 -left-20 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-[#FFE6E6]/60 blur-3xl"></div>
+        <div class="pointer-events-none absolute top-12 -right-20 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-[#FFF1F2]/70 blur-3xl"></div>
 
-        <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
-                
-                <!-- Left Column: High-Impact Hero Copy -->
-                <div class="lg:col-span-7">
-                    @auth
-                        <!-- Logged-in User Quick Dashboard Bar -->
-                        <div class="mb-6 p-4 rounded-2xl bg-white/90 border border-[#f1b7c1]/60 shadow-xs flex flex-wrap items-center justify-between gap-3 backdrop-blur-sm">
-                            <div class="flex items-center gap-3">
-                                <img src="{{ Auth::user()->avatar_url }}" alt="{{ Auth::user()->full_name }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-[#b0284b] shadow-xs">
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="font-bold text-sm text-[#1b1b21]">Welcome back, {{ explode(' ', Auth::user()->full_name)[0] }}!</h3>
-                                        <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Online</span>
-                                    </div>
-                                    <p class="text-xs text-[#6e585b]">Direct shortcuts to your feed &amp; singles.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <a href="{{ route('feed') }}" class="px-3.5 py-1.5 rounded-full bg-[#b0284b] text-white text-xs font-bold hover:bg-[#97223f] transition">Coffee Feed</a>
-                                <a href="{{ route('swipes') }}" class="px-3.5 py-1.5 rounded-full border border-[#dfbfc2] bg-white text-[#a8334e] text-xs font-bold hover:bg-[#fff0f3] transition">Discover</a>
-                                <a href="{{ route('messages') }}" class="px-3.5 py-1.5 rounded-full border border-[#dfbfc2] bg-white text-blue-600 text-xs font-bold hover:bg-blue-50 transition">Chats</a>
-                            </div>
+        <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
+
+            @auth
+                <!-- Logged-in Quick Bar -->
+                <div class="mb-6 mx-auto max-w-xl p-3.5 rounded-2xl bg-white border border-[#f3d3dc] shadow-xs flex items-center justify-between gap-3 text-left">
+                    <div class="flex items-center gap-3">
+                        <img src="{{ Auth::user()->avatar_url }}" alt="{{ Auth::user()->full_name }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-[#FF3366]">
+                        <div>
+                            <h3 class="font-bold text-xs sm:text-sm text-[#1e1e24]">Welcome back, {{ explode(' ', Auth::user()->full_name)[0] }}!</h3>
+                            <p class="text-[11px] text-[#785b62]">Direct access to your inner dashboard.</p>
                         </div>
-                    @endauth
-
-                    <!-- Live Real-Time Activity Pill -->
-                    <div class="mb-5 flex flex-wrap items-center gap-2">
-                        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold text-emerald-900 shadow-2xs">
-                            <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            <span id="liveOnlineCount" class="font-extrabold font-mono text-emerald-950">1,492</span>
-                            <span>Singles Online in India</span>
-                        </div>
-
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-[#f1b7c1] bg-white px-3 py-1 text-xs font-bold text-[#a8334e]">
-                            <svg class="w-3.5 h-3.5 text-[#ff6584]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                            <span>100% Selfie Verified</span>
-                        </span>
-
-                        <span class="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-900">
-                            <span>☕ 840+ Coffee Dates</span>
-                        </span>
                     </div>
-
-                    <h1 class="text-4xl font-black leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl text-[#1b1b21]">
-                        Dating Built for
-                        <span class="relative inline-block text-[#b0284b]">
-                            Genuine Chemistry,
-                            <span class="absolute -bottom-1 left-0 h-1.5 w-full rounded-full bg-[#ff738e]/40"></span>
-                        </span>
-                        Not Endless Swipes.
-                    </h1>
-
-                    <p class="mt-5 max-w-xl text-base leading-relaxed text-[#5c474a] sm:text-lg">
-                        Skip the exhausting texting cycles and fake profiles. Meet selfie-verified singles for relaxed, low-pressure 45-minute coffee dates at curated public cafés.
-                    </p>
-
-                    <!-- Primary Actions -->
-                    <div class="mt-8 flex flex-wrap items-center gap-3">
-                        @guest
-                            <button type="button" onclick="openQuickAuthModal('register')" 
-                                    class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ff6584] via-[#fd748e] to-[#b0284b] px-7 py-3.5 text-sm font-extrabold text-white shadow-md shadow-[#ff6584]/25 hover:brightness-105 active:scale-95 transition cursor-pointer">
-                                <span>Start Meeting Singles</span>
-                                <span aria-hidden="true">♥</span>
-                            </button>
-                            <button type="button" onclick="openQuickAuthModal('signin')" 
-                                    class="inline-flex items-center justify-center gap-2 rounded-full border border-[#dfbfc2] bg-white px-7 py-3.5 text-sm font-extrabold text-[#a8334e] hover:bg-[#fff0f3] active:scale-95 transition cursor-pointer">
-                                <span>Sign In</span>
-                            </button>
-                        @else
-                            <a href="{{ route('feed') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ff6584] to-[#b0284b] px-7 py-3.5 text-sm font-extrabold text-white shadow-md shadow-[#ff6584]/25 hover:brightness-105 active:scale-95 transition">
-                                <span>Enter Coffee Feed</span>
-                                <span aria-hidden="true">&rarr;</span>
-                            </a>
-                            <a href="{{ route('swipes') }}" class="inline-flex items-center justify-center gap-2 rounded-full border border-[#dfbfc2] bg-white px-6 py-3.5 text-sm font-extrabold text-[#a8334e] hover:bg-[#fff0f3] active:scale-95 transition">
-                                <span>Discover Matches</span>
-                            </a>
-                        @endguest
-                        <a href="{{ route('cities.index') }}" class="inline-flex items-center justify-center gap-1.5 rounded-full border border-stone-200 bg-white px-5 py-3.5 text-xs font-bold text-[#5c474a] hover:bg-stone-50 transition">
-                            <span>Browse 100+ Cities</span>
-                        </a>
-                    </div>
-
-                    <!-- Live Community Activity Ticker -->
-                    <div class="mt-6 p-3 rounded-2xl bg-white border border-[#f1b7c1]/50 shadow-2xs flex items-center gap-2.5 max-w-xl text-xs text-[#5c474a]">
-                        <span class="shrink-0 w-6 h-6 rounded-lg bg-[#fff0f3] text-[#b0284b] flex items-center justify-center font-bold">⚡</span>
-                        <div id="liveActivityTicker" class="truncate font-semibold transition-opacity duration-300">
-                            🟢 Simran from Shimla just verified her profile (2m ago)
-                        </div>
-                        <span class="ml-auto shrink-0 text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">LIVE</span>
-                    </div>
-
-                    <!-- Feature Checkmarks -->
-                    <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs font-bold text-[#6e585b]">
-                        <span class="inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> 100% Real Selfie Profiles</span>
-                        <span class="inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Zero Fake Bots &amp; Spam</span>
-                        <span class="inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Low-Pressure 45-Min Dates</span>
+                    <div class="flex items-center gap-1.5">
+                        <a href="{{ route('feed') }}" class="px-3 py-1.5 rounded-full bg-[#FF3366] text-white text-xs font-bold hover:bg-[#e02857] transition shadow-xs">Feed</a>
+                        <a href="{{ route('radar') }}" class="px-3 py-1.5 rounded-full bg-[#E8F4FD] text-[#0284c7] border border-[#BAE6FD] text-xs font-bold hover:bg-sky-100 transition">Radar</a>
                     </div>
                 </div>
+            @endauth
 
-                <!-- Right Column: Visual Card Deck Showcase -->
-                <div class="lg:col-span-5">
-                    <div class="relative mx-auto max-w-md">
-                        <div class="relative rounded-3xl border-4 border-white bg-white shadow-xl overflow-hidden">
-                            <!-- Card Visual -->
-                            <div class="relative aspect-[4/3] bg-gradient-to-br from-[#ffdce2] via-[#fff0f3] to-white overflow-hidden">
-                                <img src="{{ asset('assets/images/hero_couple_4.png') }}" alt="Couple enjoying coffee date on CupDate" class="w-full h-full object-cover" loading="eager" onerror="this.src='https://images.unsplash.com/photo-1522263842439-347f0722f2ff?w=600&q=80&fit=crop'">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#1b1b21]/80 via-transparent to-transparent"></div>
-                                <div class="absolute top-4 left-4 z-10 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold text-[#b0284b] shadow-2xs">
-                                    <span>☕ Daylight Coffee Dates</span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4 z-10 text-white">
-                                    <p class="text-xs font-bold uppercase tracking-wider text-[#ffd9dd]">Intentional Dating</p>
-                                    <p class="text-lg font-black mt-0.5">Start with a real hello.</p>
-                                </div>
-                            </div>
-                            <!-- Card Quick Stats Bar -->
-                            <div class="grid grid-cols-3 divide-x divide-stone-100 bg-white p-3.5 text-center">
-                                <div>
-                                    <p class="text-base font-black text-[#b0284b]">100%</p>
-                                    <p class="text-[10px] font-bold uppercase text-[#735d60]">Verified</p>
-                                </div>
-                                <div>
-                                    <p class="text-base font-black text-[#b0284b]">1:1</p>
-                                    <p class="text-[10px] font-bold uppercase text-[#735d60]">Direct Chat</p>
-                                </div>
-                                <div>
-                                    <p class="text-base font-black text-[#b0284b]">45 min</p>
-                                    <p class="text-[10px] font-bold uppercase text-[#735d60]">Coffee Dates</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- VERIFIED SINGLES CARDS PREVIEW -->
-    <section class="py-14 sm:py-18 bg-white border-b border-[#f1d8de]/60" id="singles">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
-                <div>
-                    <span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#fff0f3] text-[#a8334e] border border-[#f1b7c1] mb-2">
-                        ★ Verified Singles Ready for Coffee
-                    </span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-[#1b1b21] tracking-tight">
-                        Real Singles in Your City
-                    </h2>
-                    <p class="text-xs sm:text-sm text-[#5c474a] mt-1">
-                        Selfie-verified profiles looking for intentional connection across Himachal Pradesh, Punjab, and major Indian cities.
-                    </p>
-                </div>
-                @guest
-                    <button type="button" onclick="openQuickAuthModal('register')" class="text-xs sm:text-sm font-bold text-[#b0284b] hover:underline flex items-center gap-1 cursor-pointer">
-                        <span>Join &amp; Say Hello</span>
-                        <span>&rarr;</span>
-                    </button>
-                @else
-                    <a href="{{ route('swipes') }}" class="text-xs sm:text-sm font-bold text-[#b0284b] hover:underline flex items-center gap-1">
-                        <span>Explore Full Deck</span>
-                        <span>&rarr;</span>
-                    </a>
-                @endguest
+            <!-- Inclusivity Hero Banner (Simple & Proper as Requested) -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#f0d4da] text-xs font-bold text-[#b0284b] mb-6 shadow-xs">
+                <span class="flex h-2 w-5 rounded-full bg-gradient-to-r from-red-500 via-amber-400 via-emerald-400 via-blue-500 to-purple-500"></span>
+                <span>Love in Every Dimension: Welcoming Lesbian, Gay, Bisexual, Transgender &amp; Queer singles</span>
+                <a href="{{ route('community.lgbtq') }}" class="underline text-[#FF3366] hover:text-[#b0284b] text-[11px] ml-1">Learn More &rarr;</a>
             </div>
 
-            <!-- Singles Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-                @php
-                    $displayDaters = $featuredDaters->isNotEmpty() ? $featuredDaters : collect([
-                        (object)[
-                            'id' => 1,
-                            'full_name' => 'Priya Mehta',
-                            'age' => 25,
-                            'country' => 'Shimla, Himachal Pradesh',
-                            'coffee_style' => 'Vanilla Oat Milk Latte',
-                            'avatar_url' => 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80&fit=crop&crop=face',
-                            'is_verified' => 1,
-                            'formatted_member_id' => 'CD-10001'
-                        ],
-                        (object)[
-                            'id' => 2,
-                            'full_name' => 'Arjun Kapoor',
-                            'age' => 27,
-                            'country' => 'Pune, Maharashtra',
-                            'coffee_style' => 'Double Espresso Macchiato',
-                            'avatar_url' => 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop&crop=face',
-                            'is_verified' => 1,
-                            'formatted_member_id' => 'CD-10002'
-                        ],
-                        (object)[
-                            'id' => 3,
-                            'full_name' => 'Tanya Sharma',
-                            'age' => 26,
-                            'country' => 'Shimla, Himachal Pradesh',
-                            'coffee_style' => 'Cinnamon Honey Latte',
-                            'avatar_url' => 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80&fit=crop&crop=face',
-                            'is_verified' => 1,
-                            'formatted_member_id' => 'CD-10003'
-                        ],
-                        (object)[
-                            'id' => 4,
-                            'full_name' => 'Vikram Thakur',
-                            'age' => 28,
-                            'country' => 'Manali, Himachal Pradesh',
-                            'coffee_style' => 'French Press Dark Roast',
-                            'avatar_url' => 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80&fit=crop&crop=face',
-                            'is_verified' => 1,
-                            'formatted_member_id' => 'CD-10004'
-                        ],
-                    ]);
-                @endphp
-
-                @foreach($displayDaters as $dater)
-                    <div class="group relative rounded-2xl border border-[#f0d9df] bg-white overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col">
-                        <!-- Profile Image -->
-                        <div class="relative aspect-[4/5] w-full overflow-hidden bg-stone-100">
-                            <img src="{{ $dater->avatar_url }}" alt="{{ $dater->full_name }}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#1b1b21]/75 via-transparent to-transparent z-10"></div>
-                            
-                            <!-- Badges -->
-                            <div class="absolute top-2.5 left-2.5 z-20">
-                                <span class="bg-[#1b1b21]/70 backdrop-blur-xs text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded-full">
-                                    {{ $dater->formatted_member_id ?? 'CD-10001' }}
-                                </span>
-                            </div>
-
-                            @if($dater->is_verified ?? true)
-                                <div class="absolute top-2.5 right-2.5 z-20 w-6 h-6 rounded-full bg-[#ff6584] text-white flex items-center justify-center shadow-xs" title="Selfie Verified">
-                                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                </div>
-                            @endif
-
-                            <!-- Name & Location Over Image -->
-                            <div class="absolute bottom-2.5 left-2.5 right-2.5 z-20 text-white">
-                                <h3 class="font-black text-base drop-shadow-xs">
-                                    {{ explode(' ', $dater->full_name)[0] }}, {{ $dater->age ?? '25' }}
-                                </h3>
-                                <p class="text-xs text-white/85 truncate mt-0.5">
-                                    📍 {{ $dater->country ?? 'Himachal Pradesh' }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Card Body -->
-                        <div class="p-3.5 flex flex-col justify-between flex-1 bg-white">
-                            <div class="mb-3">
-                                <span class="text-[10px] font-bold text-[#a8334e] bg-[#fff0f3] border border-[#f1b7c1] px-2 py-0.5 rounded-full inline-block truncate max-w-full">
-                                    ☕ {{ $dater->coffee_style ?? 'Artisan Coffee' }}
-                                </span>
-                            </div>
-
-                            @guest
-                                <button type="button" onclick="openQuickAuthModal('signin')" 
-                                        class="w-full py-2 px-3 rounded-full bg-[#b0284b] hover:bg-[#97223f] text-white text-xs font-bold shadow-2xs flex items-center justify-center gap-1 transition active:scale-95 cursor-pointer">
-                                    <span>Invite for Coffee</span>
-                                </button>
-                            @else
-                                <a href="{{ route('profile', $dater->id) }}" 
-                                   class="w-full py-2 px-3 rounded-full bg-[#b0284b] hover:bg-[#97223f] text-white text-xs font-bold shadow-2xs flex items-center justify-center gap-1 transition text-center">
-                                    <span>Say Hello</span>
-                                </a>
-                            @endguest
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <!-- HOW IT WORKS IN 3 SIMPLE STEPS -->
-    <section class="py-14 sm:py-18 bg-[#fff9fa] border-b border-[#f1d8de]/60" id="how-it-works">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-10">
-                <span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#fff0f3] text-[#a8334e] border border-[#f1b7c1] mb-2">
-                    How CupDate Works
+            <!-- Big Main Headline -->
+            <h1 class="text-4xl sm:text-6xl font-black text-[#1e1e24] tracking-tight leading-[1.1] max-w-3xl mx-auto">
+                Find Your <br/>
+                <span class="text-[#FF3366] font-serif italic relative inline-block">
+                    Real Connections
+                    <svg class="absolute -bottom-2 left-0 w-full h-3 text-[#FF3366]/30" viewBox="0 0 100 20" preserveAspectRatio="none">
+                        <path d="M0,10 Q50,0 100,10" fill="none" stroke="currentColor" stroke-width="4"/>
+                    </svg>
                 </span>
-                <h2 class="text-2xl sm:text-3xl font-black text-[#1b1b21] tracking-tight">
-                    3 Simple Steps from Hello to Coffee
-                </h2>
-                <p class="mt-2 text-xs sm:text-sm text-[#5c474a]">
-                    No confusing algorithms or ghosting games. Pure, honest dating built around genuine conversation.
-                </p>
-            </div>
+            </h1>
 
-            <div class="grid gap-6 md:grid-cols-3">
-                <!-- Step 1 -->
-                <div class="rounded-2xl border border-[#f0d9df] bg-white p-6 shadow-2xs flex flex-col">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-3xl font-black text-[#fd748e]/40 font-mono">01</span>
-                        <div class="w-10 h-10 rounded-xl bg-[#ffd9dd] text-[#b0284b] flex items-center justify-center font-bold text-lg">
-                            ✓
-                        </div>
-                    </div>
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-[#a8334e] mb-1">Step 1 • Profile Setup</span>
-                    <h3 class="text-lg font-black text-[#1b1b21] mb-2">Create Profile &amp; Selfie Pass</h3>
-                    <p class="text-xs sm:text-sm leading-relaxed text-[#6e585b] flex-grow">
-                        Sign up free in seconds. Complete a quick 3-second live selfie check to verify your photo ownership. Choose your coffee archetype and set honest intentions.
-                    </p>
-                    <div class="mt-4 pt-3 border-t border-[#f0d9df] text-xs font-bold text-[#b0284b]">
-                        ✓ Blue verification badge awarded
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="rounded-2xl border border-[#f0d9df] bg-white p-6 shadow-2xs flex flex-col">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-3xl font-black text-[#fd748e]/40 font-mono">02</span>
-                        <div class="w-10 h-10 rounded-xl bg-[#ffd9dd] text-[#b0284b] flex items-center justify-center font-bold text-lg">
-                            💬
-                        </div>
-                    </div>
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-[#a8334e] mb-1">Step 2 • Clean Messaging</span>
-                    <h3 class="text-lg font-black text-[#1b1b21] mb-2">Discover &amp; Spark Clean Chat</h3>
-                    <p class="text-xs sm:text-sm leading-relaxed text-[#6e585b] flex-grow">
-                        Browse verified singles in your city or hill station. Start a direct conversation with zero spam, zero automated bots, and full privacy without revealing phone numbers.
-                    </p>
-                    <div class="mt-4 pt-3 border-t border-[#f0d9df] text-xs font-bold text-[#b0284b]">
-                        🔒 100% Private, spam-free chats
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="rounded-2xl border border-[#f0d9df] bg-white p-6 shadow-2xs flex flex-col">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-3xl font-black text-[#fd748e]/40 font-mono">03</span>
-                        <div class="w-10 h-10 rounded-xl bg-[#ffd9dd] text-[#b0284b] flex items-center justify-center font-bold text-lg">
-                            ☕
-                        </div>
-                    </div>
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-[#a8334e] mb-1">Step 3 • The First Date</span>
-                    <h3 class="text-lg font-black text-[#1b1b21] mb-2">Meet for a 45-Min Coffee Date</h3>
-                    <p class="text-xs sm:text-sm leading-relaxed text-[#6e585b] flex-grow">
-                        Choose a vetted public café (like Wake &amp; Bake, Cafe Simla Times, or Blue Tokai). Enjoy daytime public safety, low pressure, and real conversation.
-                    </p>
-                    <div class="mt-4 pt-3 border-t border-[#f0d9df] text-xs font-bold text-[#b0284b]">
-                        ☕ Curated daylight public café spots
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-8 text-center">
-                <a href="{{ route('how.it.works') }}" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#a8334e] hover:underline">
-                    <span>Read complete guide &amp; safety rules</span>
-                    <span>&rarr;</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- EXPLORE SINGLES BY CITY (HIGH SEO VALUE) -->
-    <section class="py-14 sm:py-18 bg-white border-b border-[#f1d8de]/60">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
-                <div>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#a8334e]">Local Dating Chapters</span>
-                    <h2 class="mt-1 text-2xl sm:text-3xl font-black text-[#1b1b21] tracking-tight">
-                        Explore Singles Across Himachal Pradesh &amp; India
-                    </h2>
-                </div>
-                <a href="{{ route('cities.index') }}" class="font-bold text-[#a8334e] hover:underline flex items-center gap-1 text-xs sm:text-sm">
-                    <span>View all cities</span>
-                    <span>&rarr;</span>
-                </a>
-            </div>
-
-            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <!-- Shimla -->
-                <a href="{{ route('city.show', 'shimla') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">🏔️</span>
-                        <span class="text-[10px] font-bold uppercase text-[#a8334e] bg-[#ffd9dd] px-2 py-0.5 rounded-full">Himachal</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Shimla</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">The Mall Road, The Ridge &amp; cozy pine-scented cafés.</p>
-                </a>
-
-                <!-- Manali -->
-                <a href="{{ route('city.show', 'manali') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">🌲</span>
-                        <span class="text-[10px] font-bold uppercase text-[#a8334e] bg-[#ffd9dd] px-2 py-0.5 rounded-full">Himachal</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Manali &amp; Old Manali</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">Riverside espresso decks &amp; wooden cafés along Manalsu.</p>
-                </a>
-
-                <!-- Dharamshala -->
-                <a href="{{ route('city.show', 'dharamshala') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">📚</span>
-                        <span class="text-[10px] font-bold uppercase text-[#a8334e] bg-[#ffd9dd] px-2 py-0.5 rounded-full">Himachal</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Dharamshala &amp; McLeodGanj</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">Artisan brews, bookshops, and mountain conversations.</p>
-                </a>
-
-                <!-- Chandigarh -->
-                <a href="{{ route('city.show', 'chandigarh') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">🏙️</span>
-                        <span class="text-[10px] font-bold uppercase text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Tri-City</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Chandigarh &amp; Mohali</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">Sector 8 &amp; 35 spots, Sukhna Lake &amp; young singles.</p>
-                </a>
-
-                <!-- Delhi NCR -->
-                <a href="{{ route('city.show', 'delhi') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">🏛️</span>
-                        <span class="text-[10px] font-bold uppercase text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">Metro</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Delhi NCR</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">Saket, HKV &amp; specialty roasteries across Delhi and Gurgaon.</p>
-                </a>
-
-                <!-- Pune -->
-                <a href="{{ route('city.show', 'pune') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">☕</span>
-                        <span class="text-[10px] font-bold uppercase text-purple-800 bg-purple-100 px-2 py-0.5 rounded-full">Metro</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Pune &amp; Mumbai</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">Koregaon Park roasters, Bandra cafés &amp; genuine singles.</p>
-                </a>
-
-                <!-- Solan -->
-                <a href="{{ route('city.show', 'solan') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">🍄</span>
-                        <span class="text-[10px] font-bold uppercase text-[#a8334e] bg-[#ffd9dd] px-2 py-0.5 rounded-full">Himachal</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Solan</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">Pine walks, Mohan Park overlooks &amp; peaceful dating havens.</p>
-                </a>
-
-                <!-- Bangalore -->
-                <a href="{{ route('city.show', 'bangalore') }}" class="group block rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 transition hover:-translate-y-0.5 hover:shadow-xs hover:border-[#b0284b]/40">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-lg">💻</span>
-                        <span class="text-[10px] font-bold uppercase text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded-full">Metro</span>
-                    </div>
-                    <h3 class="font-black text-sm sm:text-base text-[#1b1b21] group-hover:text-[#b0284b] transition">Bangalore</h3>
-                    <p class="text-xs text-[#6e585b] mt-1">Indiranagar &amp; Koramangala filter coffee and specialty roasts.</p>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- EDITORIAL JOURNAL & ARTICLES -->
-    @if($editorialBlogs->isNotEmpty())
-        <section class="py-14 sm:py-18 bg-[#fff9fa] border-b border-[#f1d8de]/60">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
-                    <div>
-                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#a8334e]">From the Journal</span>
-                        <h2 class="mt-1 text-2xl sm:text-3xl font-black text-[#1b1b21] tracking-tight">Better Dates Start Here</h2>
-                    </div>
-                    <a href="{{ route('blog.index') }}" class="font-bold text-[#a8334e] hover:underline flex items-center gap-1 text-xs sm:text-sm">
-                        <span>Read all guides</span>
-                        <span>&rarr;</span>
-                    </a>
-                </div>
-                <div class="grid gap-6 md:grid-cols-3">
-                    @foreach($editorialBlogs as $blog)
-                        <a href="{{ route('blog.show', $blog->slug) }}" class="rounded-2xl border border-[#f0d9df] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between">
-                            <div>
-                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#a8334e]">{{ $blog->category }}</span>
-                                <h3 class="mt-2 line-clamp-2 font-black text-[#1b1b21] text-base">{{ $blog->title }}</h3>
-                                <p class="mt-1.5 line-clamp-3 text-xs leading-relaxed text-[#6e585b]">{{ $blog->excerpt }}</p>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#a8334e]">
-                                <span>Read Article</span>
-                                <span>&rarr;</span>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
-    <!-- FREQUENTLY ASKED QUESTIONS (FAST HTML DETAILS ACCORDION) -->
-    <section class="py-14 sm:py-18 bg-white border-b border-[#f1d8de]/60">
-        <div class="mx-auto max-w-4xl px-4 sm:px-6">
-            <div class="text-center mb-8">
-                <span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#ffd9dd] text-[#a8334e] mb-2">
-                    Frequently Asked Questions
-                </span>
-                <h2 class="text-2xl sm:text-3xl font-black text-[#1b1b21] tracking-tight">Got Questions? We Have Answers</h2>
-                <p class="mt-1.5 text-xs sm:text-sm text-[#5c474a]">Everything you need to know about CupDate, safety, selfie verification, and coffee dating.</p>
-            </div>
-
-            <div class="space-y-3">
-                <!-- FAQ 1 -->
-                <details class="group rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 text-xs sm:text-sm open:bg-white transition">
-                    <summary class="font-bold text-[#1b1b21] cursor-pointer flex items-center justify-between list-none">
-                        <span>How is CupDate different from Tinder or Bumble?</span>
-                        <span class="text-[#a8334e] font-bold group-open:rotate-180 transition-transform duration-200">▼</span>
-                    </summary>
-                    <p class="mt-3 pt-3 border-t border-stone-100 text-[#5c474a] leading-relaxed">
-                        Traditional apps encourage endless superficial swiping, ghosting, and expensive 2-hour dinners. CupDate is designed around intentional, low-pressure 45-minute coffee dates at verified public cafés. Every profile is 100% selfie-verified, and we do not use addictive casino algorithms.
-                    </p>
-                </details>
-
-                <!-- FAQ 2 -->
-                <details class="group rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 text-xs sm:text-sm open:bg-white transition">
-                    <summary class="font-bold text-[#1b1b21] cursor-pointer flex items-center justify-between list-none">
-                        <span>Is CupDate free to join and chat?</span>
-                        <span class="text-[#a8334e] font-bold group-open:rotate-180 transition-transform duration-200">▼</span>
-                    </summary>
-                    <p class="mt-3 pt-3 border-t border-stone-100 text-[#5c474a] leading-relaxed">
-                        Yes! Free registration, identity verification, discovering singles, and direct one-on-one chatting are available to all genuine singles. There are no paywalls preventing you from having a great conversation and meeting for coffee.
-                    </p>
-                </details>
-
-                <!-- FAQ 3 -->
-                <details class="group rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 text-xs sm:text-sm open:bg-white transition">
-                    <summary class="font-bold text-[#1b1b21] cursor-pointer flex items-center justify-between list-none">
-                        <span>How does the 3-second live selfie check protect members?</span>
-                        <span class="text-[#a8334e] font-bold group-open:rotate-180 transition-transform duration-200">▼</span>
-                    </summary>
-                    <p class="mt-3 pt-3 border-t border-stone-100 text-[#5c474a] leading-relaxed">
-                        When creating an account, members record a quick 3-second live selfie pose. Our biometric security compares the live pose with uploaded profile photos to confirm true ownership. This completely eliminates catfishes, stolen photos, and automated scam bots.
-                    </p>
-                </details>
-
-                <!-- FAQ 4 -->
-                <details class="group rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 text-xs sm:text-sm open:bg-white transition">
-                    <summary class="font-bold text-[#1b1b21] cursor-pointer flex items-center justify-between list-none">
-                        <span>Can I use CupDate for serious matrimony and traditional rishta?</span>
-                        <span class="text-[#a8334e] font-bold group-open:rotate-180 transition-transform duration-200">▼</span>
-                    </summary>
-                    <p class="mt-3 pt-3 border-t border-stone-100 text-[#5c474a] leading-relaxed">
-                        Yes. CupDate offers a dedicated Rishta &amp; Serious Matrimony portal for singles and families seeking long-term life partners without awkward arranged-marriage interrogations. A comfortable 45-minute coffee chat provides the perfect balance of modern respect and deep values alignment.
-                    </p>
-                </details>
-
-                <!-- FAQ 5 -->
-                <details class="group rounded-2xl border border-[#f0d9df] bg-[#fffafc] p-4 text-xs sm:text-sm open:bg-white transition">
-                    <summary class="font-bold text-[#1b1b21] cursor-pointer flex items-center justify-between list-none">
-                        <span>Which cities and hill stations in Himachal Pradesh are active?</span>
-                        <span class="text-[#a8334e] font-bold group-open:rotate-180 transition-transform duration-200">▼</span>
-                    </summary>
-                    <p class="mt-3 pt-3 border-t border-stone-100 text-[#5c474a] leading-relaxed">
-                        CupDate is active across all 12 districts of Himachal Pradesh — including Shimla, Manali, Dharamshala, McLeodGanj, Kangra, Solan, Mandi, Kullu, Palampur, and Hamirpur — as well as Chandigarh Tri-City, Delhi NCR, Pune, and Mumbai.
-                    </p>
-                </details>
-            </div>
-
-            <div class="mt-6 text-center">
-                <a href="{{ route('faq') }}" class="text-xs font-bold text-[#a8334e] hover:underline">
-                    View full FAQ &amp; help center &rarr;
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- FINAL CALLOUT -->
-    <section class="py-14 sm:py-18 bg-gradient-to-br from-[#fff0f3] to-white text-center">
-        <div class="mx-auto max-w-2xl px-4">
-            <span class="text-3xl mb-2 inline-block">☕</span>
-            <h2 class="text-2xl sm:text-3xl font-black text-[#1b1b21]">Ready for a Better First Date?</h2>
-            <p class="mt-2 text-xs sm:text-sm text-[#5c474a] max-w-md mx-auto">
-                Join thousands of verified singles who value authentic conversation, great coffee, and genuine connections.
+            <p class="mt-5 text-sm sm:text-base text-[#695458] max-w-xl mx-auto leading-relaxed">
+                Meaningful conversations, authentic dates, and warm coffee moments designed for modern singles. Skip endless swiping and meet in vetted public cafes.
             </p>
-            <div class="mt-6 flex flex-wrap justify-center gap-3">
+
+            <!-- Hero Action Buttons -->
+            <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
                 @guest
                     <button type="button" onclick="openQuickAuthModal('register')" 
-                            class="px-8 py-3.5 rounded-full bg-gradient-to-r from-[#ff6584] via-[#fd748e] to-[#b0284b] hover:brightness-105 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#ff6584]/25 transition hover:-translate-y-0.5 active:scale-95 cursor-pointer">
-                        Create Your Free Profile ♥
+                            class="px-8 py-3.5 rounded-full bg-[#FF3366] hover:bg-[#e02857] text-white text-sm font-bold shadow-lg shadow-[#FF3366]/25 transition active:scale-95 cursor-pointer">
+                        Join CupDate Free
                     </button>
                     <button type="button" onclick="openQuickAuthModal('signin')" 
-                            class="px-8 py-3.5 rounded-full border border-[#dfbfc2] bg-white text-[#a8334e] font-extrabold text-xs sm:text-sm hover:bg-[#fff0f3] transition active:scale-95 cursor-pointer">
+                            class="px-7 py-3.5 rounded-full bg-white border border-[#dfbfc2] hover:bg-stone-50 text-[#1e1e24] text-sm font-bold transition active:scale-95 cursor-pointer">
                         Sign In
                     </button>
                 @else
-                    <a href="{{ route('swipes') }}" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-[#ff6584] via-[#fd748e] to-[#b0284b] hover:brightness-105 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#ff6584]/25 transition hover:-translate-y-0.5">
-                        Discover Deck &rarr;
+                    <a href="{{ route('swipes') }}" class="px-8 py-3.5 rounded-full bg-[#FF3366] hover:bg-[#e02857] text-white text-sm font-bold shadow-lg shadow-[#FF3366]/25 transition active:scale-95">
+                        Discover Matches
+                    </a>
+                    <a href="{{ route('radar') }}" class="px-7 py-3.5 rounded-full bg-white border border-[#dfbfc2] hover:bg-stone-50 text-[#1e1e24] text-sm font-bold transition">
+                        Scan Nearby Radar
                     </a>
                 @endguest
+                <a href="{{ route('dates') }}" class="px-6 py-3.5 rounded-full bg-[#FFF2F4] border border-[#f0d4da] text-[#a8334e] text-xs font-bold hover:bg-[#ffe1e6] transition">
+                    Explore Date Cafes
+                </a>
+            </div>
+
+            <!-- Central Vector Artwork (Matching Reference Image 3 Couple Texting + Pink Heart) -->
+            <div class="relative mt-12 mx-auto max-w-2xl flex items-center justify-center">
+                <!-- Floating Soft Pink Heart Backdrop -->
+                <div class="relative flex items-center justify-center">
+                    <svg class="w-64 h-64 sm:w-80 sm:h-80 text-[#FFE6E6] drop-shadow-md" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+
+                    <!-- Center Envelope with Heart -->
+                    <div class="absolute z-10 w-16 h-12 rounded-xl bg-white border border-[#f0d4da] shadow-md flex items-center justify-center animate-bounce" style="animation-duration: 2.5s;">
+                        <svg class="w-6 h-6 text-[#FF3366]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+
+                    <!-- Left Guy Vector Illustration -->
+                    <div class="absolute -left-6 sm:left-4 bottom-0 z-10 flex flex-col items-center">
+                        <div class="w-28 sm:w-36 h-36 sm:h-44 rounded-2xl overflow-hidden bg-gradient-to-t from-emerald-500/10 to-transparent p-1">
+                            <img src="{{ asset('assets/images/male_avatar_1.png') }}" alt="Single dater on CupDate" class="w-full h-full object-cover rounded-xl shadow-xs" onerror="this.src='https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&fit=crop'">
+                        </div>
+                        <span class="mt-1 text-[10px] font-bold bg-white px-2 py-0.5 rounded-full border border-stone-200 shadow-2xs">Arjun, 27 · Coffee Lover</span>
+                    </div>
+
+                    <!-- Right Girl Vector Illustration -->
+                    <div class="absolute -right-6 sm:right-4 bottom-0 z-10 flex flex-col items-center">
+                        <div class="w-28 sm:w-36 h-36 sm:h-44 rounded-2xl overflow-hidden bg-gradient-to-t from-pink-500/10 to-transparent p-1">
+                            <img src="{{ asset('assets/images/female_avatar_1.png') }}" alt="Single dater on CupDate" class="w-full h-full object-cover rounded-xl shadow-xs" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop'">
+                        </div>
+                        <span class="mt-1 text-[10px] font-bold bg-white px-2 py-0.5 rounded-full border border-stone-200 shadow-2xs">Priya, 25 · Oat Latte</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 2. THE 3 PASTEL FEATURE CARDS (Directly from Ref Image)   -->
+    <!-- ======================================================== -->
+    <section class="py-14 sm:py-18 bg-[#FAFAF8] border-b border-[#f3e5e8]">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Card 1: Sky Blue "Efficient" -->
+                <div class="rounded-3xl p-8 bg-[#E8F4FD] border border-[#BAE6FD] shadow-xs flex flex-col justify-between transition hover:-translate-y-1">
+                    <div>
+                        <!-- Minimalist SVG Icon -->
+                        <div class="w-12 h-12 rounded-2xl bg-white border border-[#BAE6FD] text-[#0284c7] flex items-center justify-center mb-6 shadow-xs">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-black text-[#1e1e24] mb-3">Efficient</h3>
+                        <p class="text-xs sm:text-sm text-[#4b6375] leading-relaxed">
+                            Smart compatibility based on coffee habits, communication styles, and dating goals instead of endless superficial swiping.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#BAE6FD]/60 text-[11px] font-bold text-[#0284c7]">
+                        Verified Matches Only
+                    </div>
+                </div>
+
+                <!-- Card 2: Buttercup Yellow "Balance" -->
+                <div class="rounded-3xl p-8 bg-[#FEF9C3] border border-[#FDE047] shadow-xs flex flex-col justify-between transition hover:-translate-y-1">
+                    <div>
+                        <!-- Minimalist Scales SVG Icon -->
+                        <div class="w-12 h-12 rounded-2xl bg-white border border-[#FDE047] text-[#ca8a04] flex items-center justify-center mb-6 shadow-xs">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-black text-[#1e1e24] mb-3">Balance</h3>
+                        <p class="text-xs sm:text-sm text-[#665a29] leading-relaxed">
+                            Low-pressure 45-minute first dates designed to preserve emotional energy, respect your schedule, and let genuine attraction bloom.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#FDE047]/60 text-[11px] font-bold text-[#ca8a04]">
+                        Zero Awkward Pressure
+                    </div>
+                </div>
+
+                <!-- Card 3: Blush Pink "Smart Blocking" -->
+                <div class="rounded-3xl p-8 bg-[#FEE2E2] border border-[#FECDD3] shadow-xs flex flex-col justify-between transition hover:-translate-y-1">
+                    <div>
+                        <!-- Minimalist Shield SVG Icon -->
+                        <div class="w-12 h-12 rounded-2xl bg-white border border-[#FECDD3] text-[#e11d48] flex items-center justify-center mb-6 shadow-xs">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-black text-[#1e1e24] mb-3">Smart Blocking</h3>
+                        <p class="text-xs sm:text-sm text-[#753b43] leading-relaxed">
+                            Mandatory selfie verification, anti-harassment safeguards, and instantaneous one-click reporting reviewed by human trust officers.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#FECDD3]/60 text-[11px] font-bold text-[#e11d48]">
+                        100% Human Monitored
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
+
+    <!-- ======================================================== -->
+    <!-- 3. "WHAT OUR USERS SAY" TESTIMONIAL SECTION              -->
+    <!-- ======================================================== -->
+    <section class="py-14 sm:py-20 bg-white border-b border-[#f3e5e8]">
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-2 mb-8">
+                <h2 class="text-3xl font-black text-[#1e1e24] tracking-tight">
+                    What Our <span class="text-[#FF3366]">Users Say</span>
+                </h2>
+                <span class="text-xl text-[#FF3366]">✦</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-[#FFF8F8] rounded-3xl p-8 sm:p-10 border border-[#f0d4da]">
+                
+                <!-- Quote Left -->
+                <div class="md:col-span-8">
+                    <!-- Big Pink Quote Mark -->
+                    <span class="text-6xl font-serif text-[#FF3366] leading-none block mb-2 font-black">“</span>
+                    <blockquote class="text-base sm:text-xl font-medium text-[#1e1e24] leading-relaxed">
+                        CupDate's prompts really made the difference — I felt like I got a good sense of their vibe from their answers, and our first meet at the cafe was completely natural.
+                    </blockquote>
+
+                    <div class="mt-6 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-pink-500/20 text-[#FF3366] font-bold flex items-center justify-center">
+                            DK
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-[#1e1e24]">Devika &amp; Kabir</p>
+                            <p class="text-xs text-[#695458]">Met at Wake &amp; Bake, Shimla · Together 8 Months</p>
+                        </div>
+                        <div class="ml-auto text-amber-500 text-sm">★★★★★</div>
+                    </div>
+                </div>
+
+                <!-- Review Stamp Right -->
+                <div class="md:col-span-4 flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-[#ecd5dc] text-center shadow-xs">
+                    <div class="w-14 h-14 rounded-2xl bg-[#E8F4FD] text-[#0284c7] flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+                    </div>
+                    <span class="text-2xl font-black text-[#1e1e24]">94%</span>
+                    <p class="text-xs font-bold text-[#695458] mt-1">First Date Success Rate</p>
+                    <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-mono font-bold mt-2">VERIFIED</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 4. "HOW OUR APP WORK?" (4 Step Cards + Phone Mockup)     -->
+    <!-- ======================================================== -->
+    <section class="py-14 sm:py-20 bg-[#FEF9C3]/20 border-b border-[#f3e5e8]">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center sm:text-left">
+                <h2 class="text-3xl font-black text-[#1e1e24] tracking-tight">
+                    How Our App <span class="text-[#FF3366]">Work?</span>
+                </h2>
+                <p class="text-xs sm:text-sm text-[#695458] mt-1">
+                    Four simple steps to go from online conversation to coffee date.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Left: 4 Step Pastel Cards (lg:col-span-7) -->
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
+                    <!-- Step 1: Cyan -->
+                    <div class="p-5 rounded-2xl bg-[#E0F2FE] border border-[#BAE6FD] shadow-xs">
+                        <span class="w-6 h-6 rounded-full bg-[#0284c7] text-white text-xs font-bold flex items-center justify-center mb-2">1</span>
+                        <h3 class="font-bold text-sm text-[#1e1e24] mb-1">Download App / Join</h3>
+                        <p class="text-xs text-[#4b6375] leading-relaxed">Sign up in 30 seconds with email or phone. No tedious setup fees.</p>
+                    </div>
+
+                    <!-- Step 2: Light Blue -->
+                    <div class="p-5 rounded-2xl bg-[#DBEAFE] border border-[#93C5FD] shadow-xs">
+                        <span class="w-6 h-6 rounded-full bg-[#2563eb] text-white text-xs font-bold flex items-center justify-center mb-2">2</span>
+                        <h3 class="font-bold text-sm text-[#1e1e24] mb-1">Create Account</h3>
+                        <p class="text-xs text-[#3b4c6e] leading-relaxed">Set your orientation, pronouns, and dating preferences freely.</p>
+                    </div>
+
+                    <!-- Step 3: Mint Green -->
+                    <div class="p-5 rounded-2xl bg-[#DCFCE7] border border-[#86EFAC] shadow-xs">
+                        <span class="w-6 h-6 rounded-full bg-[#16a34a] text-white text-xs font-bold flex items-center justify-center mb-2">3</span>
+                        <h3 class="font-bold text-sm text-[#1e1e24] mb-1">Fill Profile</h3>
+                        <p class="text-xs text-[#2b593a] leading-relaxed">Add your favorite coffee order, music, astrology, and photos.</p>
+                    </div>
+
+                    <!-- Step 4: Lavender -->
+                    <div class="p-5 rounded-2xl bg-[#EDE9FE] border border-[#C4B5FD] shadow-xs">
+                        <span class="w-6 h-6 rounded-full bg-[#7c3aed] text-white text-xs font-bold flex items-center justify-center mb-2">4</span>
+                        <h3 class="font-bold text-sm text-[#1e1e24] mb-1">Start Swiping &amp; Meet</h3>
+                        <p class="text-xs text-[#4c3870] leading-relaxed">Connect, chat, and pick a vetted cafe spot for a 45-minute date.</p>
+                    </div>
+
+                </div>
+
+                <!-- Right: Realistic Smartphone Mockup (lg:col-span-5) -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-64 sm:w-72 rounded-[40px] border-4 border-stone-800 bg-stone-900 p-2 shadow-2xl">
+                        <!-- Screen Bezel -->
+                        <div class="rounded-[32px] bg-white overflow-hidden flex flex-col aspect-[9/18]">
+                            <!-- App Top Header -->
+                            <div class="p-3 bg-white border-b border-stone-100 flex items-center justify-between">
+                                <img src="{{ asset('assets/images/cupdate_logo_main.png') }}" class="h-5 w-auto" alt="Logo">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            </div>
+
+                            <!-- Match Profile Card Inside Phone -->
+                            <div class="p-3 flex-1 flex flex-col justify-between bg-gradient-to-b from-[#FFF5F7] to-white">
+                                <div class="rounded-2xl overflow-hidden aspect-[4/5] relative bg-stone-200">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&fit=crop" class="w-full h-full object-cover" alt="Profile">
+                                    <div class="absolute bottom-2 left-2 text-white drop-shadow-xs">
+                                        <p class="font-bold text-sm">Simran, 24</p>
+                                        <p class="text-[10px] text-pink-200">☕ Vanilla Oat Latte · Shimla</p>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons on Phone -->
+                                <div class="flex items-center justify-around pt-3">
+                                    <button class="w-9 h-9 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center font-bold text-sm shadow-xs">✕</button>
+                                    <button class="w-12 h-12 rounded-full bg-[#FF3366] text-white flex items-center justify-center font-bold text-lg shadow-md shadow-pink-500/40">♥</button>
+                                    <button class="w-9 h-9 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-sm shadow-xs">☕</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 5. "OUR ARTICLES & TIPS UPDATE" (Matching Ref Image)      -->
+    <!-- ======================================================== -->
+    <section class="py-14 sm:py-20 bg-white border-b border-[#f3e5e8]">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center sm:text-left flex flex-wrap items-end justify-between gap-4">
+                <div>
+                    <h2 class="text-3xl font-black text-[#1e1e24] tracking-tight">
+                        Our <span class="text-[#FF3366]">Articles &amp; Tips</span> Update
+                    </h2>
+                    <p class="text-xs sm:text-sm text-[#695458] mt-1">
+                        Curated advice for thoughtful modern singles.
+                    </p>
+                </div>
+                <a href="{{ route('blog.index') }}" class="text-xs font-bold text-[#FF3366] hover:underline">
+                    View All Guides &rarr;
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Article 1 -->
+                <div class="rounded-3xl bg-[#FFF9FA] border border-[#f0d4da] overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="w-full aspect-[16/10] rounded-2xl bg-gradient-to-tr from-[#FFE6E6] to-[#FFF1F2] flex items-center justify-center mb-4 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1522263842439-347f0722f2ff?w=500&q=80&fit=crop" class="w-full h-full object-cover" alt="Article 1">
+                        </div>
+                        <h3 class="font-bold text-base text-[#1e1e24] mb-2 leading-snug">
+                            Getting Over the Fantasy of Dating Someone
+                        </h3>
+                        <p class="text-xs text-[#695458] leading-relaxed line-clamp-3">
+                            How projection and romantic daydreaming keep us from seeing the authentic person sitting across from us at the cafe table.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="{{ route('blog.index') }}" class="text-xs font-bold text-[#FF3366] hover:underline">
+                            Read More &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article 2 -->
+                <div class="rounded-3xl bg-[#FFF9FA] border border-[#f0d4da] overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="w-full aspect-[16/10] rounded-2xl bg-gradient-to-tr from-[#FEF9C3] to-[#FEF08A] flex items-center justify-center mb-4 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80&fit=crop" class="w-full h-full object-cover" alt="Article 2">
+                        </div>
+                        <h3 class="font-bold text-base text-[#1e1e24] mb-2 leading-snug">
+                            4 Strategies to Increase Your Vulnerability While Dating
+                        </h3>
+                        <p class="text-xs text-[#695458] leading-relaxed line-clamp-3">
+                            Practical communication scripts to share what you really want without putting up defensive emotional walls.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="{{ route('blog.index') }}" class="text-xs font-bold text-[#FF3366] hover:underline">
+                            Read More &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article 3 -->
+                <div class="rounded-3xl bg-[#FFF9FA] border border-[#f0d4da] overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="w-full aspect-[16/10] rounded-2xl bg-gradient-to-tr from-[#E8F4FD] to-[#BAE6FD] flex items-center justify-center mb-4 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=500&q=80&fit=crop" class="w-full h-full object-cover" alt="Article 3">
+                        </div>
+                        <h3 class="font-bold text-base text-[#1e1e24] mb-2 leading-snug">
+                            Setting Realistic Intentions for First Coffee Dates
+                        </h3>
+                        <p class="text-xs text-[#695458] leading-relaxed line-clamp-3">
+                            Why the 45-minute pour-over creates the perfect low-pressure container for mutual discovery and real chemistry.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="{{ route('blog.index') }}" class="text-xs font-bold text-[#FF3366] hover:underline">
+                            Read More &rarr;
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 6. "FIND YOUR LOVE" BOTTOM BANNER (Matching Ref Image)   -->
+    <!-- ======================================================== -->
+    <section class="py-14 sm:py-20 bg-[#FFF5F7]">
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div class="rounded-3xl bg-white border border-[#f0d4da] p-8 sm:p-12 shadow-md flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                
+                <!-- Left Sticky Note CTA -->
+                <div class="max-w-md">
+                    <span class="inline-block px-3 py-1 rounded-lg bg-[#FFE6E6] text-[#b0284b] text-xs font-bold uppercase tracking-wider mb-3">
+                        Find Your Love
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-[#1e1e24] tracking-tight leading-tight">
+                        Start Your First Coffee Date Today.
+                    </h2>
+                    <p class="text-xs sm:text-sm text-[#695458] mt-2 leading-relaxed">
+                        Join thousands of verified singles who value authentic connection. 100% free to create your profile.
+                    </p>
+                    <div class="mt-6">
+                        @guest
+                            <button type="button" onclick="openQuickAuthModal('register')" class="px-8 py-3.5 rounded-full bg-[#FF3366] hover:bg-[#e02857] text-white text-sm font-bold shadow-md shadow-pink-500/25 transition cursor-pointer">
+                                Download &amp; Join Free
+                            </button>
+                        @else
+                            <a href="{{ route('feed') }}" class="px-8 py-3.5 rounded-full bg-[#FF3366] hover:bg-[#e02857] text-white text-sm font-bold shadow-md shadow-pink-500/25 transition">
+                                Enter Coffee Feed
+                            </a>
+                        @endguest
+                    </div>
+                </div>
+
+                <!-- Right Graphic: Illustrated Mobile with Fishing / Spark Connection -->
+                <div class="flex items-center justify-center">
+                    <div class="w-48 sm:w-56 h-60 sm:h-72 rounded-3xl bg-[#FFF9FA] border-2 border-[#ecd5dc] p-4 flex flex-col items-center justify-center text-center shadow-inner relative">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#FF3366] to-[#b0284b] text-white flex items-center justify-center text-2xl shadow-lg shadow-pink-500/30 mb-3 animate-pulse">
+                            ♥
+                        </div>
+                        <h4 class="font-black text-sm text-[#1e1e24]">CupDate Match</h4>
+                        <p class="text-[11px] text-[#785b62] mt-1">Connecting hearts over fresh brews</p>
+                        <span class="mt-4 px-3 py-1 rounded-full bg-[#E8F4FD] text-[#0284c7] text-[10px] font-bold">100% Verified</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
 </div>
-
-<!-- GOOGLE SEARCH CONSOLE RICH JSON-LD SCHEMAS -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://cupdate.in/#website",
-      "url": "https://cupdate.in/",
-      "name": "CupDate",
-      "description": "Genuine intentional dating, online chat, and verified 45-minute coffee dates across Himachal Pradesh and India.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://cupdate.in/cities?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://cupdate.in/#organization",
-      "name": "CupDate",
-      "url": "https://cupdate.in/",
-      "logo": "https://cupdate.in/assets/images/cupdate_logo.svg",
-      "description": "India's premier 100% selfie-verified intentional coffee dating and matchmaking platform.",
-      "areaServed": [
-        "Himachal Pradesh",
-        "Chandigarh",
-        "Punjab",
-        "Delhi NCR",
-        "Maharashtra",
-        "India"
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://cupdate.in/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "How is CupDate different from Tinder or Bumble?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "CupDate is designed around intentional, low-pressure 45-minute coffee dates at verified public cafés. Every profile is 100% selfie-verified without addictive casino swipe algorithms."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is CupDate free to join and chat?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, free account registration, identity verification, discovering singles, and direct chatting are available to all genuine singles."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does the 3-second live selfie check protect members?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Our biometric security compares the 3-second live selfie pose with uploaded photos to confirm account ownership, eliminating catfishes, stolen photos, and scam bots."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I use CupDate for serious matrimony and traditional rishta?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. CupDate offers a dedicated Rishta & Serious Matrimony portal for singles seeking long-term intentional partnerships over a relaxed 45-minute coffee chat."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Which cities and hill stations in Himachal Pradesh are active?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "CupDate is active across all 12 districts of Himachal Pradesh — including Shimla, Manali, Dharamshala, McLeodGanj, Kangra, Solan, Mandi, Kullu, Palampur, and Hamirpur."
-          }
-        }
-      ]
-    }
-  ]
-}
-</script>
-
-<!-- Micro Activity Ticker JS -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const liveActivities = [
-        "🟢 Simran from Shimla just verified her profile (2m ago)",
-        "☕ Arjun & Sneha matched for a coffee date in Chandigarh (4m ago)",
-        "🟢 Rohit from Kangra claimed 50 daily coffee coins (6m ago)",
-        "✨ Tanya added 'Bookworm & Pour-overs' in Pune (8m ago)",
-        "☕ Vikram suggested Wake & Bake Cafe in Manali (11m ago)",
-        "🟢 Ananya completed her 3-second selfie check (13m ago)",
-        "✨ Meera & Kabir fixed a 45-min coffee meet in Bangalore (16m ago)",
-        "☕ Rahul shared a new cafe spark in Dharamshala (19m ago)"
-    ];
-    let activityIdx = 0;
-    const tickerEl = document.getElementById('liveActivityTicker');
-
-    if (tickerEl) {
-        setInterval(function() {
-            tickerEl.style.opacity = '0';
-            setTimeout(function() {
-                activityIdx = (activityIdx + 1) % liveActivities.length;
-                tickerEl.textContent = liveActivities[activityIdx];
-                tickerEl.style.opacity = '1';
-            }, 250);
-        }, 3500);
-    }
-
-    const counterEl = document.getElementById('liveOnlineCount');
-    if (counterEl) {
-        setInterval(function() {
-            let current = parseInt(counterEl.textContent.replace(/,/g, ''), 10) || 1492;
-            const delta = Math.floor(Math.random() * 5) - 2;
-            const next = Math.max(1450, current + delta);
-            counterEl.textContent = next.toLocaleString();
-        }, 5000);
-    }
-});
-</script>
 @endsection

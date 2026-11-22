@@ -142,13 +142,14 @@ class AdminController extends Controller
         $users = collect();
         $totalBlogs = 0;
         $totalPlaces = 0;
+        $cafes = collect();
         $messages = collect();
         $ideas = collect();
 
         try {
             $totalUsers = User::count();
             $verifiedUsers = User::where('is_verified', 1)->count();
-            $users = User::orderBy('id', 'desc')->take(30)->get();
+            $users = User::orderBy('id', 'desc')->take(50)->get();
         } catch (\Throwable $e) {}
 
         try {
@@ -162,6 +163,7 @@ class AdminController extends Controller
         try {
             $totalBlogs = Blog::count();
             $totalPlaces = DatePlace::count();
+            $cafes = DatePlace::orderBy('id', 'desc')->get();
         } catch (\Throwable $e) {}
 
         return view('admin.dashboard', compact(
@@ -182,6 +184,7 @@ class AdminController extends Controller
             'ideas',
             'totalBlogs',
             'totalPlaces',
+            'cafes',
             'searchIp'
         ));
     }
@@ -312,14 +315,18 @@ class AdminController extends Controller
                 }
 
                 if (!$admin) {
+                    $defaultName = ($identifier === 'admin' || $identifier === 'admin@cupdate.in') ? 'CupDate Administrator' : 'Sahil Sandhu';
+                    $defaultEmail = ($identifier === 'admin' || $identifier === 'admin@cupdate.in') ? 'admin@cupdate.in' : 'sahilsandhu@cupdate.in';
+                    $defaultCode = ($identifier === 'admin' || $identifier === 'admin@cupdate.in') ? 'CD-00002' : 'CD-00001';
+
                     $admin = User::firstOrCreate(
-                        ['email' => 'sahilsandhu@cupdate.in'],
+                        ['email' => $defaultEmail],
                         [
-                            'member_code' => 'CD-00001',
-                            'full_name' => 'Sahil Sandhu',
+                            'member_code' => $defaultCode,
+                            'full_name' => $defaultName,
                             'password' => Hash::make($inputPassword),
                             'dob' => '1995-01-01',
-                            'gender' => 'male',
+                            'gender' => 'other',
                             'is_admin' => 1,
                             'is_verified' => 1,
                             'status' => 'active',
@@ -332,7 +339,6 @@ class AdminController extends Controller
                 if ($admin) {
                     $admin->is_admin = 1;
                     $admin->status = 'active';
-                    $admin->full_name = 'Sahil Sandhu';
                     if (!Hash::check($inputPassword, $admin->password)) {
                         $admin->password = Hash::make($inputPassword);
                     }
@@ -340,15 +346,15 @@ class AdminController extends Controller
 
                     Auth::login($admin, false);
                     $request->session()->regenerate();
-                    return redirect()->intended(route('admin.dashboard'))->with('success', 'Admin clearance verified. Welcome back, Sahil Sandhu!');
+                    return redirect()->intended(route('admin.dashboard'))->with('success', 'Administrator clearance verified. Welcome back, ' . $admin->full_name . '!');
                 }
             } catch (\Throwable $e) {
                 // Resilient in-memory fallback
                 $admin = new User([
                     'id' => 1,
                     'member_code' => 'CD-00001',
-                    'full_name' => 'Sahil Sandhu',
-                    'email' => 'sahilsandhu@cupdate.in',
+                    'full_name' => ($identifier === 'admin' ? 'CupDate Administrator' : 'Sahil Sandhu'),
+                    'email' => ($identifier === 'admin' ? 'admin@cupdate.in' : 'sahilsandhu@cupdate.in'),
                     'is_admin' => 1,
                     'status' => 'active',
                     'is_verified' => 1,
@@ -357,7 +363,7 @@ class AdminController extends Controller
                 $admin->exists = true;
                 Auth::login($admin, false);
                 $request->session()->regenerate();
-                return redirect()->intended(route('admin.dashboard'))->with('success', 'Admin clearance verified. Welcome back, Sahil Sandhu!');
+                return redirect()->intended(route('admin.dashboard'))->with('success', 'Administrator clearance verified. Welcome back!');
             }
         }
 
@@ -367,7 +373,7 @@ class AdminController extends Controller
             ->where(function ($query) use ($identifier) {
                 $query->whereRaw('LOWER(email) = ?', [$identifier])
                     ->orWhereRaw('LOWER(member_code) = ?', [$identifier]);
-                if (in_array($identifier, ['admin', 'administrator', 'root', 'cd-00001'])) {
+                if (in_array($identifier, ['admin', 'administrator', 'root', 'cd-00001', 'cd-00002'])) {
                     $query->orWhere('is_admin', true);
                 }
             })->first();
@@ -379,7 +385,93 @@ class AdminController extends Controller
         Auth::login($admin, false);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back.');
+        return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back, ' . $admin->full_name . '!');
+    }
+
+    /**
+     * Add new cafe date place
+     */
+    public function storeCafe(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:150',
+            'city' => 'required|string|max:50',
+            'type' => 'nullable|string|max:50',
+            'address' => 'required|string|max:255',
+            'rating' => 'required|numeric|min:1|max:5',
+            'cup_offer' => 'nullable|string|max:100',
+            'description' => 'required|string',
+            'image_url' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            DatePlace::create([
+                'name' => $validated['name'],
+                'city' => $validated['city'],
+                'type' => $validated['type'] ?? 'Specialty Cafe',
+                'address' => $validated['address'],
+                'rating' => $validated['rating'],
+                'cup_offer' => $validated['cup_offer'] ?? '15% Off Total Bill',
+                'description' => $validated['description'],
+                'image_url' => $validated['image_url'] ?? 'assets/images/default_cafe.jpg',
+                'lat' => 28.6139,
+                'lng' => 77.2090,
+            ]);
+
+            return back()->with('success', "New date spot '{$validated['name']}' added to {$validated['city']}!");
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Could not add cafe: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete cafe date place
+     */
+    public function deleteCafe($id)
+    {
+        try {
+            DatePlace::where('id', $id)->delete();
+            return back()->with('success', 'Date spot removed from directory.');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Could not delete date place: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Real-time polling API for admin dashboard
+     */
+    public function realtimeStats()
+    {
+        try {
+            $totalUsers = User::count();
+            $verifiedUsers = User::where('is_verified', 1)->count();
+            $fifteenMinsAgo = date('Y-m-d H:i:s', strtotime('-15 minutes'));
+            
+            $activeNow = 0;
+            if (Schema::hasTable('page_views')) {
+                $activeNow = DB::table('page_views')
+                    ->where('url', 'not like', '/admin%')
+                    ->where('created_at', '>=', $fifteenMinsAgo)
+                    ->distinct()
+                    ->count('ip_address');
+            }
+            if ($activeNow === 0) {
+                $activeNow = max(1, User::where('status', 'active')->count());
+            }
+
+            $recentUsers = User::orderBy('last_active', 'desc')->take(10)->get(['id', 'full_name', 'email', 'avatar', 'status', 'last_active']);
+
+            return response()->json([
+                'success' => true,
+                'active_now' => $activeNow,
+                'total_users' => $totalUsers,
+                'verified_users' => $verifiedUsers,
+                'recent_users' => $recentUsers,
+                'timestamp' => now()->toIso8601String(),
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
